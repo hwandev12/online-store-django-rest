@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'widget_tweaks',
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
@@ -139,7 +140,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 AUTH_USER_MODEL = 'authentication.User'
-LOGIN_URL = 'login/'
+LOGIN_URL = 'accounts/signup/'
 LOGIN_REDIRECT_URL = "/"
 
 # Default primary key field type
