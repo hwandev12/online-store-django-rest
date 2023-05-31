@@ -3,6 +3,8 @@ from .models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
+from allauth.account.forms import SignupForm
+
 
 class UserCreationForm(forms.ModelForm):
     
@@ -41,3 +43,13 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["email", "username", "phone_number", "password", "is_superuser", "is_staff", "is_active", "is_verified"]
+        
+
+class CustomAllauthForm(SignupForm):
+    phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Phone Number"}), label="")
+    
+    def save(self, request):
+        user = super(CustomAllauthForm, self).save(request)
+        user.phone_number = self.cleaned_data['phone_number']
+        user.save()
+        return user
