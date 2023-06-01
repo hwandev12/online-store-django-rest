@@ -60,4 +60,4 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 @receiver(user_signed_up)
 def user_signup_callback(sender, user, request, **kwargs):
-    messages.success(request, f"Successfully registered as {request.user.username}", extra_tags="signup")
+    messages.success(request, "", extra_tags="signup")
