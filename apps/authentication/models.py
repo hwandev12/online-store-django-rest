@@ -5,6 +5,10 @@ from django.contrib.auth.models import (
     PermissionsMixin
 )
 
+from django.contrib import messages
+from allauth.account.signals import user_signed_up
+from django.dispatch import receiver
+
 class CustomUserManager(BaseUserManager):
     
     def create_user(self, email, username, phone_number, password=None):
@@ -53,3 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def token(self):
         return ""
     
+
+@receiver(user_signed_up)
+def user_signup_callback(sender, user, request, **kwargs):
+    messages.success(request, f"Successfully registered as {request.user.username}", extra_tags="signup")

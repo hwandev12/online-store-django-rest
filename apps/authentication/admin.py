@@ -6,6 +6,8 @@ from .forms import (
     UserUpdateForm
 )
 
+from django.contrib.auth.decorators import login_required
+
 class CustomUserAdmin(admin.ModelAdmin):
     
     form = UserUpdateForm
@@ -19,4 +21,5 @@ class CustomUserAdmin(admin.ModelAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(Group)
+admin.site.login = login_required(admin.site.login)
 
