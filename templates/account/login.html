@@ -182,30 +182,17 @@
                         <form class="requires-validation" method="POST">
                             {% csrf_token %}
                             <div class="col-md-12">
-                                {% render_field form.email placeholder="Enter email" %}
-                            </div>
-
-                            <div class="col-md-12">
-                                {% render_field form.username placeholder="Username" %}
-                            </div>
-
-
-                            <div class="col-md-12 mt-3">
-                                {% render_field form.phone_number placeholder="Enter Number" %}
+                                {% render_field form.login placeholder="Enter email" %}
                             </div>
                             <div class="col-md-12">
-                                {% render_field form.password1 placeholder="Password" %}
+                                {% render_field form.password placeholder="Password" %}
                             </div>
-                            <div class="col-md-12">
-                                {% render_field form.password2 placeholder="Confirm Password" %}
-                            </div>
-
 
                             <div class="form-button mt-3">
-                                <button id="submit" type="submit" class="btn btn-warning w-100">Register</button>
+                                <button id="submit" type="submit" class="btn btn-warning w-100">Login</button>
                             </div>
-                            <p class="mt-2">If you have an account, login <a href="/authentication/login/">here</a></p>
-                            {{form.errors}}
+                            <p class="mt-2">If you don't have an account, signup <a href="/authentication/signup/">here</a></p>
+                            <p style="color: white;">{{form.errors}}</p>
                         </form>
                     </div>
                 </div>
