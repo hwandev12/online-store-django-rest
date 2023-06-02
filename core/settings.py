@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'widget_tweaks',
 
     # local apps
@@ -115,6 +116,7 @@ USE_TZ = True
 
 # authentication backends
 AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -133,6 +135,23 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1
 # ACCOUNT_SESSION_REMEMBER = "None"
 # ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 # ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE  = True
+
+# for social registration
+SOCIALACCOUNT_QUERY_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET= True
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 
 # for email verification
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

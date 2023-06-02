@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load widget_tweaks %}
+{% load socialaccount %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -169,6 +170,11 @@
     .valid-feedback {
         color: #2acc80;
     }
+    .social {
+        border: 3px solid #363b40;
+        padding: 24px 10px;
+        margin-right: 15px;
+    }
 </style>
 
 <body>
@@ -193,7 +199,11 @@
                             </div>
                             <p class="mt-2" style="margin-bottom: 10px;">If you don't have an account, signup <a href="{% url 'account_signup' %}">here</a></p>
                             <p class="">Forget <a href="{% url 'account_reset_password' %}">password</a></p>
-
+                            <a class="social" href="{% provider_login_url 'google' %}" title="Image from freepnglogos.com"><img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" width="50" alt="google logo png suite everything you need know about google newest" /></a>
+                            <a class="social" href="https://www.freepnglogos.com/pics/spotify-logo-png" title="Image from freepnglogos.com"><img src="https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-icon-marilyn-scott-0.png" width="50" alt="spotify icon marilyn scott" /></a>
+                            <a class="social" href="https://www.freepnglogos.com/pics/512x512-logo" title="Image from freepnglogos.com"><img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" width="50" alt="512x512 logo github icon" /></a>
+                            <a class="social" href="https://www.freepnglogos.com/pics/amazon-png-logo-vector" title="Image from freepnglogos.com"><img src="https://www.freepnglogos.com/uploads/amazon-png-logo-vector/online-pig-weight-calculator-amazon-png-logo-vector-23.png" width="50" alt="online pig weight calculator amazon png logo vector" /></a>
+                            <a class="social" href="https://www.freepnglogos.com/pics/company-logo-ideas" title="Image from freepnglogos.com"><img src="https://www.freepnglogos.com/uploads/company-logo-png/company-logo-brand-apple-ios-logo-png-transparent-apple-ios-logo-images-26.png" width="50" alt="company logo brand apple ios logo png transparent apple ios logo images" /></a>
                             <p style="color: white;">{{form.errors}}</p>
                         </form>
                     </div>

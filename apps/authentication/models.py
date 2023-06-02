@@ -58,6 +58,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         return ""
     
 
+# we can configure as what we want login, logout, signup
+# this is second way of doing that
+# first way is just change the template name and override to complete task
 @receiver(user_signed_up)
 def user_signup_callback(sender, user, request, **kwargs):
     messages.success(request, "", extra_tags="signup")
