@@ -183,27 +183,15 @@
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Login Today</h3>
-                        <p>Fill in the data below.</p>
+                        <h3>Login with {{ provider.name }}</h3>
+                        <p class="mt-3">Press continue button login with {{ provider.name }}</p>
                         <form class="requires-validation" method="POST">
                             {% csrf_token %}
-                            <div class="col-md-12">
-                                {% render_field form.login placeholder="Enter email" %}
-                            </div>
-                            <div class="col-md-12">
-                                {% render_field form.password placeholder="Password" %}
-                            </div>
-
                             <div class="form-button mt-3">
-                                <button id="submit" type="submit" class="btn btn-warning w-100">Login</button>
+                                <button id="submit" type="submit" class="btn btn-warning w-100">Continue</button>
                             </div>
                             <p class="mt-2" style="margin-bottom: 10px;">If you don't have an account, signup <a href="{% url 'account_signup' %}">here</a></p>
                             <p class="">Forget <a href="{% url 'account_reset_password' %}">password</a></p>
-                            <a class="social" href="{% provider_login_url 'google' %}"><img src="https://www.freepnglogos.com/uploads/google-logo-png/google-logo-png-suite-everything-you-need-know-about-google-newest-0.png" width="50" alt="google logo png suite everything you need know about google newest" /></a>
-                            <a class="social" href="https://www.freepnglogos.com/pics/spotify-logo-png"><img src="https://www.freepnglogos.com/uploads/spotify-logo-png/spotify-icon-marilyn-scott-0.png" width="50" alt="spotify icon marilyn scott" /></a>
-                            <a class="social" href="https://www.freepnglogos.com/pics/512x512-logo"><img src="https://www.freepnglogos.com/uploads/512x512-logo-png/512x512-logo-github-icon-35.png" width="50" alt="512x512 logo github icon" /></a>
-                            <a class="social" href="https://www.freepnglogos.com/pics/amazon-png-logo-vector"><img src="https://www.freepnglogos.com/uploads/amazon-png-logo-vector/online-pig-weight-calculator-amazon-png-logo-vector-23.png" width="50" alt="online pig weight calculator amazon png logo vector" /></a>
-                            <a class="social" href="https://www.freepnglogos.com/pics/company-logo-ideas"><img src="https://www.freepnglogos.com/uploads/company-logo-png/company-logo-brand-apple-ios-logo-png-transparent-apple-ios-logo-images-26.png" width="50" alt="company logo brand apple ios logo png transparent apple ios logo images" /></a>
                             <p style="color: white;">{{form.errors}}</p>
                         </form>
                     </div>
