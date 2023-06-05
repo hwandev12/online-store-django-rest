@@ -12,6 +12,9 @@ class HomePageView(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
     
+class WelcomePage(TemplateView):
+    template_name = 'components/welcome_choose.html'
     
 # make classes to functionable
 home_page_view = HomePageView.as_view()
+welcome_page = WelcomePage.as_view()

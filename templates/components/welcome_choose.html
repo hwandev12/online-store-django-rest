@@ -169,6 +169,45 @@
     .valid-feedback {
         color: #2acc80;
     }
+    .wrapper_cards {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .card_choose {
+        position: relative;
+        width: 160px;
+        height: 100px;
+        background-color: transparent;
+        border: 2px solid #444;
+        box-shadow: 0 0  4px #444;
+        transition: .5s transform ease;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+        z-index: 2;
+    }
+    .card_choose:hover {
+        transform: scale(0.96);
+    }
+    .card_choose h4 {
+        color: white;
+    }
+    .card_choose::before {
+        position: absolute;
+        content:  "";
+        left: 0;
+        top: 0;
+        background-color: orange;
+        width: 0%;
+        height: 100%;
+        z-index: -1;
+        transition: .5s all ease;
+    }
+    .card_choose:hover::before {
+        width: 100%;
+    }
 </style>
 
 <body>
@@ -177,35 +216,20 @@
             <div class="form-holder">
                 <div class="form-content">
                     <div class="form-items">
-                        <h3>Register Today</h3>
-                        <p>Fill in the data below.</p>
-                        <form class="requires-validation" method="POST">
-                            {% csrf_token %}
-                            <div class="col-md-12">
-                                {% render_field form.email placeholder="Enter email" %}
-                            </div>
-
-                            <div class="col-md-12">
-                                {% render_field form.username placeholder="Username" %}
-                            </div>
-
-                            <div class="col-md-12 mt-3">
-                                {% render_field form.phone_number placeholder="Enter Number" %}
-                            </div>
-                            <div class="col-md-12">
-                                {% render_field form.password1 placeholder="Password" %}
-                            </div>
-                            <div class="col-md-12">
-                                {% render_field form.password2 placeholder="Confirm Password" %}
-                            </div>
-
-
-                            <div class="form-button mt-3">
-                                <button id="submit" type="submit" class="btn btn-warning w-100">Register as Buyer</button>
-                            </div>
-                            <p class="mt-2">If you have an account, login <a href="/authentication/login/">here</a></p>
-                            {{form.errors}}
-                        </form>
+                        <h3>So who you are?</h3>
+                        <p>Choose below</p>
+                        <div class="wrapper_cards">
+                            <a href="/authentication/seller-register/" style="text-decoration: none;">
+                                <div class="card_choose">
+                                    <h4>Seller</h4>
+                                </div>
+                            </a>
+                            <a href="{% url 'account_signup' %}" style="text-decoration: none;">
+                                <div class="card_choose">
+                                    <h4>Buyer</h4>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
