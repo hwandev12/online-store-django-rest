@@ -161,7 +161,7 @@ EMAIL_HOST_PASSWORD = "Onajonim1234@"
 EMAIL_USE_TLS = True
 
 ACCOUNT_FORMS = {
-    'signup': 'apps.authentication.forms.CustomAllauthForm',
+    'signup': 'apps.authentication.forms.StoreSellerAccountForm',
 }
 
 # Static files (CSS, JavaScript, Images)
@@ -176,7 +176,7 @@ MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 AUTH_USER_MODEL = 'authentication.User'
-LOGIN_URL = 'authentication/login/'
+LOGIN_URL = '/authentication/login/'
 LOGIN_REDIRECT_URL = "/"
 
 # Default primary key field type

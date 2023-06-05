@@ -41,13 +41,13 @@ class User(AbstractBaseUser, PermissionsMixin):
         
     username = models.CharField(max_length=50, db_index=True)
     email = models.EmailField(unique=True, db_index=True)
-    phone_number = models.IntegerField(default=998)
+    phone_number = models.IntegerField(default=998, null=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'phone_number']
+    REQUIRED_FIELDS = ['username', 'phone_number', 'address']
     
     objects = CustomUserManager()
 
@@ -57,6 +57,21 @@ class User(AbstractBaseUser, PermissionsMixin):
     def token(self):
         return ""
     
+# create seller account
+class SellerAccountModel(models.Model):
+    
+    class Meta:
+        verbose_name = "Seller Account"
+        verbose_name_plural = "Seller Account"
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    phone_number = models.IntegerField(default=998)
+    
+    def __str__(self):
+        return self.user.username
+
 
 # we can configure as what we want login, logout, signup
 # this is second way of doing that
