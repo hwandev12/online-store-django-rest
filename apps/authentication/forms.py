@@ -1,5 +1,5 @@
 from django import forms
-from .models import User, SellerAccountModel
+from .models import User, SellerAccountModel, BuyerAccountModel
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.db import transaction
@@ -13,13 +13,11 @@ class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Confirm Password"}), label="")
     
     # username
-    username = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control", "placeholder": "Username"}), label="")
     email = forms.CharField(widget=forms.EmailInput(attrs={"class": "form-control", "placeholder": "Email"}),label="")
-    phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Phone Number"}), label="")
     
     class Meta:
         model = User
-        fields = ["email", "username", "phone_number"]
+        fields = ["email"]
         
     def clean_password2(self):
         
@@ -28,7 +26,7 @@ class UserCreationForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise ValidationError("Passwords don't match!")
         return password2
-    
+
     def save(self, commit=True):
         
         user = super().save(commit=False)
@@ -64,17 +62,30 @@ class UserUpdateForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ["email", "username", "phone_number", "password", "is_superuser", "is_staff", "is_active", "is_verified"]
+        fields = ["email",  "password", "is_superuser", "is_staff", "is_active", "is_verified"]
         
 
-class CustomAllauthForm(SignupForm):
+class CustomBuyerAccountFormDjango(UserCreationForm):
     phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Phone Number"}), label="")
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    company = forms.CharField()
     
-    def save(self, request):
-        user = super(CustomAllauthForm, self).save(request)
-        user.phone_number = self.cleaned_data['phone_number']
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        
         user.is_buyer = True
         user.save()
+        buyer = BuyerAccountModel.objects.create(user=user)
+        buyer.first_name = self.cleaned_data['first_name']
+        buyer.last_name = self.cleaned_data['last_name']
+        buyer.phone_number = self.cleaned_data['phone_number']
+        buyer.company = self.cleaned_data['company']
+        buyer.save()
         return user
     
 # By this we can create custom djagno allauth form with concise ways

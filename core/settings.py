@@ -122,7 +122,9 @@ AUTHENTICATION_BACKENDS = [
 
 # allauth configure
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+# we should add this as i removed username field in core users section
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = "/"
@@ -160,9 +162,9 @@ EMAIL_HOST_USER = 'husanboy0250@gmail.com'
 EMAIL_HOST_PASSWORD = "Onajonim1234@"
 EMAIL_USE_TLS = True
 
-ACCOUNT_FORMS = {
-    'signup': 'apps.authentication.forms.CustomAllauthForm',
-}
+# ACCOUNT_FORMS = {
+#     'signup': 'apps.authentication.forms.CustomBuyerAccountFormDjango',
+# }
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
