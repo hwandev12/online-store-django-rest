@@ -92,11 +92,23 @@ class BuyerProfile(models.Model):
         verbose_name = "Buyer Profile"
         verbose_name_plural = "Buyer Profile"
         
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    avatar = models.ImageField(default='user/user.png', upload_to='users/')
+    user = models.OneToOneField(BuyerAccountModel, on_delete=models.CASCADE)
+    avatar = models.ImageField(default='users/user.png', upload_to='buyers/')
 
     def __str__(self):
-        return self.user.email
+        return self.user.first_name
+    
+class SellerProfile(models.Model):
+    
+    class Meta:
+        verbose_name = "Seller Profile"
+        verbose_name_plural = "Seller Profile"
+        
+    user = models.OneToOneField(SellerAccountModel, on_delete=models.CASCADE)
+    avatar = models.ImageField(default="users/user.png", upload_to='sellers/')
+    
+    def __str__(self):
+        return self.user.first_name
 
 # we can configure as what we want login, logout, signup
 # this is second way of doing that

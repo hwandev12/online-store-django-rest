@@ -19,13 +19,21 @@ class SellerRegisterView(generic.CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')
     
+
 class BuyerRegisterView(generic.CreateView):
     model = User
     form_class = CustomBuyerAccountFormDjango
     template_name = 'account/signup.html'
+    
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'buyer'
         return super().get_context_data(**kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("/")
+        return super(BuyerRegisterView, self).get(request, *args, **kwargs)
+    
     def form_valid(self, form):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')

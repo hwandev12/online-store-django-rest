@@ -14,6 +14,6 @@ urlpatterns = [
     path("", include("apps.base.urls")),
     path('authentication/', include('allauth.urls')),
     path("authentication/seller-register/", seller_register),
-    path("authentication/signups/", buyer_register),
+    path("authentication/register/", buyer_register),
     path('authentication/profile/', user_profile)
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
