@@ -161,7 +161,7 @@ EMAIL_HOST_PASSWORD = "Onajonim1234@"
 EMAIL_USE_TLS = True
 
 ACCOUNT_FORMS = {
-    'signup': 'apps.authentication.forms.StoreSellerAccountForm',
+    'signup': 'apps.authentication.forms.CustomAllauthForm',
 }
 
 # Static files (CSS, JavaScript, Images)

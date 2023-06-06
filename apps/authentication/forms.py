@@ -2,6 +2,7 @@ from django import forms
 from .models import User, SellerAccountModel
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.db import transaction
 
 from allauth.account.forms import SignupForm
 
@@ -36,6 +37,27 @@ class UserCreationForm(forms.ModelForm):
             user.save()
         return user
     
+    
+class CustomSellerAccountFormDjango(UserCreationForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Phone Number"}), label="")
+    class Meta(UserCreationForm.Meta):
+        model = User
+        
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        
+        user.is_seller = True
+        user.save()
+        seller = SellerAccountModel.objects.create(user=user)
+        seller.first_name = self.cleaned_data['first_name']
+        seller.last_name = self.cleaned_data['last_name']
+        seller.phone_number = self.cleaned_data['phone_number']
+        seller.save()
+        return user
+    
 class UserUpdateForm(forms.ModelForm):
     
     password = ReadOnlyPasswordHashField()
@@ -51,6 +73,7 @@ class CustomAllauthForm(SignupForm):
     def save(self, request):
         user = super(CustomAllauthForm, self).save(request)
         user.phone_number = self.cleaned_data['phone_number']
+        user.is_buyer = True
         user.save()
         return user
     

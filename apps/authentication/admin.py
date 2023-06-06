@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import User, SellerAccountModel
+from .models import (
+    User,
+    SellerAccountModel,
+    BuyerProfile
+)
 from django.contrib.auth.models import Group
 from .forms import (
     UserCreationForm,
@@ -16,7 +20,7 @@ class CustomUserAdmin(admin.ModelAdmin):
     
     list_display = ["email", "username", "phone_number", "is_superuser", ]
     list_filter = ["is_superuser"]
-    fields = ['email', 'username', 'phone_number', "is_superuser", 'is_active', 'is_staff',]
+    fields = ['email', 'username', 'phone_number', "is_superuser", 'is_active', 'is_staff', 'is_buyer', 'is_seller']
     search_fields = ["email"]
     ordering = ["email"]
 
@@ -38,6 +42,7 @@ class CustomSellerAccountAdmin(admin.ModelAdmin):
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(Group)
-admin.site.register(SellerAccountModel, CustomSellerAccountAdmin)
+admin.site.register(SellerAccountModel)
+admin.site.register(BuyerProfile)
 admin.site.login = login_required(admin.site.login)
 

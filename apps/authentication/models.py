@@ -46,6 +46,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     
+    # 
+    is_seller = models.BooleanField(default=False)
+    is_buyer = models.BooleanField(default=False)
+    
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'phone_number', 'address']
     
@@ -70,8 +74,18 @@ class SellerAccountModel(models.Model):
     phone_number = models.IntegerField(default=998)
     
     def __str__(self):
-        return self.user.username
+        return self.user.email
+    
+class BuyerProfile(models.Model):
+    class Meta:
+        verbose_name = "Buyer Profile"
+        verbose_name_plural = "Buyer Profile"
+        
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(default='user/user.png', upload_to='users/')
 
+    def __str__(self):
+        return self.user.username
 
 # we can configure as what we want login, logout, signup
 # this is second way of doing that
