@@ -177,7 +177,7 @@
     .card_choose {
         position: relative;
         width: 160px;
-        height: 100px;
+        height: 40px;
         background-color: transparent;
         border: 2px solid #444;
         box-shadow: 0 0  4px #444;
@@ -193,20 +193,9 @@
     }
     .card_choose h4 {
         color: white;
-    }
-    .card_choose::before {
-        position: absolute;
-        content:  "";
-        left: 0;
-        top: 0;
-        background-color: orange;
-        width: 0%;
-        height: 100%;
-        z-index: -1;
-        transition: .5s all ease;
-    }
-    .card_choose:hover::before {
-        width: 100%;
+        font-size: 16px;
+        margin-bottom: 0;
+        margin-top: 0;
     }
 </style>
 
@@ -224,9 +213,14 @@
                                     <h4>Seller</h4>
                                 </div>
                             </a>
-                            <a href="{% url 'account_signup' %}" style="text-decoration: none;">
+                            <a href="/authentication/register/" style="text-decoration: none;">
                                 <div class="card_choose">
                                     <h4>Buyer</h4>
+                                </div>
+                            </a>
+                            <a href="/authentication/login/" style="text-decoration: none;">
+                                <div class="card_choose">
+                                    <h4>Login</h4>
                                 </div>
                             </a>
                         </div>

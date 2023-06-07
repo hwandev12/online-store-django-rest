@@ -83,10 +83,10 @@ class BuyerAccountModel(models.Model):
     last_name = models.CharField(max_length=100)
     phone_number = models.IntegerField(default=998)
     company = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return self.user.email
-    
+
 class BuyerProfile(models.Model):
     class Meta:
         verbose_name = "Buyer Profile"
