@@ -53,15 +53,24 @@ class BuyerRegisterView(generic.CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')    
 
-def user_profile(request, pk):
-    request_get_pk = User.objects.get(id=pk)
+def user_profile(request, firstname):
+    if request.user.is_seller:
+        request_get_pk = User.objects.get(selleraccountmodel__first_name=firstname)
+    elif request.user.is_buyer:
+        request_get_pk = User.objects.get(buyeraccountmodel__first_name=firstname)
+    # this is for superuser accounts
+    else:
+        request_get_pk = User.objects.get(id=firstname)
     
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=request.user)
-        if not request.user.is_seller:
+        if request.user.is_buyer:
             account_model_update = UpdateBuyerAccount(request.POST, instance=request.user.buyeraccountmodel)
-        else:
+        elif request.user.is_seller:
             account_model_update = UpdateSellerAccount(request.POST, instance=request.user.selleraccountmodel)
+        # this is for superuser accounts
+        else:
+            account_model_update = User(request.POST, instance=request.user)
         
         if user_form.is_valid():
             user_form.save()
@@ -69,10 +78,12 @@ def user_profile(request, pk):
             return redirect("/")
     else:
         user_form = UpdateUserForm(instance=request.user)
-        if not request.user.is_seller:
+        if request.user.is_buyer:
             account_model_update = UpdateBuyerAccount(instance=request.user.buyeraccountmodel)
-        else:
+        elif request.user.is_seller:
             account_model_update = UpdateSellerAccount(instance=request.user.selleraccountmodel)    
+        else:
+            account_model_update = UpdateUserForm(instance=request.user)
         
     context = {
         "user_form": user_form,

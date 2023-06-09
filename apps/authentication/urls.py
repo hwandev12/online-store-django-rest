@@ -10,5 +10,5 @@ app_name = "authentication"
 urlpatterns = [
     path("authentication/seller-register/", seller_register, name="seller_register"),
     path("authentication/register/", buyer_register, name="buyer_register"),
-    path('authentication/profile/<int:pk>', user_profile, name="profile")
+    path('authentication/profile/<str:firstname>', user_profile, name="profile")
 ]

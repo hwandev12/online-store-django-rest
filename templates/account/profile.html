@@ -4,6 +4,9 @@
 
 {% block content %}
 <h2>Profile</h2>
-{{account_model_update}}
+<!-- By this we can filter form using which user is using  -->
+{% if request.user.is_seller or request.user.is_buyer %}
+    {{account_model_update}}
+{% endif %}
 {{user_form}}
 {% endblock %}
