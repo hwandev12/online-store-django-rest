@@ -21,17 +21,17 @@
               <p class="d-none d-md-block mb-0">Sign out</p>
             </a>
             {% if request.user.is_seller %}
-            <a href="{% url 'authentication:profile' request.user.selleraccountmodel.first_name  %}"
+            <a href="{% url 'authentication:general_profile' request.user.selleraccountmodel.first_name  %}"
               class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
               <p class="d-none d-md-block mb-0">Profile</p>
             </a>
             {% elif request.user.is_buyer %}
-            <a href="{% url 'authentication:profile' request.user.buyeraccountmodel.first_name  %}"
+            <a href="{% url 'authentication:general_profile' request.user.buyeraccountmodel.first_name  %}"
             class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
             <p class="d-none d-md-block mb-0">Profile</p>
             </a>
             {% else %}
-            <a href="{% url 'authentication:profile' request.user.id  %}"
+            <a href="{% url 'authentication:general_profile' request.user.id  %}"
             class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
             <p class="d-none d-md-block mb-0">Profile</p>
             </a>

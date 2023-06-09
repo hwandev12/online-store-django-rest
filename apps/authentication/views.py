@@ -1,6 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from allauth.account.views import SignupView
-from django.views import generic
+from django.views import generic, View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from .forms import (
     StoreSellerAccountForm,
     CustomSellerAccountFormDjango,
@@ -12,9 +14,12 @@ from .forms import (
 
 from django.contrib.auth import login
 
+from datetime import datetime
+
 from .models import (
     User,
-    BuyerAccountModel
+    BuyerAccountModel,
+    SellerAccountModel
 )
 
 class SellerRegisterView(generic.CreateView):
@@ -91,7 +96,39 @@ def user_profile(request, firstname):
         "request_get_pk": request_get_pk
     }
     
+    return render(request, 'account/profile-update.html', context)
+
+@login_required()
+def profile(request, first_name):
+    seller = None
+    buyer = None
+    user = None
+    if request.user.is_seller:
+        try:
+            seller = get_object_or_404(SellerAccountModel, user=request.user, first_name=first_name)
+        except ValueError as e:
+            # we should change this 404 error page later on
+            return redirect("/")
+    elif request.user.is_buyer:
+        try:
+            buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
+        except ValueError as e:
+            # we should change this 404 error page later on
+            return redirect("/")
+    else:
+        try:
+            user = get_object_or_404(User, id=first_name, email=request.user.email)
+        except ValueError as e:
+            # we should change this 404 error page later on
+            return redirect("/")
+        
+    context = {
+        "seller": seller,
+        "buyer": buyer,
+        "user": user
+    }
     return render(request, 'account/profile.html', context)
+
     
 seller_register = SellerRegisterView.as_view()
 buyer_register = BuyerRegisterView.as_view()
