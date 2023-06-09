@@ -14,6 +14,10 @@ class SellerRegisterView(generic.CreateView):
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'seller'
         return super().get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("/")
+        return super(SellerRegisterView, self).get(request, *args, **kwargs)
     def form_valid(self, form):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')

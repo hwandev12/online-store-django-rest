@@ -187,6 +187,7 @@
         align-items: center;
         text-decoration: none;
         z-index: 2;
+        margin-right: 5px;
     }
     .card_choose:hover {
         transform: scale(0.96);
@@ -197,6 +198,18 @@
         margin-bottom: 0;
         margin-top: 0;
     }
+    @media(max-width: 800px) {
+        .wrapper_cards {
+            flex-direction: column;
+        }
+        .form-items {
+            min-width: 0 !important;
+            width: 300px !important;
+        }
+        .card_choose {
+            margin-top: 10px;
+        }
+    }
 </style>
 
 <body>
@@ -204,26 +217,28 @@
         <div class="row">
             <div class="form-holder">
                 <div class="form-content">
-                    <div class="form-items">
+                    <div class="form-items" style="width: 500px;">
                         <h3>So who you are?</h3>
                         <p>Choose below</p>
                         <div class="wrapper_cards">
-                            <a href="/authentication/seller-register/" style="text-decoration: none;">
+                            <a href="{% url 'authentication:seller_register' %}" style="text-decoration: none;">
                                 <div class="card_choose">
                                     <h4>Seller</h4>
                                 </div>
                             </a>
-                            <a href="/authentication/register/" style="text-decoration: none;">
+                            <a href="{% url 'authentication:buyer_register' %}" style="text-decoration: none;">
                                 <div class="card_choose">
                                     <h4>Buyer</h4>
                                 </div>
                             </a>
-                            <a href="/authentication/login/" style="text-decoration: none;">
+                            <a href="{% url 'account_login' %}" style="text-decoration: none;">
                                 <div class="card_choose">
                                     <h4>Login</h4>
                                 </div>
                             </a>
                         </div>
+                        <p class="mt-4" style="margin-bottom: 16px;">Please read our <a href="#">agreement</a> of creating and login to your account</p>
+                        <p>You can download our agreement <a href="#">pdf</a> file to read offline</p>
                     </div>
                 </div>
             </div>
