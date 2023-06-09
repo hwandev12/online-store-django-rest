@@ -20,7 +20,7 @@
                 class="fas fa-user-alt m-1 me-md-2"></i>
               <p class="d-none d-md-block mb-0">Sign out</p>
             </a>
-            <a href="{% url 'authentication:profile' %}"
+            <a href="{% url 'authentication:profile' request.user.id %}"
               class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
               <p class="d-none d-md-block mb-0">Profile</p>
             </a>

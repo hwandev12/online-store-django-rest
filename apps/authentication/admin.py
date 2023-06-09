@@ -22,7 +22,7 @@ class CustomUserAdmin(admin.ModelAdmin):
     
     list_display = ["email", "is_superuser", "is_buyer", "is_seller"]
     list_filter = ["is_superuser"]
-    fields = ['email', "is_superuser", 'is_active', 'is_staff', 'is_buyer', 'is_seller']
+    fields = ['email', "is_superuser", 'is_active', 'is_staff', 'is_buyer', 'is_seller', "password"]
     search_fields = ["email"]
     ordering = ["email"]
 
@@ -37,7 +37,7 @@ class CustomSellerAccountAdmin(admin.ModelAdmin):
         except ObjectDoesNotExist:
             return "Error"
 
-admin.site.register(User, CustomUserAdmin)
+admin.site.register(User)
 admin.site.unregister(Group)
 admin.site.register(SellerAccountModel)
 admin.site.register(BuyerProfile)

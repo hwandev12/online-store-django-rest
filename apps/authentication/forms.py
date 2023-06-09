@@ -1,5 +1,11 @@
 from django import forms
-from .models import User, SellerAccountModel, BuyerAccountModel
+from .models import (
+    User,
+    SellerAccountModel,
+    BuyerAccountModel,
+    BuyerProfile,
+    SellerProfile
+)
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.db import transaction
@@ -118,3 +124,22 @@ class StoreSellerAccountForm(SignupForm):
         )
         seller_account.save()
         return seller_account.user
+
+# for updating uniuq user values, email, username, etc
+class UpdateUserForm(forms.ModelForm):
+    
+    class Meta:
+        model = User
+        fields = ["email"]
+        
+class UpdateBuyerAccount(forms.ModelForm):
+    
+    class Meta:
+        model = BuyerAccountModel
+        fields = ["first_name", "last_name", "phone_number", "company"]
+        
+class UpdateSellerAccount(forms.ModelForm):
+    
+    class Meta:
+        model = SellerAccountModel
+        fields = ['first_name', 'last_name', 'phone_number']

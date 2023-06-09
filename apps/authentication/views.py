@@ -1,11 +1,21 @@
 from django.shortcuts import render, redirect
 from allauth.account.views import SignupView
 from django.views import generic
-from .forms import StoreSellerAccountForm, CustomSellerAccountFormDjango, CustomBuyerAccountFormDjango
+from .forms import (
+    StoreSellerAccountForm,
+    CustomSellerAccountFormDjango,
+    CustomBuyerAccountFormDjango,
+    UpdateBuyerAccount,
+    UpdateUserForm,
+    UpdateSellerAccount
+)
 
 from django.contrib.auth import login
 
-from .models import User
+from .models import (
+    User,
+    BuyerAccountModel
+)
 
 class SellerRegisterView(generic.CreateView):
     model = User
@@ -43,9 +53,35 @@ class BuyerRegisterView(generic.CreateView):
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')    
 
-class UserProfileView(generic.TemplateView):
-    template_name = 'account/profile.html'
+def user_profile(request, pk):
+    request_get_pk = User.objects.get(id=pk)
+    
+    if request.method == 'POST':
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        if not request.user.is_seller:
+            account_model_update = UpdateBuyerAccount(request.POST, instance=request.user.buyeraccountmodel)
+        else:
+            account_model_update = UpdateSellerAccount(request.POST, instance=request.user.selleraccountmodel)
+        
+        if user_form.is_valid():
+            user_form.save()
+            account_model_update.save()
+            return redirect("/")
+    else:
+        user_form = UpdateUserForm(instance=request.user)
+        if not request.user.is_seller:
+            account_model_update = UpdateBuyerAccount(instance=request.user.buyeraccountmodel)
+        else:
+            account_model_update = UpdateSellerAccount(instance=request.user.selleraccountmodel)    
+        
+    context = {
+        "user_form": user_form,
+        "account_model_update": account_model_update,
+        "request_get_pk": request_get_pk
+    }
+    
+    return render(request, 'account/profile.html', context)
     
 seller_register = SellerRegisterView.as_view()
 buyer_register = BuyerRegisterView.as_view()
-user_profile = UserProfileView.as_view()
+# user_profile = UserProfileView.as_view()
