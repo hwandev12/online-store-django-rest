@@ -11,6 +11,7 @@ from .forms import (
     UpdateUserForm,
     UpdateSellerAccount
 )
+from django.contrib import messages
 
 from django.contrib.auth import login
 
@@ -59,13 +60,6 @@ class BuyerRegisterView(generic.CreateView):
         return redirect('/')    
 
 def user_profile(request, firstname):
-    if request.user.is_seller:
-        request_get_pk = User.objects.get(selleraccountmodel__first_name=firstname)
-    elif request.user.is_buyer:
-        request_get_pk = User.objects.get(buyeraccountmodel__first_name=firstname)
-    # this is for superuser accounts
-    else:
-        request_get_pk = User.objects.get(id=firstname)
     
     if request.method == 'POST':
         user_form = UpdateUserForm(request.POST, instance=request.user)
@@ -80,6 +74,7 @@ def user_profile(request, firstname):
         if user_form.is_valid():
             user_form.save()
             account_model_update.save()
+            messages.success(request, "Your profile is updated successfully", extra_tags="profile_update")
             return redirect("/")
     else:
         user_form = UpdateUserForm(instance=request.user)
@@ -93,7 +88,6 @@ def user_profile(request, firstname):
     context = {
         "user_form": user_form,
         "account_model_update": account_model_update,
-        "request_get_pk": request_get_pk
     }
     
     return render(request, 'account/profile-update.html', context)

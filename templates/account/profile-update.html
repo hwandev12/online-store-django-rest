@@ -1,6 +1,76 @@
 {% extends 'base/index.html' %}
+{% load widget_tweaks %}
 
 {% block title %}Profile{% endblock %}
 {% block content %}
-<h1>Profile</h1>
+<style>
+    .avatar {
+        width: 200px;
+        height: 200px;
+    }
+</style>
+<div class="container bootstrap snippets bootdey my-5">
+    <h1 class="text-primary">Edit Profile</h1>
+    <hr>
+    <div class="row">
+        <!-- left column -->
+        <div class="col-md-3">
+            <div class="text-center">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="avatar img-circle img-thumbnail"
+                    alt="avatar">
+                <h6>Upload a different photo...</h6>
+
+                <input type="file" class="form-control">
+            </div>
+        </div>
+
+        <!-- edit form column -->
+        <div class="col-md-9 personal-info">
+            <!-- <div class="alert alert-info alert-dismissable">
+                <a class="panel-close close" data-dismiss="alert">×</a>
+                <i class="fa fa-coffee"></i>
+                This is an <strong>.alert</strong>. Use this to show important messages to the user.
+            </div> -->
+            <h3>Personal info</h3>
+
+            <form class="form-horizontal" role="form" method="post">
+                {% csrf_token %}
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Email:</label>
+                    <div class="col-lg-8">
+                        {% render_field user_form.email class+="form-control" placeholder="Email" %}
+                    </div>
+                </div>
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Firstname</label>
+                    <div class="col-lg-8">
+                        {% render_field account_model_update.first_name class+="form-control" placeholder="Firstname" %}
+                    </div>
+                </div>
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Lastname</label>
+                    <div class="col-lg-8">
+                        {% render_field account_model_update.last_name class+="form-control" placeholder="Lastname" %}
+                    </div>
+                </div>
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Phone Number</label>
+                    <div class="col-lg-8">
+                        {% render_field account_model_update.phone_number class+="form-control" placeholder="Phone number" %}
+                    </div>
+                </div>
+                {% if request.user.is_buyer %}
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Company</label>
+                    <div class="col-lg-8">
+                        {% render_field account_model_update.company class+="form-control" placeholder="Company" %}
+                    </div>
+                </div>
+                {% endif %}
+                <button type="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+<hr>
 {% endblock %}

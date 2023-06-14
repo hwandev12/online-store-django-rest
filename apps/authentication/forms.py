@@ -130,7 +130,7 @@ class UpdateUserForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ["email"]
+        fields = ["email",]
         
 class UpdateBuyerAccount(forms.ModelForm):
     

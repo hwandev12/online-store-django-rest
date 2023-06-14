@@ -61,7 +61,11 @@
         {% if messages %}
         <div class="alert alert-success" role="alert" style="position: absolute; z-index: 1; width: 400px !important; right: 0px; top: 68px; height: 80px; text-align: left;">
           {% for message in messages %}
+          {% if "profile_update" in message.tags %}
           <i class="fa-solid fa-check mx-2"></i>{{message}}
+          {% else %}
+          <i class="fa-solid fa-check mx-2"></i>{{message}}
+          {% endif %}
           {% endfor %}
         </div>
         {% endif %}
