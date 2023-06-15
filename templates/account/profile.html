@@ -56,21 +56,22 @@
             <div class="py-4 px-4">
                 {% if request.user.is_seller %}
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+                    <h5 class="mb-0">Recent Products</h5><a href="#" class="btn btn-link text-muted">Show all</a>
                 </div>
+                {% if product %}
                 <div class="row">
-                    <div class="col-lg-6 mb-2 pr-lg-1"><img
-                            src="https://bootstrapious.com/i/snippets/sn-profile/img-3.jpg" alt=""
+                    <a href="{{ product.get_absolute_url }}">
+                        <div class="col-lg-6 mb-2 pr-lg-1"><img
+                            src="{{ product.product_image.url }}" alt=""
                             class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 mb-2 pl-lg-1"><img
-                            src="https://bootstrapious.com/i/snippets/sn-profile/img-4.jpg" alt=""
-                            class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 pr-lg-1 mb-2"><img
-                            src="https://bootstrapious.com/i/snippets/sn-profile/img-5.jpg" alt=""
-                            class="img-fluid rounded shadow-sm"></div>
-                    <div class="col-lg-6 pl-lg-1"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-6.jpg"
-                            alt="" class="img-fluid rounded shadow-sm"></div>
+                    </a>
                 </div>
+                {% else %}
+                <h5 class="text-center" style="
+                color: #777;
+                font-size: 16px;
+                "><i class="fa-solid fa-circle-exclamation mx-2"></i>You dont have product yet</h5>
+                {% endif %}
                 {% endif %}
                 <div class="py-4">
                     <h5 class="my-3">Recent comments</h5>

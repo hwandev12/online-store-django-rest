@@ -18,6 +18,8 @@ class HomePageView(TemplateView):
     def get_context_data(self, **kwargs: Any) -> dict:
         context = super().get_context_data(**kwargs)
         context['products'] = Product.objects.all()
+        # filter products by date
+        context['latest_products'] = Product.objects.all().order_by('-created_at')[:3]
         return context
        
 class ProductDetailView(DetailView):

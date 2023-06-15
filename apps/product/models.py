@@ -14,12 +14,14 @@ class Product(models.Model):
     product_quantity = models.IntegerField()
     product_description = models.TextField()
     product_image = models.ImageField(upload_to='products/')
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
         return self.product_name
     
     def get_absolute_url(self):
-        return reverse('product_detail', args=[str(self.id)])
+        return reverse('base:product_detail', args=[str(self.slug)])
     
     # create a method to truncate product_description to 50 characters
     @property

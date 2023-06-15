@@ -22,6 +22,9 @@ from .models import (
     BuyerAccountModel,
     SellerAccountModel
 )
+from apps.product.models import (
+    Product
+)
 
 class SellerRegisterView(generic.CreateView):
     model = User
@@ -97,9 +100,11 @@ def profile(request, first_name):
     seller = None
     buyer = None
     user = None
+    product = None
     if request.user.is_seller:
         try:
             seller = get_object_or_404(SellerAccountModel, user=request.user, first_name=first_name)
+            product = Product.objects.filter(owner=request.user.selleraccountmodel)
         except ValueError as e:
             # we should change this 404 error page later on
             return redirect("/")
@@ -116,10 +121,17 @@ def profile(request, first_name):
             # we should change this 404 error page later on
             return redirect("/")
         
+    # get latest product
+    if product:
+        product = product.latest('created_at')
+    else:
+        product = None
+        
     context = {
         "seller": seller,
         "buyer": buyer,
-        "user": user
+        "user": user,
+        "product": product
     }
     return render(request, 'account/profile.html', context)
 
