@@ -8,7 +8,7 @@
         <div class="row">
             {% for product in products %}
             <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="card my-2 shadow-0">
+                <div class="card my-2 shadow-0" style="height: 400px;">
                     <a href="{{ product.get_absolute_url }}" class="">
                         <div class="mask" style="height: 50px;">
                             <div class="d-flex justify-content-start align-items-start h-100 m-2">
@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <img src="{{ product.product_image.url }}"
-                            class="card-img-top rounded-2" style="aspect-ratio: 1 / 1" />
+                            class="card-img-top rounded-2" style="height: 220px; object-fit: cover;"/>
                     </a>
                     <div class="card-body px-2 pt-3">
                         <a href="#!" class="btn btn-light border px-2 pt-2 float-end icon-hover"><i
