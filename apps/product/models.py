@@ -6,6 +6,8 @@ from apps.authentication.models import SellerAccountModel
 
 # create model for product with product_name, product_cost, product_quantity, product_description, product_image
 class Product(models.Model):
+    # add slug field
+    slug = models.SlugField(max_length=200, unique=True, null=True)
     owner = models.ForeignKey(SellerAccountModel, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=200)
     product_cost = models.IntegerField()
