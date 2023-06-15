@@ -37,7 +37,8 @@ INSTALLED_APPS = [
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
-    'apps.base.apps.BaseConfig'
+    'apps.base.apps.BaseConfig',
+    'apps.product.apps.ProductConfig',
 ]
 
 SITE_ID = 1

@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-
+            {% if request.user.is_seller %}
             <div class="bg-light p-4 d-flex justify-content-end text-center">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item">
@@ -52,8 +52,9 @@
                     </li>
                 </ul>
             </div>
-
+            {% endif %}
             <div class="py-4 px-4">
+                {% if request.user.is_seller %}
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h5 class="mb-0">Recent photos</h5><a href="#" class="btn btn-link text-muted">Show all</a>
                 </div>
@@ -70,8 +71,9 @@
                     <div class="col-lg-6 pl-lg-1"><img src="https://bootstrapious.com/i/snippets/sn-profile/img-6.jpg"
                             alt="" class="img-fluid rounded shadow-sm"></div>
                 </div>
+                {% endif %}
                 <div class="py-4">
-                    <h5 class="mb-3">Recent posts</h5>
+                    <h5 class="my-3">Recent comments</h5>
                     <div class="p-4 bg-light rounded shadow-sm">
                         <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
