@@ -123,7 +123,7 @@ def profile(request, first_name):
         
     # get latest product
     if product:
-        product = product.latest('created_at')
+        product = product.order_by('-created_at')[:3]
     else:
         product = None
         

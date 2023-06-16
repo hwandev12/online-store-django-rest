@@ -41,7 +41,7 @@
                     </ul>
                 </div>
                 <div class="col-lg-4 order-lg-2 order-1">
-                    <div class="image_selected"><img src="{{ product.product_image.url }}" alt=""></div>
+                    <div class="image_selected"><img src="{{ product.image.product_image.url }}" alt=""></div>
                 </div>
                 <div class="col-lg-6 order-3">
                     <div class="product_description">
@@ -77,7 +77,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-6"> <button type="button" class="btn btn-primary shop-button">Add to Cart</button> <button type="button" class="btn btn-success shop-button">Buy Now</button>
+                            <div class="col-xs-6">
+                                 <button type="button" class="btn btn-primary shop-button">Add to Cart</button> <button type="button" class="btn btn-success shop-button">Buy Now</button>
+                                 {% if request.user.is_seller %}
+                                 <a href="{% url 'base:product_delete' product.slug %}" class="btn btn-success shop-button" style="padding-top: 12px;">Delete</a>
+                                 <!-- create a tag to delete product -->
+                                 <a href="{% url 'base:product_update' product.slug %}" class="btn btn-success shop-button" style="padding-top: 12px;">Update</a>
+                                 <!-- create a tag to update product -->
+                                 {% endif %}
                                 <div class="product_fav"><i class="fas fa-heart"></i></div>
                             </div>
                         </div>

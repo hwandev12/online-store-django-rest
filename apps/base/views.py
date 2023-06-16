@@ -1,10 +1,19 @@
+from typing import Any, Dict
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView, DetailView, CreateView
+from django.views.generic import (
+    TemplateView,
+    DetailView,
+    CreateView,
+    DeleteView,
+    UpdateView
+)
 from django.urls import reverse
-from apps.product.models import Product
-from apps.product.forms import ProductForm
+from apps.product.models import Product, ProductImage
+from apps.product.forms import ProductForm, ProductImageForm, ProductImageFormSet
+from django.db import transaction
+from apps.authentication.models import SellerAccountModel
 class HomePageView(TemplateView):
     template_name = "pages/home.html"
     
@@ -38,14 +47,91 @@ class ProductCreateView(CreateView):
             return redirect('base:home')
         return super().dispatch(*args, **kwargs)
     
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context["product_image"] = ProductImageFormSet()
+        if self.request.POST:
+            context['product_image'] = ProductImageFormSet(self.request.POST, self.request.FILES)
+        else:
+            context['product_image'] = ProductImageFormSet()
+        return context
+    
     def form_valid(self, form):
+        context = self.get_context_data()
+        product_image = context["product_image"]
+        with transaction.atomic():
+            form.instance.owner = self.request.user.selleraccountmodel
+            self.object = form.save()
+            if product_image.is_valid():
+                product_image.instance = self.object
+                product_image.save()
         form.instance.owner = self.request.user.selleraccountmodel
-        return super().form_valid(form)
+        return super(ProductCreateView, self).form_valid(form)
     
     def get_success_url(self):
         return reverse('base:product_detail', args=[self.object.slug])
     
+class ProductDeleteVeiew(DeleteView):
+    model = Product
+    template_name = 'pages/product_delete.html'
+    context_object_name = 'product'
     
+    def get_success_url(self):
+        return reverse('base:home')
+    
+    # create method to allow only seller to delete product
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        if not self.request.user.is_seller:
+            # later on i would add 404 page here
+            return redirect('base:home')
+        return super().dispatch(*args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return redirect('base:home')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        return context
+    
+# create a class to update product
+class ProductUpdate(UpdateView):
+    template_name = 'pages/product_update.html'
+    form_class = ProductForm
+    
+    # create method to allow only seller to update product
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        if not self.request.user.is_seller:
+            # later on i would add 404 page here
+            return redirect('base:home')
+        return super().dispatch(*args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProductUpdate, self).get_context_data(**kwargs)
+        context["product_image"] = ProductImageFormSet()
+        if self.request.POST:
+            context['product_image'] = ProductImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+        else:
+            context['product_image'] = ProductImageFormSet(instance=self.object)
+        return context
+    
+    def form_valid(self, form):
+        context = self.get_context_data()
+        product_image = context["product_image"]
+        with transaction.atomic():
+            self.object = form.save()
+            if product_image.is_valid():
+                product_image.instance = self.object
+                product_image.save()
+        return super(ProductUpdate, self).form_valid(form)
+    
+    def get_success_url(self):
+        return reverse('base:product_detail', args=[self.object.slug])
+
 class WelcomePage(TemplateView):
     template_name = 'components/welcome_choose.html'
     
@@ -63,3 +149,5 @@ welcome_page = WelcomePage.as_view()
 # create a function name from class
 product_detail_view = ProductDetailView.as_view()
 product_create_view = ProductCreateView.as_view()
+product_delete_view = ProductDeleteVeiew.as_view()
+product_update_view = ProductUpdate.as_view()

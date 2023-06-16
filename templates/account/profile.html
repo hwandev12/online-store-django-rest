@@ -60,11 +60,14 @@
                 </div>
                 {% if product %}
                 <div class="row">
-                    <a href="{{ product.get_absolute_url }}">
-                        <div class="col-lg-6 mb-2 pr-lg-1"><img
-                            src="{{ product.product_image.url }}" alt=""
-                            class="img-fluid rounded shadow-sm"></div>
-                    </a>
+                {% for p in product %}
+                        <div class="col-lg-6 mb-2 pr-lg-1">
+                            <a href="{{ p.get_absolute_url }}">
+                                <img src="{{ p.image.product_image.url }}" alt="No image" class="img-fluid rounded shadow-sm">
+                            </a>
+                        </div>
+                        <a href="{% url 'base:product_delete' p.slug %}" class="btn btn-primary">Delete Product</a>
+                    {% endfor %}
                 </div>
                 <a href="{% url 'base:product_create' %}" class="btn btn-primary">Upload Product</a>
                 {% else %}
