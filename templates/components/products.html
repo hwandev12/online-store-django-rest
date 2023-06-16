@@ -2,14 +2,16 @@
     <div class="container py-5">
       <div class="row justify-content-center mb-3">
         {% for p in products %}
-        <div class="col-md-12 col-xl-10">
+        <div class="col-md-12 col-xl-10 mt-2">
           <div class="card shadow-0 border rounded-3">
             <div class="card-body">
               <div class="row">
                 <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
                   <div class="bg-image hover-zoom ripple rounded ripple-surface">
-                    <img src="{{ p.get_image }}"
+                    <a href="{{ p.get_absolute_url }}">
+                      <img src="{{ p.get_image }}"
                       class="w-100" />
+                    </a>
                   </div>
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-6">
@@ -43,7 +45,7 @@
                 </div>
                 <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
                   <div class="d-flex flex-row align-items-center mb-1">
-                    <h4 class="mb-1 me-1">${{ p.product_cost }}.00</h4>
+                    <h4 class="mb-1 me-1">{{ p.product_cost }} 000 so'm</h4>
                     <!-- <span class="text-danger"><s>$20.99</s></span> -->
                   </div>
                   <h6 class="text-success">Free shipping</h6>

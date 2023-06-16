@@ -1,4 +1,3 @@
-from typing import Any, Dict
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -14,6 +13,7 @@ from apps.product.models import Product, ProductImage
 from apps.product.forms import ProductForm, ProductImageForm, ProductImageFormSet
 from django.db import transaction
 from apps.authentication.models import SellerAccountModel
+from django.contrib import messages
 class HomePageView(TemplateView):
     template_name = "pages/home.html"
     
@@ -141,6 +141,7 @@ class ProductUpdate(UpdateView):
             self.object = form.save()
             if product_image.is_valid():
                 product_image.instance = self.object
+                messages.success(self.request, 'Product updated successfully', extra_tags='update')
                 product_image.save()
         return super(ProductUpdate, self).form_valid(form)
     

@@ -16,7 +16,8 @@ class ProductForm(forms.ModelForm):
 
     
 class ProductImageForm(forms.ModelForm):
-    # write a multiple image field
+    # write code to remove default label
+    product_image = forms.ImageField(label='')
     class Meta:
         model = ProductImage
         fields = ('product_image',)

@@ -4,6 +4,16 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
+<!-- {% if messages %}
+<div class="alert alert-success" role="alert"
+    style="position: absolute; z-index: 1; width: 400px !important; right: 0px; top: 68px; height: 50px; text-align: left;">
+    {% for message in messages %}
+    {% if "update" in message.tags %}
+    <i class="fa-solid fa-check mx-2"></i>{{message}}
+    {% endif %}
+    {% endfor %}
+</div>
+{% endif %} -->
 <div class="super_container">
     <header class="header" style="display: none;">
         <div class="header_main">
@@ -15,7 +25,9 @@
                                 <div class="header_search_form_container">
                                     <form action="#" class="header_search_form clearfix">
                                         <div class="custom_dropdown">
-                                            <div class="custom_dropdown_list"> <span class="custom_dropdown_placeholder clc">All Categories</span> <i class="fas fa-chevron-down"></i>
+                                            <div class="custom_dropdown_list"> <span
+                                                    class="custom_dropdown_placeholder clc">All Categories</span> <i
+                                                    class="fas fa-chevron-down"></i>
                                                 <ul class="custom_list clc">
                                                     <li><a class="clc" href="#">All Categories</a></li>
                                                 </ul>
@@ -35,9 +47,15 @@
             <div class="row mx-0">
                 <div class="col-lg-2 order-lg-1 order-2" style="width: 15%;">
                     <ul class="image_list">
-                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713229/single_4.jpg"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713229/single_4.jpg" alt=""></li>
-                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_2.jpg"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_2.jpg" alt=""></li>
-                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_3.jpg"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_3.jpg" alt=""></li>
+                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713229/single_4.jpg"><img
+                                src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713229/single_4.jpg" alt="">
+                        </li>
+                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_2.jpg"><img
+                                src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_2.jpg" alt="">
+                        </li>
+                        <li data-image="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_3.jpg"><img
+                                src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1565713228/single_3.jpg" alt="">
+                        </li>
                     </ul>
                 </div>
                 <div class="col-lg-4 order-lg-2 order-1">
@@ -53,10 +71,11 @@
                             </ol>
                         </nav>
                         <div class="product_name">{{ product.product_name }}</div>
-                        <div> <span class="product_price">$ {{ product.product_cost }}</span> <strike class="product_discount"></strike> </div>
+                        <div> <span class="product_price">{{ product.product_cost }} 000 so'm</span> <strike
+                                class="product_discount"></strike> </div>
                         <hr class="singleline">
                         <div> <span class="product_info">
-                            {{ product.product_description }}
+                                {{ product.product_description }}
                         </div>
                         <div>
                             <!-- <div class="row mx-0" style="margin-top: 15px;">
@@ -70,21 +89,27 @@
                         </div>
                         <div class="row mx-0">
                             <div class="col-xs-6" style="margin-left: 13px;">
-                                <div class="product_quantity"> <span>QTY: </span> <input id="quantity_input" type="text" pattern="[0-9]*" value="1">
+                                <div class="product_quantity"> <span>QTY: </span> <input id="quantity_input" type="text"
+                                        pattern="[0-9]*" value="1">
                                     <div class="quantity_buttons">
-                                        <div id="quantity_inc_button" class="quantity_inc quantity_control"><i class="fas fa-chevron-up"></i></div>
-                                        <div id="quantity_dec_button" class="quantity_dec quantity_control"><i class="fas fa-chevron-down"></i></div>
+                                        <div id="quantity_inc_button" class="quantity_inc quantity_control"><i
+                                                class="fas fa-chevron-up"></i></div>
+                                        <div id="quantity_dec_button" class="quantity_dec quantity_control"><i
+                                                class="fas fa-chevron-down"></i></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xs-6">
-                                 <button type="button" class="btn btn-primary shop-button">Add to Cart</button> <button type="button" class="btn btn-success shop-button">Buy Now</button>
-                                 {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
-                                 <a href="{% url 'base:product_delete' product.slug %}" class="btn btn-success shop-button" style="padding-top: 12px;">Delete</a>
-                                 <!-- create a tag to delete product -->
-                                 <a href="{% url 'base:product_update' product.slug %}" class="btn btn-success shop-button" style="padding-top: 12px;">Update</a>
-                                 <!-- create a tag to update product -->
-                                 {% endif %}
+                                <button type="button" class="btn btn-primary shop-button">Add to Cart</button> <button
+                                    type="button" class="btn btn-success shop-button">Buy Now</button>
+                                {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
+                                <a href="{% url 'base:product_delete' product.slug %}"
+                                    class="btn btn-success shop-button" style="padding-top: 12px;">Delete</a>
+                                <!-- create a tag to delete product -->
+                                <a href="{% url 'base:product_update' product.slug %}"
+                                    class="btn btn-success shop-button" style="padding-top: 12px;">Update</a>
+                                <!-- create a tag to update product -->
+                                {% endif %}
                                 <div class="product_fav"><i class="fas fa-heart"></i></div>
                             </div>
                         </div>
@@ -103,7 +128,8 @@
                                 <td class="col-md-4"><span class="p_specification">Sales Package :</span> </td>
                                 <td class="col-md-8">
                                     <ul>
-                                        <li>2 in 1 Laptop, Power Adaptor, Active Stylus Pen, User Guide, Warranty Documents</li>
+                                        <li>2 in 1 Laptop, Power Adaptor, Active Stylus Pen, User Guide, Warranty
+                                            Documents</li>
                                     </ul>
                                 </td>
                             </tr>

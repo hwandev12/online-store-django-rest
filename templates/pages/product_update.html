@@ -1,12 +1,23 @@
 {% extends 'base/index.html' %}
 {% load static %}
 {% block title %}Product Update{% endblock %}
-
+{% load widget_tweaks %}
 {% block content %}
-<form method="post" enctype="multipart/form-data">
+<style>
+    @media(max-width: 700px){
+        form {
+            width: 87% !important;
+        }
+    }
+</style>
+<form method="post" enctype="multipart/form-data" class="mx-auto my-5" style="width: 600px;">
+    <h2 class="text-muted text-center text-uppercase">Upload Product</h2>
     {% csrf_token %}
-    {{form}}
-    {{ product_image }}
-    <button type="submit">Update</button>
+    {% render_field form.product_name class+="form-control my-4" placeholder="Product Name" %}
+    {% render_field form.product_description class+="form-control mb-4" placeholder="Product Description" %}
+    {% render_field form.product_cost class+="form-control mb-4" placeholder="Product Cost" %}
+    {% render_field form.product_quantity class+="form-control mb-4" placeholder="Product Quantity" %}
+    {{ product_image.as_p }}
+    <button class="btn btn-primary w-100" type="submit">Update</button>
 </form>
 {% endblock %}
