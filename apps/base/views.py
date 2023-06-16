@@ -10,7 +10,12 @@ from django.views.generic import (
 )
 from django.urls import reverse
 from apps.product.models import Product, ProductImage
-from apps.product.forms import ProductForm, ProductImageForm, ProductImageFormSet
+from apps.product.forms import (
+    ProductForm,
+    ProductImageForm,
+    ProductImageFormSet,
+    ProductImageFormSetUpdate
+)
 from django.db import transaction
 from apps.authentication.models import SellerAccountModel
 from django.contrib import messages

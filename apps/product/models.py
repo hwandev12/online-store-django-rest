@@ -40,18 +40,45 @@ class Product(models.Model):
         return f"{self.product_cost:,} 000 UZS"
     
     # create a method to get product_image
-    @property
     def get_image(self):
-        if self.image:
-            return self.image.product_image.url
+        return self.image.all()[1:]
+    # write a code to get first image from ProductImage model
+    def get_first_image(self):
+        if self.image.first():
+            return self.image.first().get_product_image_url()
+    
+    # create a method to get product_quantity
+    @property
+    def get_quantity(self):
+        return self.product_quantity
+    
+    # create a method to get product_status
+    @property
+    def get_status(self):
+        return self.product_status
+    
+    # create a method to get product_cost
+    @property
+    def get_cost(self):
+        return self.product_cost
+
     
 # create model for product image with product_image
 class ProductImage(models.Model):
-    product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='image')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='image')
     product_image = models.ImageField(upload_to='products/')
+    
     
     def __str__(self):
         return self.product.product_name
+    
+    # create method product only created 4 times
+    def save(self, *args, **kwargs):
+        if ProductImage.objects.filter(product=self.product).count() < 4:
+            return super().save(*args, **kwargs)
+    
+    def get_product_image_url(self):
+        return self.product_image.url
     
     def get_absolute_url(self):
         return reverse('base:product_detail', args=[str(self.product.slug)])
