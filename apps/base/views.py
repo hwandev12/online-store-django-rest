@@ -87,6 +87,13 @@ class ProductDeleteVeiew(DeleteView):
             return redirect('base:home')
         return super().dispatch(*args, **kwargs)
     
+    # create a method only allow owner to delete product
+    def get_object(self, queryset=None):
+        product = super(ProductDeleteVeiew, self).get_object()
+        if not product.owner == self.request.user.selleraccountmodel:
+            return redirect('base:home')
+        return product
+    
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
@@ -101,6 +108,7 @@ class ProductDeleteVeiew(DeleteView):
 class ProductUpdate(UpdateView):
     template_name = 'pages/product_update.html'
     form_class = ProductForm
+    queryset = Product.objects.all()
     
     # create method to allow only seller to update product
     @method_decorator(login_required)
@@ -118,6 +126,13 @@ class ProductUpdate(UpdateView):
         else:
             context['product_image'] = ProductImageFormSet(instance=self.object)
         return context
+    
+    # create a method only allow owner to update product
+    def get_object(self, queryset=None):
+        product = super(ProductUpdate, self).get_object()
+        if not product.owner == self.request.user.selleraccountmodel:
+            return redirect('base:home')
+        return product
     
     def form_valid(self, form):
         context = self.get_context_data()

@@ -66,11 +66,11 @@
                                 <img src="{{ p.image.product_image.url }}" alt="No image" class="img-fluid rounded shadow-sm">
                             </a>
                         </div>
-                        <a href="{% url 'base:product_delete' p.slug %}" class="btn btn-primary">Delete Product</a>
+                        <!-- <a href="{% url 'base:product_delete' p.slug %}" class="btn btn-primary">Delete Product</a> -->
                     {% endfor %}
                 </div>
-                <a href="{% url 'base:product_create' %}" class="btn btn-primary">Upload Product</a>
                 {% else %}
+                <a href="{% url 'base:product_create' %}" class="btn btn-primary">Upload Product</a>
                 <h5 class="text-center" style="
                 color: #777;
                 font-size: 16px;

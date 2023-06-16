@@ -34,6 +34,17 @@ class Product(models.Model):
     def short_description(self):
         return truncatechars(self.product_description, 50)
     
+    # create a method to convert product_cost to uzs
+    @property
+    def uzs_cost(self):
+        return f"{self.product_cost:,} 000 UZS"
+    
+    # create a method to get product_image
+    @property
+    def get_image(self):
+        if self.image:
+            return self.image.product_image.url
+    
 # create model for product image with product_image
 class ProductImage(models.Model):
     product = models.OneToOneField(Product, on_delete=models.CASCADE, related_name='image')

@@ -1,0 +1,12 @@
+{% extends 'base/index.html' %}
+{% load static %}
+{% block title %}Product Update{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form}}
+    {{ product_image }}
+    <button type="submit">Update</button>
+</form>
+{% endblock %}
