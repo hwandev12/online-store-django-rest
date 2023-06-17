@@ -9,7 +9,11 @@ from django.views.generic import (
     UpdateView
 )
 from django.urls import reverse
-from apps.product.models import Product, ProductImage
+from apps.product.models import (
+    Product,
+    ProductImage,
+    ProductCategory
+)
 from apps.product.forms import (
     ProductForm,
     ProductImageForm,
@@ -31,6 +35,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['products'] = Product.objects.all()
         context['latest_products'] = Product.objects.all().order_by('-created_at')[:3]
+        context['categories'] = ProductCategory.objects.all()
         return context
 
 class ProductDetailView(DetailView):
