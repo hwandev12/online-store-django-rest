@@ -3,9 +3,8 @@ from django.urls import reverse
 from django.template.defaultfilters import truncatechars, slugify
 from django.contrib import messages
 
-from apps.authentication.models import SellerAccountModel
+from apps.authentication.models import SellerAccountModel, User
 
-# create a category model for product model with category_name
 class ProductCategory(models.Model):
     
     class Meta:
@@ -102,4 +101,17 @@ class ProductImage(models.Model):
     
     def get_absolute_url(self):
         return reverse('base:product_detail', args=[str(self.product.slug)])
+
+class Comment(models.Model):
     
+    class Meta:
+        verbose_name = "Comment"
+        verbose_name_plural = "Comments"
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product_name = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='comment')
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.user.email

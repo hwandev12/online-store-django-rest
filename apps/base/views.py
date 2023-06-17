@@ -12,13 +12,15 @@ from django.urls import reverse
 from apps.product.models import (
     Product,
     ProductImage,
-    ProductCategory
+    ProductCategory,
+    Comment
 )
 from apps.product.forms import (
     ProductForm,
     ProductImageForm,
     ProductImageFormSet,
-    ProductImageFormSetUpdate
+    ProductImageFormSetUpdate,
+    CommentForm
 )
 from django.db import transaction
 from apps.authentication.models import SellerAccountModel
@@ -43,6 +45,27 @@ class ProductDetailView(DetailView):
     model = Product
     template_name = 'pages/product_detail.html'
     context_object_name = 'product'
+
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        context['form'] = CommentForm()
+        context['comments'] = self.object.comment.all()
+        return context
+    
+    # write a post method to add comment
+    def post(self, request, *args, **kwargs):
+        if self.request.method == 'POST':
+            form = CommentForm(self.request.POST)
+            if form.is_valid():
+                comment = form.cleaned_data.get('comment') 
+            
+            new_comment = Comment(comment=comment, product_name=self.get_object(), user=self.request.user)
+            new_comment.save()
+            return redirect('base:product_detail', slug=self.kwargs['slug'])
+        
+    
     
     
 # create product create class

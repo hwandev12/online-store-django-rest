@@ -37,6 +37,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = "User"
         verbose_name_plural = "User"
         
+        
     email = models.EmailField(unique=True, db_index=True)
     is_verified = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -50,6 +51,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = []
     
     objects = CustomUserManager()
+    
 
     def __str__(self):
         return self.email

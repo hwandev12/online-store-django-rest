@@ -1,0 +1,8 @@
+{% load widget_tweaks %}
+<form method="POST">
+    {% csrf_token %}
+    <div class="d-flex align-items-end">
+        {% render_field form.comment class+="form-control w-50 my-2" placeholder="Comment" %}
+        <button type="submit" class="btn btn-primary mx-3 my-2" style="border: none;">Post</button>
+    </div>
+</form>
