@@ -5,8 +5,25 @@ from django.contrib import messages
 
 from apps.authentication.models import SellerAccountModel
 
-# create model for product with product_name, product_cost, product_quantity, product_description, product_image
+# create a category model for product model with category_name
+class ProductCategory(models.Model):
+    
+    class Meta:
+        verbose_name = 'Product Category'
+        verbose_name_plural = 'Product Category'
+    
+    category_name = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.category_name
+
+
 class Product(models.Model):
+    
+    class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Product'
+        
     # add slug field
     slug = models.SlugField(max_length=200, unique=True, null=True)
     owner = models.ForeignKey(SellerAccountModel, on_delete=models.CASCADE)
@@ -17,6 +34,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     product_status = models.BooleanField(default=True)
+    category = models.ForeignKey(ProductCategory, null=True, on_delete=models.SET_NULL, related_name='category')
 
     def __str__(self):
         return self.product_name
