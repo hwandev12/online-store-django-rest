@@ -11,8 +11,28 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.db import transaction
 
 from allauth.account.forms import SignupForm
+from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 
-
+# create a custom social signup form
+class CustomSocialSignupForm(SocialSignupForm):
+    first_name = forms.CharField(required=True, strip=True)
+    last_name = forms.CharField(required=True, strip=True)
+    phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control"}))
+    company = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control"}), label="Company")
+    
+    def save(self, request):
+        user =  super(CustomSocialSignupForm, self).save(request)
+        user.is_buyer = True
+        user.save()
+        buyer_account = BuyerAccountModel(
+            user=user,
+            first_name=self.cleaned_data.get("first_name"),
+            last_name=self.cleaned_data.get("last_name"),
+            phone_number=self.cleaned_data.get("phone_number"),
+            company=self.cleaned_data.get("company")
+        )
+        buyer_account.save()
+        return buyer_account
 class UserCreationForm(forms.ModelForm):
     
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={"class": "form-control", "placeholder": "Enter Password"}), label="")

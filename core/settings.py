@@ -162,6 +162,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'husanboy0250@gmail.com'
 EMAIL_HOST_PASSWORD = "Onajonim1234@"
 EMAIL_USE_TLS = True
+SOCIALACCOUNT_FORMS = {'signup': 'apps.authentication.forms.CustomSocialSignupForm'}
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
 # ACCOUNT_FORMS = {
 #     'signup': 'apps.authentication.forms.CustomBuyerAccountFormDjango',
