@@ -11,7 +11,7 @@
     }
 </style>
 <form method="post" enctype="multipart/form-data" class="mx-auto my-5" style="width: 600px;">
-    <h2 class="text-muted text-center text-uppercase">Upload Product</h2>
+    <h2 class="text-muted text-center text-uppercase">Update Product</h2>
     {% csrf_token %}
     {% render_field form.product_name class+="form-control my-4" placeholder="Product Name" %}
     {% render_field form.product_description class+="form-control mb-4" placeholder="Product Description" %}

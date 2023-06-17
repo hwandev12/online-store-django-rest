@@ -102,6 +102,7 @@ class ProductDeleteVeiew(DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
+        messages.success(request, 'Product deleted successfully')
         return redirect('base:home')
     
     def get_context_data(self, **kwargs):
@@ -123,13 +124,14 @@ class ProductUpdate(UpdateView):
             return redirect('base:home')
         return super().dispatch(*args, **kwargs)
     
+    # update product image
     def get_context_data(self, **kwargs):
         context = super(ProductUpdate, self).get_context_data(**kwargs)
-        context["product_image"] = ProductImageFormSet()
+        context["product_image"] = ProductImageFormSetUpdate(instance=self.object)
         if self.request.POST:
-            context['product_image'] = ProductImageFormSet(self.request.POST, self.request.FILES, instance=self.object)
+            context['product_image'] = ProductImageFormSetUpdate(self.request.POST, self.request.FILES, instance=self.object)
         else:
-            context['product_image'] = ProductImageFormSet(instance=self.object)
+            context['product_image'] = ProductImageFormSetUpdate(instance=self.object)
         return context
     
     # create a method only allow owner to update product
@@ -139,15 +141,17 @@ class ProductUpdate(UpdateView):
             return redirect('base:home')
         return product
     
+    # write form valid method
     def form_valid(self, form):
         context = self.get_context_data()
         product_image = context["product_image"]
-        with transaction.atomic():
+        with transaction.atomic():                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+            form.instance.owner = self.request.user.selleraccountmodel
             self.object = form.save()
             if product_image.is_valid():
                 product_image.instance = self.object
-                messages.success(self.request, 'Product updated successfully', extra_tags='update')
                 product_image.save()
+        form.instance.owner = self.request.user.selleraccountmodel
         return super(ProductUpdate, self).form_valid(form)
     
     def get_success_url(self):

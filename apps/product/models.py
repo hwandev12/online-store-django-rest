@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.template.defaultfilters import truncatechars, slugify
+from django.contrib import messages
 
 from apps.authentication.models import SellerAccountModel
 
@@ -72,10 +73,11 @@ class ProductImage(models.Model):
     def __str__(self):
         return self.product.product_name
     
-    # create method product only created 4 times
+    # create method product only created 4 times allow update
     def save(self, *args, **kwargs):
-        if ProductImage.objects.filter(product=self.product).count() < 4:
-            return super().save(*args, **kwargs)
+        if not self.pk and self.product.image.count() >= 4:
+            return reverse('base:product_detail', args=[str(self.product.slug)])
+        return super().save(*args, **kwargs)
     
     def get_product_image_url(self):
         return self.product_image.url

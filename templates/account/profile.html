@@ -63,7 +63,7 @@
                 {% for p in product %}
                         <div class="col-lg-6 mb-2 pr-lg-1">
                             <a href="{{ p.get_absolute_url }}">
-                                <img src="{{ p.get_first_image }}" alt="No image" class="img-fluid rounded shadow-sm">
+                                <img src="{{ p.get_first_image }}" alt="No image" class="img-fluid rounded shadow-sm" style="height: 400px; width: 100%; object-fit: cover;">
                             </a>
                         </div>
                         <!-- <a href="{% url 'base:product_delete' p.slug %}" class="btn btn-primary">Delete Product</a> -->
