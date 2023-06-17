@@ -35,6 +35,7 @@ class HomePageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['products'] = Product.objects.all()
         context['latest_products'] = Product.objects.all().order_by('-created_at')[:3]
+        context["latest_products_for_product_page"] = Product.objects.all().order_by('-created_at')[:10]
         context['categories'] = ProductCategory.objects.all()
         return context
 

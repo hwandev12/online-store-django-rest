@@ -1,0 +1,157 @@
+{% extends 'base/index.html' %}
+{% load static %}
+{% block title %}All Products{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product.css' %}">
+<div class="container d-md-flex align-items-stretch">
+    <!-- Page Content  -->
+
+
+    <nav id="sidebar">
+        <div class="p-4 pt-5">
+            <h5>Categories</h5>
+            <ul class="list-unstyled components mb-5">
+                <li>
+                    <a href="#pageSubmenu1" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Mens
+                        Shoes</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu1">
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Casual</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Football</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Jordan</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Lifestyle</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Running</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Soccer</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Sports</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#pageSubmenu2" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Mens
+                        Shoes</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu2">
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Casual</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Football</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Jordan</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Lifestyle</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Running</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Soccer</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Sports</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#pageSubmenu3" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Accessories</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu3">
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Nicklace</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Ring</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Bag</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Sacks</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Lipstick</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#pageSubmenu4" data-toggle="collapse" aria-expanded="false"
+                        class="dropdown-toggle">Clothes</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu4">
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Jeans</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> T-shirt</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Jacket</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Shoes</a></li>
+                        <li><a href="#"><span class="fa fa-chevron-right mr-2"></span> Sweater</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="mb-5">
+                <h5>Tag Cloud</h5>
+                <div class="tagcloud">
+                    <a href="#" class="tag-cloud-link">dish</a>
+                    <a href="#" class="tag-cloud-link">menu</a>
+                    <a href="#" class="tag-cloud-link">food</a>
+                    <a href="#" class="tag-cloud-link">sweet</a>
+                    <a href="#" class="tag-cloud-link">tasty</a>
+                    <a href="#" class="tag-cloud-link">delicious</a>
+                    <a href="#" class="tag-cloud-link">desserts</a>
+                    <a href="#" class="tag-cloud-link">drinks</a>
+                </div>
+            </div>
+            <div class="mb-5">
+                <h5>Newsletter</h5>
+                <form action="#" class="subscribe-form">
+                    <div class="form-group d-flex">
+                        <div class="icon"><span class="icon-paper-plane"></span></div>
+                        <input type="text" class="form-control" placeholder="Enter Email Address">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- product starts here -->
+    <div id="content" class="pt-5">
+        <h2 class="mb-4">Products</h2>
+       {% for p in products %}
+       <div class="col-md-12 col-xl-12 mt-2 mx-2">
+        <div class="card shadow-0 border rounded-3">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 col-lg-3 col-xl-3 mb-4 mb-lg-0">
+                <div class="bg-image hover-zoom ripple rounded ripple-surface">
+                  <a href="{{ p.get_absolute_url }}">
+                    <img src="{{ p.get_first_image }}"
+                    class="w-100" />
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-6 col-xl-6">
+                <h5>{{ p.product_name }}</h5>
+                <div class="d-flex flex-row">
+                  <div class="text-danger mb-1 me-2">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                  </div>
+                  <span>310</span>
+                </div>
+                <div class="mt-1 mb-0 text-muted small">
+                  <span>100% cotton</span>
+                  <span class="text-primary"> • </span>
+                  <span>Light weight</span>
+                  <span class="text-primary"> • </span>
+                  <span>Best finish<br /></span>
+                </div>
+                <div class="mb-2 text-muted small">
+                  <span>Unique design</span>
+                  <span class="text-primary"> • </span>
+                  <span>For men</span>
+                  <span class="text-primary"> • </span>
+                  <span>Casual<br /></span>
+                </div>
+                <p class="text-truncate mb-4 mb-md-0">
+                  {{ p.product_description }}}
+                </p>
+              </div>
+              <div class="col-md-6 col-lg-3 col-xl-3 border-sm-start-none border-start">
+                <div class="d-flex flex-row align-items-center mb-1">
+                  <h4 class="mb-1 me-1">{{ p.product_cost }} 000 so'm</h4>
+                  <!-- <span class="text-danger"><s>$20.99</s></span> -->
+                </div>
+                <h6 class="text-success">Free shipping</h6>
+                <div class="d-flex flex-column mt-4">
+                  <a href="{{ p.get_absolute_url }}" class="btn btn-primary btn-sm" type="button">Details</a>
+                  <button class="btn btn-outline-primary btn-sm mt-2" type="button">
+                    Add to wishlist
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+       {% endfor %}
+    </div>
+</div>
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/popper.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+{% endblock %}

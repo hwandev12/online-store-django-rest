@@ -1,7 +1,13 @@
-<section style="background-color: #eee;">
+<section style="background-color: #eee; overflow-x: hidden;" >
     <div class="container py-5">
       <div class="row justify-content-center mb-3">
-        {% for p in products %}
+        <h2 style="transform: translateX(110px);">Latest Products</h2>
+        <ol style="transform: translateX(125px);" class="breadcrumb">
+          <li class="breadcrumb-item">All Products</li>
+          <!-- later on i would add specific products page -->
+          <li class="breadcrumb-item"><a href="{% url 'base:products' %}">here</a></li>
+      </ol>
+        {% for p in latest_products_for_product_page %}
         <div class="col-md-12 col-xl-10 mt-2">
           <div class="card shadow-0 border rounded-3">
             <div class="card-body">

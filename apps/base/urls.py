@@ -8,6 +8,8 @@ from .views import (
     product_update_view
 )
 
+from apps.product.views import product_view
+
 app_name = 'base'
 
 urlpatterns = [
@@ -18,5 +20,8 @@ urlpatterns = [
     # create a path for product create
     path("product/create/", product_create_view, name='product_create'),
     path("product/delete/<slug:slug>/", product_delete_view, name='product_delete'),
-    path('product/update/<slug:slug>/', product_update_view, name='product_update')
+    path('product/update/<slug:slug>/', product_update_view, name='product_update'),
+    
+    # specific path for products
+    path("products/", product_view, name='products'),
 ]
