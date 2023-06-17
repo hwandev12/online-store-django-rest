@@ -5,7 +5,8 @@ from .views import (
     product_detail_view,
     product_create_view,
     product_delete_view,
-    product_update_view
+    product_update_view,
+    delete_comment
 )
 
 from apps.product.views import product_view
@@ -24,4 +25,5 @@ urlpatterns = [
     
     # specific path for products
     path("products/", product_view, name='products'),
+    path("product/comment/delete/<slug:slug>/<int:comment_id>/", delete_comment, name='delete_comment'),   
 ]

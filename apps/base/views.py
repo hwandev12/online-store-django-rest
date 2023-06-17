@@ -50,23 +50,33 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
-        context['form'] = CommentForm()
+        if not self.request.user.is_seller:   
+            context['form'] = CommentForm()
         context['comments'] = self.object.comment.all()
+        # get comments by owner of the comment
+        context['comments_by_owner'] = self.object.comment.filter(user=self.request.user)
         return context
     
     # write a post method to add comment
     def post(self, request, *args, **kwargs):
-        if self.request.method == 'POST':
-            form = CommentForm(self.request.POST)
-            if form.is_valid():
-                comment = form.cleaned_data.get('comment') 
-            
-            new_comment = Comment(comment=comment, product_name=self.get_object(), user=self.request.user)
-            new_comment.save()
-            return redirect('base:product_detail', slug=self.kwargs['slug'])
-        
+        if not self.request.user.is_seller:
+            if self.request.method == 'POST':
+                form = CommentForm(self.request.POST)
+                if form.is_valid():
+                    comment = form.cleaned_data.get('comment') 
+                
+                new_comment = Comment(comment=comment, product_name=self.get_object(), user=self.request.user)
+                new_comment.save()
+                return redirect('base:product_detail', slug=self.kwargs['slug'])
+        else:
+            pass
     
-    
+# create a function to delete comment only owner can delete comment
+def delete_comment(request, slug, comment_id):
+    comment = Comment.objects.get(id=comment_id)
+    if comment.user == request.user:
+        comment.delete()
+    return redirect('base:product_detail', slug=slug)
     
 # create product create class
 class ProductCreateView(CreateView):

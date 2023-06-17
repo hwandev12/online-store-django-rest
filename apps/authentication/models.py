@@ -58,6 +58,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def token(self):
         return ""
+
+    # get buyera and seller profile avatar
+    def get_buyer_avatar(self):
+        return self.buyeraccountmodel.buyerprofile.avatar.url
     
 # create seller account
 class SellerAccountModel(models.Model):

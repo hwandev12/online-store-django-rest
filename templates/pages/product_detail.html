@@ -1,5 +1,6 @@
 {% extends 'base/index.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% block title %}Product Details{% endblock %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/product_detail.css' %}">
@@ -86,6 +87,51 @@
                     </div>
                 </div>
             </div>
+            <div class="container mt-5">
+                <div class="d-flex justify-content-start row">
+                    <div class="col-md-8">
+                        <div class="d-flex flex-column comment-section mb-4">
+                            {% for cm in comments %}
+                            <div class="bg-white p-2">
+                                <div class="d-flex flex-row user-info">
+                                    <img class="rounded-circle mx-2" src="{{ cm.user.get_buyer_avatar }}" width="40">
+                                    <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">{{ cm.user }}</span><span class="date text-black-50">Shared publicly - {{ cm.created_at|date:"d M" }}</span></div>
+                                    {% if comments_by_owner %}
+                                    <a href="{% url 'base:delete_comment' product.slug cm.pk %}">
+                                        <i class="fa-solid fa-trash" style="color: red; font-size: 13px;"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                                <div class="mt-2">
+                                    <p class="comment-text" style="position: relative; left: 60px;">{{ cm.comment }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            <div class="bg-white">
+                                <div class="d-flex flex-row fs-12">
+                                    <div class="like p-2 cursor"><i class="fa fa-thumbs-o-up"></i><span class="ml-1">Like</span></div>
+                                    <div class="like p-2 cursor"><i class="fa fa-commenting-o"></i><span class="ml-1">Comment</span></div>
+                                    <div class="like p-2 cursor"><i class="fa fa-share"></i><span class="ml-1">Share</span></div>
+                                </div>
+                            </div>
+                            {% if not request.user.is_seller %}
+                            <div class="bg-light p-2">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="d-flex flex-row align-items-start">
+                                        <img class="rounded-circle mx-2" src="{{ request.user.get_buyer_avatar }}" width="30">
+                                        {% render_field form.comment class+="form-control ml-1 shadow-none textarea" placeholder="Comment" %}
+                                    </div>
+                                    <div class="mt-2 text-right">
+                                        <button class="btn btn-primary btn-sm shadow-none" style="margin-left: 40px;" type="submit">Post comment</button>
+                                    </div>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- <div class="row row-underline py-3">
                 <div class="col-md-6"> <span class=" deal-text">Specifications</span> </div>
                 <div class="col-md-6"> <a href="#" data-abc="true"> <span class="ml-auto view-all"></span> </a> </div>
@@ -147,8 +193,6 @@
                     </table>
                 </div>
             </div> -->
-            <h5 class="text-muted my-3">Post Comment</h5>
-            {% include 'components/product_comment.html' %}
         </div>
     </div>
 </div>
