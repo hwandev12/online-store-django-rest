@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'widget_tweaks',
+    'star_ratings',
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',

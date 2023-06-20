@@ -1,6 +1,11 @@
 from django import forms
 from django.forms.models import inlineformset_factory
-from .models import Product, ProductImage, Comment
+from .models import (
+    Product,
+    ProductImage,
+    Comment,
+    RatingProduct
+)
 from apps.authentication.models import SellerAccountModel, User
 
 # create product form class for SellerAccountModel
@@ -28,6 +33,12 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('comment',)
+
+# create rating form for product
+class ProductRatingForm(forms.ModelForm):
+    class Meta:
+        model = RatingProduct
+        fields = ('rating',)
 
 
 # this is for formset for product image

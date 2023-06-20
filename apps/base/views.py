@@ -13,14 +13,16 @@ from apps.product.models import (
     Product,
     ProductImage,
     ProductCategory,
-    Comment
+    Comment,
+    RatingProduct
 )
 from apps.product.forms import (
     ProductForm,
     ProductImageForm,
     ProductImageFormSet,
     ProductImageFormSetUpdate,
-    CommentForm
+    CommentForm,
+    ProductRatingForm
 )
 from django.db import transaction
 from apps.authentication.models import SellerAccountModel
@@ -35,9 +37,10 @@ class HomePageView(TemplateView):
     # create a method to get all products
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['products'] = Product.objects.all()
         context['latest_products'] = Product.objects.all().order_by('-created_at')[:3]
         context["latest_products_for_product_page"] = Product.objects.all().order_by('-created_at')[:10]
+        # get rating for each product
+        context['products'] = Product.objects.all()
         context['categories'] = ProductCategory.objects.all()
         return context
 
@@ -50,10 +53,10 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
-        if not self.request.user.is_seller:   
+        if not self.request.user.is_seller and not self.request.user.is_superuser:   
             context['form'] = CommentForm()
+            context['rating_form'] = ProductRatingForm()
         context['comments'] = self.object.comment.all()
-        # get comments by owner of the comment
         context['comments_by_owner'] = self.object.comment.filter(user=self.request.user)
         return context
     
@@ -62,11 +65,14 @@ class ProductDetailView(DetailView):
         if not self.request.user.is_seller:
             if self.request.method == 'POST':
                 form = CommentForm(self.request.POST)
-                if form.is_valid():
+                rating_form = ProductRatingForm(self.request.POST, instance=self.get_object())
+                if form.is_valid() and rating_form.is_valid():
                     comment = form.cleaned_data.get('comment') 
-                
+                    rating = rating_form.cleaned_data.get('rating')
+                new_rating = RatingProduct(rating=rating, post=self.get_object(), user=self.request.user)
                 new_comment = Comment(comment=comment, product_name=self.get_object(), user=self.request.user)
                 new_comment.save()
+                new_rating.save()
                 return redirect('base:product_detail', slug=self.kwargs['slug'])
         else:
             pass

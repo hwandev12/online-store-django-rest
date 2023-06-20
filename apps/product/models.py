@@ -41,6 +41,11 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse('base:product_detail', args=[str(self.slug)])
     
+    # create average rating for product
+    def average_rating(self):
+        rating = RatingProduct.objects.filter(post=self).aggregate(models.Avg('rating'))["rating__avg"] or 0
+        return rating
+    
     # create a method to create slug from product_name
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -115,3 +120,17 @@ class Comment(models.Model):
     
     def __str__(self):
         return self.user.email
+    
+# create rating model for product
+class RatingProduct(models.Model):
+    
+    class Meta:
+        verbose_name = "Rating Product"
+        verbose_name_plural = "Rating Products"
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='rating')
+    rating = models.FloatField(default=0)
+    
+    def __str__(self):
+        return f"{self.post.product_name}: {self.rating}"

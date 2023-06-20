@@ -549,3 +549,64 @@ ul {
 .textarea {
   resize: none;
 }
+.rating-wrap{
+	max-width: 480px;
+	padding: 15px;
+}
+
+.center{
+	width: 162px; 
+	/* margin: auto; */
+}
+
+
+#rating-value{	
+	width: 110px;
+	margin: 40px auto 0;
+	padding: 10px 5px;
+}
+
+/*styling star rating*/
+.rating{
+	border: none;
+  width: 200px;
+}
+
+.rating > input{
+	display: none;
+}
+
+.rating > label:before{
+	content: '\f005';
+	font-family: FontAwesome;
+	margin: 5px;
+	font-size: 1.4rem;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.rating > .half:before{
+	content: '\f089';
+	position: absolute;
+	cursor: pointer;
+}
+
+
+.rating > label{
+	color: #ddd;
+	float: right;
+	cursor: pointer;
+}
+
+.rating > input:checked ~ label,
+.rating:not(:checked) > label:hover, 
+.rating:not(:checked) > label:hover ~ label{
+	color: #444;
+}
+
+.rating > input:checked + label:hover,
+.rating > input:checked ~ label:hover,
+.rating > label:hover ~ input:checked ~ label,
+.rating > input:checked ~ label:hover ~ label{
+	color: #444;
+}

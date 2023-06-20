@@ -4,7 +4,8 @@ from .models import (
     Product,
     ProductImage,
     ProductCategory,
-    Comment
+    Comment,
+    RatingProduct
 )
 # create admin for product
 class ProductAdmin(admin.ModelAdmin):
@@ -17,3 +18,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductImage)
 admin.site.register(ProductCategory)
 admin.site.register(Comment)
+admin.site.register(RatingProduct)
