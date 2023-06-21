@@ -4,6 +4,7 @@ from .models import Product, ProductCategory
 from django.views.generic import ListView, DetailView
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.views.generic.detail import SingleObjectMixin
 
 
 class ProductView(ListView):

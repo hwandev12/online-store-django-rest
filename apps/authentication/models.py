@@ -74,6 +74,7 @@ class SellerAccountModel(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     phone_number = models.IntegerField(default=998)
+    organization = models.CharField(max_length=100, null=True)
     
     def __str__(self):
         return self.user.email
@@ -116,9 +117,7 @@ class SellerProfile(models.Model):
     def __str__(self):
         return self.user.first_name
 
-# we can configure as what we want login, logout, signup
-# this is second way of doing that
-# first way is just change the template name and override to complete task
+
 @receiver(user_signed_up)
 def user_signup_callback(sender, user, request, **kwargs):
     messages.success(request, "", extra_tags="signup")

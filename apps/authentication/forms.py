@@ -66,6 +66,7 @@ class CustomSellerAccountFormDjango(UserCreationForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
     phone_number = forms.CharField(widget=forms.NumberInput(attrs={"class": "form-control", "placeholder": "Phone Number"}), label="")
+    organization = forms.CharField()
     class Meta(UserCreationForm.Meta):
         model = User
         
@@ -79,6 +80,7 @@ class CustomSellerAccountFormDjango(UserCreationForm):
         seller.first_name = self.cleaned_data['first_name']
         seller.last_name = self.cleaned_data['last_name']
         seller.phone_number = self.cleaned_data['phone_number']
+        seller.organization = self.cleaned_data['organization']
         seller.save()
         return user
     
@@ -162,4 +164,4 @@ class UpdateSellerAccount(forms.ModelForm):
     
     class Meta:
         model = SellerAccountModel
-        fields = ['first_name', 'last_name', 'phone_number']
+        fields = ['first_name', 'last_name', 'phone_number', 'organization']

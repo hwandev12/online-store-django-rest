@@ -59,6 +59,14 @@
                         {% render_field account_model_update.phone_number class+="form-control" placeholder="Phone number" %}
                     </div>
                 </div>
+                {% if request.user.is_seller %}
+                <div class="form-group my-2">
+                    <label class="col-lg-3 control-label">Organization</label>
+                    <div class="col-lg-8">
+                        {% render_field account_model_update.organization class+="form-control" placeholder="Organization" %}
+                    </div>
+                </div>
+                {% endif %}
                 {% if request.user.is_buyer %}
                 <div class="form-group my-2">
                     <label class="col-lg-3 control-label">Company</label>
