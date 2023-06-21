@@ -79,6 +79,9 @@
                 {% endif %}
                 <div class="py-4">
                     <h5 class="my-3">Recent comments</h5>
+                    {% if request.user.is_superuser %}
+                        <a href="{% url 'developer:home' %}" class="btn btn-outline-primary mb-2">Developer</a>
+                    {% endif %}
                     <div class="p-4 bg-light rounded shadow-sm">
                         <p class="font-italic mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
                             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.</p>
@@ -89,7 +92,7 @@
                     </div>
                 </div>
             </div>
-        </div><!-- End profile widget -->
+        </div>
 
     </div>
 </div>

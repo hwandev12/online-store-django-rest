@@ -7,13 +7,18 @@ from apps.product.models import Product
 class DeveloperHomePage(ListView):
     template_name = 'developer/pages/develop.html'
     context_object_name = 'apps'
+    model = Product
 
-    def get_queryset(self):
-        return Product.objects.all()
+    def get_queryset(self, *args, **kwargs):
+        qs = super(DeveloperHomePage, self).get_queryset(*args, **kwargs)
+        return qs
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(DeveloperHomePage, self).dispatch(*args, **kwargs)
+        if self.request.user.is_superuser:
+            return super(DeveloperHomePage, self).dispatch(*args, **kwargs)
+        else:
+            return render(self.request, 'pages/404.html', status=404)
 
 
-developer_home_page = DeveloperHomePage.as_view()   
+developer_home_page = DeveloperHomePage.as_view()
