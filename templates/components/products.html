@@ -25,11 +25,11 @@
                   <h5>{{ p.product_name }}</h5>
                   <div class="d-flex flex-row">
                     <div class="text-danger mb-1 me-2">
-                      <i class="fa fa-star fa-regular get_star"></i>
-                      <i class="fa fa-star fa-regular get_star"></i>
-                      <i class="fa fa-star fa-regular get_star"></i>
-                      <i class="fa fa-star fa-regular get_star"></i>
-                      <i class="fa fa-star fa-regular get_star"></i>
+                      <i class="fa fa-star get_star"></i>
+                      <i class="fa fa-star get_star"></i>
+                      <i class="fa fa-star get_star"></i>
+                      <i class="fa fa-star get_star"></i>
+                      <i class="fa fa-star get_star"></i>
                     </div>
                     <span class="average_rating">{{p.average_rating}}</span>
                   </div>
@@ -76,55 +76,110 @@
   <script>
     let average_rating = document.querySelectorAll('.average_rating');
     let star = document.querySelectorAll('.get_star');
-
     // write a code get average rating and set stars
-    for (let i = 0; i < average_rating.length; i++) {
-      if(average_rating[i].textContent == 0){
-        star[0].classList.remove('fa-solid');
-      }
-      else if(average_rating[i].textContent == '1.0'){
-        star[i].classList.remove('fa-star-o');
-        star[i].classList.add('fa-star');
-      }
-      else if(average_rating[i].textContent == '2.0'){
-        star[i].classList.remove('fa-star-o');
-        star[i].classList.add('fa-star');
-        star[i+1].classList.remove('fa-star-o');
-        star[i+1].classList.add('fa-star');
-      }
-      else if(average_rating[i].textContent == '3.0'){
-        star[i].classList.remove('fa-star-o');
-        star[i].classList.add('fa-star');
-        star[i+1].classList.remove('fa-star-o');
-        star[i+1].classList.add('fa-star');
-        star[i+2].classList.remove('fa-star-o');
-        star[i+2].classList.add('fa-star');
-      }
-      else if(average_rating[i].textContent == '4.0'){
-        star[i].classList.remove('fa-star-o');
-        star[i].classList.add('fa-star');
-        star[i+1].classList.remove('fa-star-o');
-        star[i+1].classList.add('fa-star');
-        star[i+2].classList.remove('fa-star-o');
-        star[i+2].classList.add('fa-star');
-        star[i+3].classList.remove('fa-star-o');
-        star[i+3].classList.add('fa-star');
-      }
-      else if(average_rating[i].textContent == '5.0'){
-        star[i].classList.remove('fa-star-o');
-        star[i].classList.add('fa-star');
-        star[i+1].classList.remove('fa-star-o');
-        star[i+1].classList.add('fa-star');
-        star[i+2].classList.remove('fa-star-o');
-        star[i+2].classList.add('fa-star');
-        star[i+3].classList.remove('fa-star-o');
-        star[i+3].classList.add('fa-star');
-        star[i+4].classList.remove('fa-star-o');
-        star[i+4].classList.add('fa-star');
-      }
-      else{
-        star[i].classList.remove('fa-star');
-        star[i].classList.add('fa-star-o');
+    if(Math.round(average_rating[0].innerHTML) == 0) {
+     for(let i = 0; i < 5; i++) {
+       star[i].classList.add('fa-regular');
+       star[i].classList.remove('fa');
+     }
+    }
+    else if(Math.round(average_rating[0].innerHTML) == 1) {
+    for(let i = 0; i < 5; i++) {
+      star[0].classList.add('fa-solid');
+      star[1].classList.add('fa-regular'); 
+      star[2].classList.add('fa-regular'); 
+      star[3].classList.add('fa-regular'); 
+      star[4].classList.add('fa-regular'); 
     }
   }
+  else if(Math.round(average_rating[0].innerHTML) == 2) {
+    for(let i = 0; i < 5; i++) {
+      star[0].classList.add('fa-solid');
+      star[1].classList.add('fa-solid'); 
+      star[2].classList.add('fa-regular'); 
+      star[3].classList.add('fa-regular'); 
+      star[4].classList.add('fa-regular'); 
+    }
+  }
+  else if(Math.round(average_rating[0].innerHTML) == 3) {
+    for(let i = 0; i < 5; i++) {
+      star[0].classList.add('fa-solid');
+      star[1].classList.add('fa-solid'); 
+      star[2].classList.add('fa-solid'); 
+      star[3].classList.add('fa-regular'); 
+      star[4].classList.add('fa-regular'); 
+    }
+  }
+  else if(Math.round(average_rating[0].innerHTML) == 4) {
+    for(let i = 0; i < 5; i++) {
+      star[0].classList.add('fa-solid');
+      star[1].classList.add('fa-solid'); 
+      star[2].classList.add('fa-solid'); 
+      star[3].classList.add('fa-solid'); 
+      star[4].classList.add('fa-regular'); 
+    }
+  }
+  else if(Math.round(average_rating[0].innerHTML) == 5) {
+    for(let i = 0; i < 5; i++) {
+      star[0].classList.add('fa-solid');
+      star[1].classList.add('fa-solid'); 
+      star[2].classList.add('fa-solid'); 
+      star[3].classList.add('fa-solid'); 
+      star[4].classList.add('fa-solid'); 
+    }
+  }
+  if(Math.round(average_rating[1].innerHTML) == 0) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-regular');
+      star[6].classList.add('fa-regular');
+      star[7].classList.add('fa-regular');
+      star[8].classList.add('fa-regular');
+      star[9].classList.add('fa-regular');
+    }
+   }
+  else if(Math.round(average_rating[1].innerHTML) == 1) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-solid');
+      star[6].classList.add('fa-regular');
+      star[7].classList.add('fa-regular');
+      star[8].classList.add('fa-regular');
+      star[9].classList.add('fa-regular');
+    }
+   }
+  else if(Math.round(average_rating[1].innerHTML) == 2) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-solid');
+      star[6].classList.add('fa-solid');
+      star[7].classList.add('fa-regular');
+      star[8].classList.add('fa-regular');
+      star[9].classList.add('fa-regular');
+    }
+   }
+  else if(Math.round(average_rating[1].innerHTML) == 3) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-solid');
+      star[6].classList.add('fa-solid');
+      star[7].classList.add('fa-solid');
+      star[8].classList.add('fa-regular');
+      star[9].classList.add('fa-regular');
+    }
+   }
+  else if(Math.round(average_rating[1].innerHTML) == 4) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-solid');
+      star[6].classList.add('fa-solid');
+      star[7].classList.add('fa-solid');
+      star[8].classList.add('fa-solid');
+      star[9].classList.add('fa-regular');
+    }
+   }
+  else if(Math.round(average_rating[1].innerHTML) == 5) {
+    for(let i = 0; i < 10; i++) {
+      star[5].classList.add('fa-solid');
+      star[6].classList.add('fa-solid');
+      star[7].classList.add('fa-solid');
+      star[8].classList.add('fa-solid');
+      star[9].classList.add('fa-solid');
+    }
+   }
   </script>
