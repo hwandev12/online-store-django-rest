@@ -27,6 +27,8 @@ from apps.product.forms import (
 from django.db import transaction
 from apps.authentication.models import SellerAccountModel
 from django.contrib import messages
+
+
 class HomePageView(TemplateView):
     template_name = "pages/home.html"
     

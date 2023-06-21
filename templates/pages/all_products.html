@@ -1,5 +1,6 @@
 {% extends 'base/index.html' %}
 {% load static %}
+{% load pagination_extras_app %}
 {% block title %}All Products{% endblock %}
 
 {% block content %}
@@ -84,8 +85,8 @@
     <!-- product starts here -->
     <div id="content" class="pt-5">
         <h2 class="mb-4 ml-3">Products</h2>
-       {% if products_by_category %}
-            {% for p in products_by_category %}
+       {% if product_page_obj %}
+            {% for p in product_page_obj %}
                 <div class="col-md-12 col-xl-12 mt-2 mx-2">
                     <div class="card shadow-0 border rounded-3">
                     <div class="card-body">
@@ -151,6 +152,35 @@
       font-size: 16px;
       "><i class="fa-solid fa-circle-exclamation mx-2"></i>No product matches result</h5>
       {% endif %}
+      <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-end mt-3">
+            {% if product_page_obj.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="{% my_url product_page_obj.previous_page_number 'page' request.GET.urlencode %}" tabindex="-1">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="" tabindex="-1">Previous</a>
+                </li>
+            {% endif %}
+            {% for i in product_page_obj.paginator.page_range %}
+                {% if product_page_obj.number == i %}
+                    <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span></li>
+                {% elif i > product_page_obj.number|add:'-3' and i < product_page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="{% my_url i 'page' request.GET.urlencode %}">{{ i }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if product_page_obj.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="{% my_url product_page_obj.next_page_number 'page' request.GET.urlencode %}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">Next</a>
+                </li>
+            {% endif %}
+          </ul>
+      </nav>
     </div>
 </div>
 <script src="{% static 'js/jquery.min.js' %}"></script>
