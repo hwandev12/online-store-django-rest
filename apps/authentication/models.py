@@ -79,6 +79,10 @@ class SellerAccountModel(models.Model):
     def __str__(self):
         return self.user.email
     
+    # get seller profile avatar
+    def get_seller_avatar(self):
+        return self.sellerprofile.avatar.url
+    
 class BuyerAccountModel(models.Model):
     
     class Meta:
@@ -93,6 +97,10 @@ class BuyerAccountModel(models.Model):
 
     def __str__(self):
         return self.user.email
+    
+    # get buyer profile avatar
+    def get_buyer_avatar(self):
+        return self.buyerprofile.avatar.url
 
 class BuyerProfile(models.Model):
     class Meta:

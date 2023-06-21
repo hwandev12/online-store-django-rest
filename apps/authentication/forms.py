@@ -165,3 +165,15 @@ class UpdateSellerAccount(forms.ModelForm):
     class Meta:
         model = SellerAccountModel
         fields = ['first_name', 'last_name', 'phone_number', 'organization']
+        
+class UpdateSellerProfile(forms.ModelForm):
+    
+    class Meta:
+        model = SellerProfile
+        fields = ["avatar"]
+        
+class UpdateBuyerProfile(forms.ModelForm):
+    
+    class Meta:
+        model = BuyerProfile
+        fields = ["avatar"]

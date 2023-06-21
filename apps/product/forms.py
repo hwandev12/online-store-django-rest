@@ -44,4 +44,4 @@ class ProductRatingForm(forms.ModelForm):
 # this is for formset for product image
 ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=4, can_delete=False)
 # this is for update view
-ProductImageFormSetUpdate = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=0, can_delete=False)
+ProductImageFormSetUpdate = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=3, can_delete=False)

@@ -9,7 +9,9 @@ from .forms import (
     CustomBuyerAccountFormDjango,
     UpdateBuyerAccount,
     UpdateUserForm,
-    UpdateSellerAccount
+    UpdateSellerAccount,
+    UpdateBuyerProfile,
+    UpdateSellerProfile
 )
 from django.contrib import messages
 
@@ -68,8 +70,10 @@ def user_profile(request, firstname):
         user_form = UpdateUserForm(request.POST, instance=request.user)
         if request.user.is_buyer:
             account_model_update = UpdateBuyerAccount(request.POST, instance=request.user.buyeraccountmodel)
+            account_profile_update = UpdateBuyerProfile(request.POST, request.FILES, instance=request.user.buyeraccountmodel.buyerprofile)
         elif request.user.is_seller:
             account_model_update = UpdateSellerAccount(request.POST, instance=request.user.selleraccountmodel)
+            account_profile_update = UpdateSellerProfile(request.POST, request.FILES, instance=request.user.selleraccountmodel.sellerprofile)
         # this is for superuser accounts
         else:
             account_model_update = User(request.POST, instance=request.user)
@@ -77,20 +81,24 @@ def user_profile(request, firstname):
         if user_form.is_valid():
             user_form.save()
             account_model_update.save()
+            account_profile_update.save()
             messages.success(request, "Your profile is updated successfully", extra_tags="profile_update")
             return redirect("/")
     else:
         user_form = UpdateUserForm(instance=request.user)
         if request.user.is_buyer:
             account_model_update = UpdateBuyerAccount(instance=request.user.buyeraccountmodel)
+            account_profile_update = UpdateBuyerProfile(instance=request.user.buyeraccountmodel.buyerprofile)
         elif request.user.is_seller:
-            account_model_update = UpdateSellerAccount(instance=request.user.selleraccountmodel)    
+            account_model_update = UpdateSellerAccount(instance=request.user.selleraccountmodel)  
+            account_profile_update = UpdateSellerProfile(instance=request.user.selleraccountmodel.sellerprofile)  
         else:
             account_model_update = UpdateUserForm(instance=request.user)
         
     context = {
         "user_form": user_form,
         "account_model_update": account_model_update,
+        "account_profile_update": account_profile_update
     }
     
     return render(request, 'account/profile-update.html', context)

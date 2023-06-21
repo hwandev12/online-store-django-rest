@@ -16,12 +16,12 @@
         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 bg-dark">
                 <div class="d-flex align-items-end profile-header">
-                    <div class="profile d-flex flex-column mr-3"><img
-                            src="https://bootstrapious.com/i/snippets/sn-profile/teacher.jpg" alt="..." width="130"
-                            class="rounded mb-2 img-thumbnail">
-                            {% if request.user.is_seller %}
+                    <div class="profile d-flex flex-column mr-3">
+                        {% if request.user.is_seller %}
+                            <img src="{{ request.user.selleraccountmodel.get_seller_avatar }}" alt="..." width="130" class="rounded mb-2 img-thumbnail">
                             <a href="{% url 'authentication:profile-edit' request.user.selleraccountmodel.first_name %}" class="btn btn-dark btn-sm btn-block">Edit profile</a>
                             {% elif request.user.is_buyer %}
+                            <img src="{{ request.user.buyeraccountmodel.get_buyer_avatar }}" alt="..." width="130" class="rounded mb-2 img-thumbnail">
                             <a href="{% url 'authentication:profile-edit' request.user.buyeraccountmodel.first_name %}" class="btn btn-dark btn-sm btn-block">Edit profile</a>
                             {% else %}
                             <a href="{% url 'authentication:profile-edit' request.user.id %}" class="btn btn-dark btn-sm btn-block">Edit profile</a>

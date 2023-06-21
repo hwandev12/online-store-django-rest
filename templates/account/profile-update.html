@@ -12,28 +12,33 @@
 <div class="container bootstrap snippets bootdey my-5">
     <h1 class="text-primary">Edit Profile</h1>
     <hr>
-    <div class="row">
-        <!-- left column -->
-        <div class="col-md-3">
-            <div class="text-center">
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" class="avatar img-circle img-thumbnail"
-                    alt="avatar">
-                <h6>Upload a different photo...</h6>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-3">
+                <div class="text-center">
+                    {% if request.user.is_seller %}
+                    <img src="{{ request.user.selleraccountmodel.get_seller_avatar }}" class="avatar img-circle img-thumbnail" alt="avatar">
+                    {% endif %}
+                    {% if request.user.is_buyer %}
+                    <img src="{{ request.user.buyeraccountmodel.get_buyer_avatar }}" class="avatar img-circle img-thumbnail" alt="avatar">
+                    {% endif %}
+                    <h6>Upload a different photo...</h6>
 
-                <input type="file" class="form-control">
+                    {% render_field account_profile_update.avatar class+="form-control"%}
+                </div>
             </div>
-        </div>
 
-        <!-- edit form column -->
-        <div class="col-md-9 personal-info">
-            <!-- <div class="alert alert-info alert-dismissable">
+            <!-- edit form column -->
+            <div class="col-md-9 personal-info">
+                <!-- <div class="alert alert-info alert-dismissable">
                 <a class="panel-close close" data-dismiss="alert">×</a>
                 <i class="fa fa-coffee"></i>
                 This is an <strong>.alert</strong>. Use this to show important messages to the user.
             </div> -->
-            <h3>Personal info</h3>
+                <h3>Personal info</h3>
 
-            <form class="form-horizontal" role="form" method="post">
+
                 {% csrf_token %}
                 <div class="form-group my-2">
                     <label class="col-lg-3 control-label">Email:</label>
@@ -76,9 +81,9 @@
                 </div>
                 {% endif %}
                 <button type="submit" class="btn btn-primary">Update</button>
-            </form>
-        </div>
-    </div>
+            </div>
+    </form>
+</div>
 </div>
 <hr>
 {% endblock %}
