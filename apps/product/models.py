@@ -134,3 +134,43 @@ class RatingProduct(models.Model):
     
     def __str__(self):
         return f"{self.post.product_name}: {self.rating}"
+    
+    
+# create checkout model include product, user, quantity, total_cost, created_at
+
+class Checkout(models.Model):
+    
+    CITIES = (
+        ('Tashkent', 'Tashkent'),
+        ('Samarkand', 'Samarkand'),
+        ('Bukhara', 'Bukhara'),
+        ('Khiva', 'Khiva'),
+        ('Nukus', 'Nukus'),
+        ('Andijan', 'Andijan'),
+        ('Namangan', 'Namangan'),
+        ('Fergana', 'Fergana'),
+        ('Navoi', 'Navoi'),
+        ('Urgench', 'Urgench'),
+        ('Termez', 'Termez'),
+        ('Kokand', 'Kokand'),
+    )
+    
+    class Meta:
+        verbose_name = "Checkout"
+        verbose_name_plural = "Checkouts"
+        
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='checkout')
+    firstname = models.CharField(max_length=200)
+    lastname = models.CharField(max_length=200)
+    phone_number = models.IntegerField(default=998)
+    email = models.EmailField()
+    post_office = models.CharField(max_length=200)
+    address = models.CharField(max_length=200)
+    city = models.CharField(max_length=200, choices=CITIES, default='Tashkent')
+    house = models.CharField(max_length=200)
+    postal_code = models.IntegerField(default=156876)
+    message = models.TextField()
+    
+    def __str__(self):
+        return self.firstname

@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 # import Product from models.py, write a class to get all products
 from .models import(
     Product,
-    ProductCategory
+    ProductCategory,
+    Checkout,
 )
 from django.views.generic import(
     ListView,
@@ -14,6 +15,9 @@ from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth.decorators import login_required
 # import method decorator
 from django.utils.decorators import method_decorator
+from .forms import (
+    CheckoutForm,
+)
 
 
 class ProductView(ListView):
@@ -61,8 +65,31 @@ class CheckoutPageView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(CheckoutPageView, self).get_context_data(**kwargs)
         # get product by slug
+        if not self.request.user.is_seller:
+            context['form'] = CheckoutForm()
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
         return context
+    
+    def post(self, request, *args, **kwargs):
+        if not self.request.user.is_seller and self.request.user.is_authenticated:
+            if self.request.method == "POST":
+                form = CheckoutForm(self.request.POST)
+                if form.is_valid():
+                    firstname = form.cleaned_data.get('firstname')
+                    lastname = form.cleaned_data.get('lastname')
+                    phone_number = form.cleaned_data.get('phone_number')
+                    post_office = form.cleaned_data.get('post_office')
+                    email = form.cleaned_data.get('email')
+                    address = form.cleaned_data.get('address')
+                    city = form.cleaned_data.get('city')
+                    house = form.cleaned_data.get('house')
+                    postal_code = form.cleaned_data.get('postal_code')
+                    message = form.cleaned_data.get('message')
+                new_checkout = Checkout(firstname=firstname, lastname=lastname, phone_number=phone_number, post_office=post_office, email=email, address=address, city=city, house=house, postal_code=postal_code, message=message, user=self.request.user, product=self.get_object())
+                new_checkout.save()
+                return redirect('base:product_detail', slug=self.get_object().slug)
+        else:
+            pass
     
     
 

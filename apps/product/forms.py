@@ -4,7 +4,8 @@ from .models import (
     Product,
     ProductImage,
     Comment,
-    RatingProduct
+    RatingProduct,
+    Checkout,
 )
 from apps.authentication.models import SellerAccountModel, User
 
@@ -40,6 +41,31 @@ class ProductRatingForm(forms.ModelForm):
         model = RatingProduct
         fields = ('rating',)
 
+
+class CheckoutForm(forms.ModelForm):
+    
+    CHOICES = [
+        ("Express Delivery", "Express Delivery"),
+        ("Post Office", "Post Office"),
+        ("Pickup", "Pickup"),
+    ]
+    
+    post_office = forms.ChoiceField(choices=CHOICES, widget=forms.RadioSelect)
+    
+    class Meta:
+        model = Checkout
+        fields = [
+            'firstname',
+            'lastname',
+            'phone_number',
+            'post_office',
+            'email',
+            'address',
+            'city',
+            'house',
+            'postal_code',
+            'message',
+        ]
 
 # this is for formset for product image
 ProductImageFormSet = inlineformset_factory(Product, ProductImage, form=ProductImageForm, extra=4, can_delete=False)
