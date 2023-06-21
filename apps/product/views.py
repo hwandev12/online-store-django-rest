@@ -1,10 +1,19 @@
 from django.shortcuts import render
 # import Product from models.py, write a class to get all products
-from .models import Product, ProductCategory
-from django.views.generic import ListView, DetailView
+from .models import(
+    Product,
+    ProductCategory
+)
+from django.views.generic import(
+    ListView,
+    DetailView
+)
 from django.db.models import Q
 from django.core.paginator import Paginator
 from django.views.generic.detail import SingleObjectMixin
+from django.contrib.auth.decorators import login_required
+# import method decorator
+from django.utils.decorators import method_decorator
 
 
 class ProductView(ListView):
@@ -36,4 +45,26 @@ class ProductView(ListView):
         return context
 
 
+class CheckoutPageView(DetailView):
+    model = Product
+    template_name = 'pages/checkout.html'
+    context_object_name = 'product'
+    
+    # write a method decorator
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated and self.request.user.is_buyer:
+            return super(CheckoutPageView, self).dispatch(request, *args, **kwargs)
+        else:
+            return render(request, 'pages/404.html',status=404)
+    
+    def get_context_data(self, **kwargs):
+        context = super(CheckoutPageView, self).get_context_data(**kwargs)
+        # get product by slug
+        context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        return context
+    
+    
+
 product_view = ProductView.as_view()
+checkout_page_view = CheckoutPageView.as_view()

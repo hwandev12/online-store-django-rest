@@ -76,8 +76,10 @@
                                 </div>
                             </div>
                             <div class="col-xs-6">
-                                <button type="button" class="btn btn-primary shop-button">Add to Cart</button> <button
-                                    type="button" class="btn btn-success shop-button">Buy Now</button>
+                                {% if request.user.is_buyer %}
+                                <button type="button" class="btn btn-primary shop-button">Add to Cart</button>
+                                <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy Now</a>
+                                {% endif %}
                                 {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
                                 <a href="{% url 'base:product_delete' product.slug %}"
                                     class="btn btn-success shop-button" style="padding-top: 12px;">Delete</a>

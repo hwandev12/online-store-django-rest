@@ -6,10 +6,13 @@ from .views import (
     product_create_view,
     product_delete_view,
     product_update_view,
-    delete_comment
+    delete_comment,
 )
 
-from apps.product.views import product_view
+from apps.product.views import (
+    product_view,
+    checkout_page_view
+)
 
 app_name = 'base'
 
@@ -26,4 +29,7 @@ urlpatterns = [
     # specific path for products
     path("products/", product_view, name='products'),
     path("product/comment/delete/<slug:slug>/<int:comment_id>/", delete_comment, name='delete_comment'),   
+    
+    # checkout pages
+    path("product/single/checkout/<slug:slug>/", checkout_page_view, name='checkout')
 ]
