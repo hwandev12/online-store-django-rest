@@ -64,7 +64,6 @@ class CheckoutPageView(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(CheckoutPageView, self).get_context_data(**kwargs)
-        # get product by slug
         if not self.request.user.is_seller:
             context['form'] = CheckoutForm()
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])

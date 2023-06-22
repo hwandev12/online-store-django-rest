@@ -9,5 +9,6 @@ urlpatterns = [
     path('authentication/', include('allauth.urls')),
     path("", include("apps.authentication.urls")),
     path("developer/", include("apps.developer.urls")),
+    path("chat/", include("apps.chat.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

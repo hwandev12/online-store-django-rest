@@ -35,11 +35,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'widget_tweaks',
     'star_ratings',
+    'channels',
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
     'apps.base.apps.BaseConfig',
     'apps.product.apps.ProductConfig',
+    "apps.chat.apps.ChatConfig",
 ]
 
 SITE_ID = 1
@@ -73,6 +75,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
+
+ASGI_APPLICATION = 'core.asgi.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 
 # Database
