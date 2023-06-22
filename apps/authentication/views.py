@@ -94,6 +94,7 @@ def user_profile(request, firstname):
             account_profile_update = UpdateSellerProfile(instance=request.user.selleraccountmodel.sellerprofile)  
         else:
             account_model_update = UpdateUserForm(instance=request.user)
+            account_profile_update = None
         
     context = {
         "user_form": user_form,

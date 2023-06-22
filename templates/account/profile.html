@@ -77,6 +77,22 @@
                 "><i class="fa-solid fa-circle-exclamation mx-2"></i>You dont have product yet</h5>
                 {% endif %}
                 {% endif %}
+                {% if request.user.is_buyer %}
+                <main class="container my-4 py-4">
+                    <!-- Featured Products -->
+                    <h3 class="my-4 border-bottom pb-1">My Dashboard</h3>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {% include 'components/user-sidebar.html' %}
+                        </div>
+                        <div class="col-md-9">
+                            <div>
+                              <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                {% endif %}
                 <div class="py-4">
                     <h5 class="my-3">Recent comments</h5>
                     {% if request.user.is_superuser %}
