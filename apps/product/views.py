@@ -91,6 +91,20 @@ class CheckoutPageView(DetailView):
             pass
     
     
+# create myOrders class
+class MyOrdersView(ListView):
+    model = Checkout
+    template_name = 'components/orders.html'
+    context_object_name = 'orders'
+    
+    def get_queryset(self):
+        return Checkout.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super(MyOrdersView, self).get_context_data(**kwargs)
+        context['orders'] = self.get_queryset()
+        return context
 
 product_view = ProductView.as_view()
 checkout_page_view = CheckoutPageView.as_view()
+my_orders_view = MyOrdersView.as_view()
