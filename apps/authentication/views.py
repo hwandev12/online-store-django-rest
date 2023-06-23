@@ -112,6 +112,9 @@ def profile(request, first_name):
     buyer = None
     user = None
     product = None
+    orders = None
+    comments = None
+    notice = None
     if request.user.is_seller:
         try:
             seller = get_object_or_404(SellerAccountModel, user=request.user, first_name=first_name)
@@ -131,10 +134,12 @@ def profile(request, first_name):
     else:
         try:
             user = get_object_or_404(User, id=first_name, email=request.user.email)
+            notice = user.notifications.unread()
         except ValueError as e:
             # we should change this 404 error page later on
             return redirect("/")
-        
+    
+    
     # get latest product
     if product:
         product = product.order_by('-created_at')[:3]
@@ -148,6 +153,7 @@ def profile(request, first_name):
         "product": product,
         "orders": orders,
         "comments": comments,
+        "notice": notice,
     }
     return render(request, 'account/profile.html', context)
 

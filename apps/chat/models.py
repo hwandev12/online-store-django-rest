@@ -5,6 +5,8 @@ from apps.authentication.models import User
 # create message model
 class Message(models.Model):
     user = models.ForeignKey(User, related_name='author_messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User, related_name='receiver_messages', null=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, null=True)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 

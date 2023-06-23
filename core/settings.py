@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'star_ratings',
     'channels',
+    'notifications',
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',

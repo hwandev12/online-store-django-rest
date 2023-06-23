@@ -1,0 +1,44 @@
+{% extends 'base/index.html' %}
+{% load widget_tweaks %}
+{% block title %}Send message{% endblock %}
+
+{% block content %}
+<section class="ftco-section mb-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-md-12">
+                <div class="wrapper">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="contact-wrap">
+                                <h3 class="mb-4 text-center my-5">Get in touch with us</h3>
+                                <form method="POST" id="contactForm" name="contactForm" class="contactForm">
+                                    {% csrf_token %}
+                                    <div class="row">
+                                        <div class="col-md-12 my-3">
+                                            <div class="form-group">
+                                                {% render_field form.title %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 mb-3">
+                                            <div class="form-group">
+                                                {% render_field form.content class+="form-control"  placeholder="Message" %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="submit" value="Send Message" class="btn btn-primary">
+                                                <div class="submitting"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
