@@ -4,6 +4,8 @@ from .models import(
     Product,
     ProductCategory,
     Checkout,
+    Comment,
+    RatingProduct
 )
 from django.views.generic import(
     ListView,
@@ -105,6 +107,23 @@ class MyOrdersView(ListView):
         context['orders'] = self.get_queryset()
         return context
 
+class CommentForEachUserView(ListView):
+    model = Comment
+    template_name = 'components/comment.html'
+    context_object_name = 'comments'
+    
+    def get_queryset(self):
+        return Comment.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super(CommentForEachUserView, self).get_context_data(**kwargs)
+        context['comments'] = self.get_queryset()
+        # get rating for each product and user
+        context['rating'] = RatingProduct.objects.filter(user=self.request.user)
+        return context
+
+
 product_view = ProductView.as_view()
 checkout_page_view = CheckoutPageView.as_view()
 my_orders_view = MyOrdersView.as_view()
+my_comments_view = CommentForEachUserView.as_view()

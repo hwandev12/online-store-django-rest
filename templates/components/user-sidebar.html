@@ -1,8 +1,68 @@
-<div class="list-group list-group-horizontal">
-	<a href="" class="list-group-item {% if request.path == '/my-dashboard' %}active {% endif %}">Dashboard</a>
+<div class="list-group list-group-horizontal" id="roles">
+	<a href="#" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+		class="list-group-item">Dashboard</a>
 	<a href="" class="list-group-item {% if request.path == '/edit-profile' %}active {% endif %}">Profile</a>
-	<a href="{% url 'base:my_orders' request.user.buyeraccountmodel.first_name %}" class="list-group-item {% if request.path == '/my-orders' %}active {% endif %}">Orders</a>
+	<a href="#collapse1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+		class="list-group-item">Orders</a>
 	<a href="" class="list-group-item {% if request.path == '/my-wishlist' %}active {% endif %}">Wishlist</a>
-	<a href="" class="list-group-item {% if request.path == '/my-reviews' %}active {% endif %}">My Reviews</a>
+	<a href="#comment" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+	class="list-group-item">My Reviews</a>
 	<a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Address Book</a>
+</div>
+
+<div class="row collapse mt-2" id="collapse1" data-parent="#roles">
+	<div class="col-md-9">
+		<div class="table-responsive">
+			<table class="table-bordered table">
+				<thead>
+					<tr>
+						<th>OrderNo</th>
+						<th>Product Name</th>
+						<th>Delivery</th>
+						<th>Location</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for order in orders %}
+					<tr>
+						<td><a href="#" class="btn btn-sm btn-dark">{{order.id}}</a></td>
+						<td><a href="{% url 'base:product_detail' order.product.slug %}"
+								style="text-decoration: none; color: orange;">{{order.product}}</a></td>
+						<td>{{order.post_office}}</td>
+						<td>{{order.city}}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="row collapse mt-2" id="comment" data-parent="#roles">
+	<div class="col-md-9">
+		<div class="table-responsive">
+			<table class="table-bordered table">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Image</th>
+						<th>Price (So'm)</th>
+						<th>ReviewText</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for cm in comments %}
+					<tr>
+						<td><a href="{% url 'base:product_detail' cm.product_name.slug %}">{{cm.product_name}}</a></td>
+						<td>
+							<img width="100" src="{{ cm.product_name.get_first_image }}" alt="{{review.product.title}}">
+						</td>
+						<td>{{ cm.product_name.product_cost }} 000</td>
+						<td>{{ cm.comment }}</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

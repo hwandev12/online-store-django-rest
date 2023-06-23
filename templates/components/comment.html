@@ -1,0 +1,36 @@
+{% extends 'base/index.html' %}
+{% load static %}
+{% block content %}
+<main class="container my-4">
+	<!-- Featured Products -->
+	<h3 class="my-4 border-bottom pb-1">Reviews Items</h3>
+	<div class="row">
+		<div class="col-md-9">
+			<div class="table-responsive">
+				<table class="table-bordered table">
+					<thead>
+						<tr>
+							<th>Title</th>
+							<th>Image</th>
+							<th>Price (So'm)</th>
+							<th>ReviewText</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for cm in comments %}
+						<tr>
+							<td><a href="{% url 'base:product_detail' cm.product_name.slug %}">{{cm.product_name}}</a></td>
+							<td>
+								<img width="100" src="{{ cm.product_name.get_first_image }}" alt="{{review.product.title}}">
+							</td>
+							<td>{{ cm.product_name.product_cost }} 000</td>
+							<td>{{ cm.comment }}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</main>
+{% endblock %}

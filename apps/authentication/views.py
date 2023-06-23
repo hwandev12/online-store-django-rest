@@ -25,9 +25,11 @@ from .models import (
     SellerAccountModel
 )
 from apps.product.models import (
-    Product
+    Product,
+    Comment,
+    RatingProduct,
+    Checkout
 )
-
 class SellerRegisterView(generic.CreateView):
     model = User
     form_class = CustomSellerAccountFormDjango
@@ -120,7 +122,10 @@ def profile(request, first_name):
     elif request.user.is_buyer:
         try:
             buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
+            orders = Checkout.objects.filter(user=request.user)
+            comments = Comment.objects.filter(user=request.user)
         except ValueError as e:
+            print("Hatoo")
             # we should change this 404 error page later on
             return redirect("/")
     else:
@@ -140,7 +145,9 @@ def profile(request, first_name):
         "seller": seller,
         "buyer": buyer,
         "user": user,
-        "product": product
+        "product": product,
+        "orders": orders,
+        "comments": comments,
     }
     return render(request, 'account/profile.html', context)
 
