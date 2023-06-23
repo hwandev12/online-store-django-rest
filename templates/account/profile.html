@@ -11,7 +11,6 @@
     }
 </style>
 {% live_notify_badge %}
-{% live_notify_list %}
 
 <div class="row py-5 px-4 big" style="margin-left: 0; margin-right: 0;">
     <div class="col-xl-12 col-md-6 col-sm-10 mx-auto">
@@ -70,10 +69,10 @@
                                 <img src="{{ p.get_first_image }}" alt="No image" class="img-fluid rounded shadow-sm" style="height: 400px; width: 100%; object-fit: cover;">
                             </a>
                         </div>
-                        <!-- <a href="{% url 'base:product_delete' p.slug %}" class="btn btn-primary">Delete Product</a> -->
-                    {% endfor %}
-                </div>
-                <a href="{% url 'base:product_create' %}" class="btn btn-primary">Upload Product</a>
+                        {% endfor %}
+                    </div>
+                    <a href="{% url 'base:product_create' %}" class="btn btn-primary my-3">Upload Product</a>
+                    {% include 'components/seller-sidebar.html' %}
                 {% else %}
                 <h5 class="text-center" style="
                 color: #777;
