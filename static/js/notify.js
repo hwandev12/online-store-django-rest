@@ -41,7 +41,14 @@ function fill_notification_list(data) {
         // if (typeof item.timestamp !== "undefined") {
         //   message = message + " " + item.timestamp;
         // }
-        return `<a style='text-decoration: none !important;' href='/mark-as-read/${item.slug}/'><li style='list-style: none;' class='list-group-item position-relative'> ${message} <i class="fa-solid fa-envelope position-absolute" style="color: orange; font-size: 20px; right: 20px;"></i></li></a>`;
+        let d = new Date(item.timestamp);
+        return `<a style='text-decoration: none !important;' href='/mark-as-read/${item.slug}/'>
+          <li style='list-style: none;' class='list-group-item position-relative'>
+            ${message}
+            <p style='display: inline-block; position: absolute; right: 50%;'>${d.getDate()}.${d.getDay()}<sup>${d.getHours()}:${d.getMinutes()}</sup></p>
+            <i class="fa-solid fa-envelope position-absolute" style="color: orange; font-size: 20px; right: 20px;"></i>
+          </li>
+        </a>`;
       })
       .join("");
 

@@ -7,6 +7,14 @@ from django.conf import settings
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
 
+from django.views.generic import ListView
+from notifications.models import Notification
+from apps.authentication.models import (
+    User,
+    BuyerAccountModel,
+    SellerAccountModel
+)
+
 @login_required()
 def mark_as_read(request, slug=None):
     notification_id = slug2id(slug)
@@ -21,3 +29,4 @@ def mark_as_read(request, slug=None):
         return redirect(iri_to_uri(_next))
 
     return redirect('/')
+
