@@ -23,31 +23,18 @@
     <a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Special Items</a>
 </div>
 
+<div class="salom"></div>
+
 <div class="col-12 collapse my-2" id="notification">
     <div class="bg-light rounded h-100 p-4">
         <h6 class="mb-4">Responsive Table</h6>
         <div class="table-responsive">
             <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Sender</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <!-- <tbody class="notify-table">
                     {% for n in notice %}
                     <tr>
                         <th scope="row">{{ n.id }}</th>
-                        <td><a href="{% url 'authentication:mark_as_read' n.slug %}">{{ n.actor.buyeraccountmodel.first_name }}</a></td>
-                        <td>{{ n.actor.buyeraccountmodel.last_name }}</td>
-                        <td>{{ n.actor }}</td>
-                        <td>{{ n.verb }}</td>
-                        <td>{{ n.description|linebreaksbr }}</td>
+                        <td><a href="{% url 'authentication:mark_as_read' n.slug %}"></a></td>
                         {% if n.unread == True %}
                         <td><i class="fa-solid fa-envelope" style="color: orange; font-size: 20px;"></i></td>
                         {% else %}
@@ -55,8 +42,16 @@
                         {% endif %}
                     </tr>
                     {% endfor %}
-                </tbody>
+                </tbody> -->
             </table>
+            <div class="list-group">
+                {% live_notify_list as live %}
+                {% if live %}
+                {{ live }}
+                {% else %}
+                no contnet
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

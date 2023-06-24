@@ -4,11 +4,14 @@ var notify_api_url;
 var notify_fetch_count;
 var notify_unread_url;
 var notify_mark_all_unread_url;
-var notify_refresh_period = 15000;
+var notify_refresh_period = 2000;
 // Set notify_mark_as_read to true to mark notifications as read when fetched
 var notify_mark_as_read = false;
 var consecutive_misfires = 0;
 var registered_functions = [];
+
+let notifyTable = document.querySelector(".datas");
+
 
 function fill_notification_badge(data) {
   var badges = document.getElementsByClassName(notify_badge_class);
@@ -27,18 +30,18 @@ function fill_notification_list(data) {
         var message = "";
 
         if (typeof item.actor !== "undefined") {
-          message = item.actor;
+          message = '<td>' + item.actor + '<td/>';
         }
-        if (typeof item.verb !== "undefined") {
-          message = message + " " + item.verb;
-        }
+        // if (typeof item.verb !== "undefined") {
+        //   message = message + '<td>' + item.verb + '<td/>';
+        // }
         if (typeof item.target !== "undefined") {
           message = message + " " + item.target;
         }
-        if (typeof item.timestamp !== "undefined") {
-          message = message + " " + item.timestamp;
-        }
-        return "<li>" + message + "</li>";
+        // if (typeof item.timestamp !== "undefined") {
+        //   message = message + " " + item.timestamp;
+        // }
+        return `<a style='text-decoration: none !important;' href='/mark-as-read/${item.slug}/'><li style='list-style: none;' class='list-group-item position-relative'> ${message} <i class="fa-solid fa-envelope position-absolute" style="color: orange; font-size: 20px; right: 20px;"></i></li></a>`;
       })
       .join("");
 
@@ -88,6 +91,14 @@ function fetch_api_data() {
         badges[i].title = "Connection lost!";
       }
     }
+  }
+}
+
+
+function my_special_notification_callback(data) {
+  for (var i=0; i < data.unread_list.length; i++) {
+      msg = data.unread_list[i];
+      console.log(msg);
   }
 }
 
