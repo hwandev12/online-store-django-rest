@@ -7,7 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("apps.base.urls")),
     path('authentication/', include('allauth.urls')),
-    re_path(r"^inbox/notification/", include("notifications.urls", namespace="notifications")),
+    re_path(r"^inboxes/great/sk/", include("notifications.urls", namespace="notifications")),
     path("", include("apps.authentication.urls")),
     path("developer/", include("apps.developer.urls")),
     path("chat/", include("apps.chat.urls")),

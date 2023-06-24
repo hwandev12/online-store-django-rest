@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
+{% load pagination_extras_app %}
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -64,14 +64,26 @@
                     </ul>
                 </div>
                 <div class="pull-right">
-                    <span class="text-muted"><b>1</b>–<b>50</b> of <b>160</b></span>
+                    <span class="text-muted"><b>{{ notifications.number }}</b> of <b>{{ notifications.paginator.num_pages }}</b></span>
                     <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-default">
+                        {% if notifications.has_previous %}
+                        <a href="{% my_url notifications.previous_page_number 'page' request.GET.urlencode %}" class="btn btn-default">
                             <span class="glyphicon glyphicon-chevron-left"></span>
-                        </button>
-                        <button type="button" class="btn btn-default">
+                        </a>
+                        {% else %}
+                        <a href="#" class="btn btn-default disabled">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        {% endif %}
+                        {% if notifications.has_next %}
+                        <a href="{% my_url notifications.next_page_number 'page' request.GET.urlencode %}" class="btn btn-default">
                             <span class="glyphicon glyphicon-chevron-right"></span>
-                        </button>
+                        </a>
+                        {% else %}
+                        <a href="#" class="btn btn-default disabled">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

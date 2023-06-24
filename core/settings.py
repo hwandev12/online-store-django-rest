@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from django.conf import settings
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -180,6 +181,10 @@ SOCIALACCOUNT_AUTO_SIGNUP = False
 # ACCOUNT_FORMS = {
 #     'signup': 'apps.authentication.forms.CustomBuyerAccountFormDjango',
 # }
+
+CONFIG_DEFAULTS = {
+    'PAGINATE_BY': 5
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
