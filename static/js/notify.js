@@ -42,7 +42,7 @@ function fill_notification_list(data) {
         //   message = message + " " + item.timestamp;
         // }
         let d = new Date(item.timestamp);
-        return `<a style='text-decoration: none !important;' href='/mark-as-read/${item.slug}/'>
+        return `<a style='text-decoration: none !important;' href='/inbox/notify/mark-as-read/${item.slug}/'>
           <li style='list-style: none;' class='list-group-item position-relative'>
             ${message}
             <p style='display: inline-block; position: absolute; right: 50%;'>${d.getDate()}.${d.getDay()}<sup>${d.getHours()}:${d.getMinutes()}</sup></p>
