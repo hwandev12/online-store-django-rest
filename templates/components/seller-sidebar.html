@@ -1,24 +1,20 @@
 {% load notifications_tags %}
 <div class="list-group list-group-horizontal" id="roles">
-	<a href="#notification" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
-		class="list-group-item">Notifications</a>
-	<a href="" class="list-group-item {% if request.path == '/edit-profile' %}active {% endif %}">Profile</a>
-	<a href="#collapse1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
-		class="list-group-item">Orders</a>
-	<a href="" class="list-group-item {% if request.path == '/my-wishlist' %}active {% endif %}">Wishlist</a>
-	<a href="#comment" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
-	class="list-group-item">My Reviews</a>
-	<a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Address Book</a>
-	<a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Cards</a>
-	<a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Special Items</a>
+    <a href="#notification" data-bs-toggle="collapse" role="button" aria-expanded="false"
+        aria-controls="collapseExample" class="list-group-item">Notifications</a>
+    <a href="" class="list-group-item {% if request.path == '/edit-profile' %}active {% endif %}">Profile</a>
+    <a href="#collapse1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+        class="list-group-item">Orders</a>
+    <a href="" class="list-group-item {% if request.path == '/my-wishlist' %}active {% endif %}">Wishlist</a>
+    <a href="#comment" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
+        class="list-group-item">My Reviews</a>
+    <a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Address Book</a>
+    <a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Cards</a>
+    <a href="" class="list-group-item {% if request.path == '/my-addressbook' %}active {% endif %}">Special Items</a>
 </div>
-
 
 <div class="col-12 collapse my-2" id="notification">
     <div class="bg-light rounded h-100 p-4">
-        {% live_notify_list %}
-        {% notifications_unread as unread %}
-        {{ unread }}
         <h6 class="mb-4">Responsive Table</h6>
         <div class="table-responsive">
             <table class="table">
@@ -28,8 +24,8 @@
                         <th scope="col">Sender</th>
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Title</th>
                         <th scope="col">Message</th>
-                        <th scope="col">ZIP</th>
                         <th scope="col">Status</th>
                     </tr>
                 </thead>
@@ -41,13 +37,12 @@
                         <td>{{ n.actor.buyeraccountmodel.last_name }}</td>
                         <td>{{ n.actor }}</td>
                         <td>{{ n.verb }}</td>
-                        <td>123</td>
-                        <td>{% if n.unread == "False" %}
-                            helloo
-                            {% else %}
-                            lkll;k
-                            {% endif %}
-                        </td>
+                        <td>{{ n.description }}</td>
+                        {% if n.unread == True %}
+                        <td><i class="fa-solid fa-envelope" style="color: orange; font-size: 20px;"></i></td>
+                        {% else %}
+                        <td><i class="fa-solid fa-envelope-open" style="color: orange; font-size: 20px;"></i></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
