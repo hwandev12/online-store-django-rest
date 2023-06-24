@@ -31,6 +31,7 @@ from apps.product.models import (
     Checkout
 )
 from notifications.models import Notification
+from notifications.templatetags.notifications_tags import live_notify_list, register_notify_callbacks
 class SellerRegisterView(generic.CreateView):
     model = User
     form_class = CustomSellerAccountFormDjango
@@ -120,7 +121,6 @@ def profile(request, first_name):
         try:
             seller = get_object_or_404(SellerAccountModel, user=request.user, first_name=first_name)
             notice = Notification.objects.filter(recipient=request.user)
-            print(notice)
             product = Product.objects.filter(owner=request.user.selleraccountmodel)
         except ValueError as e:
             # we should change this 404 error page later on

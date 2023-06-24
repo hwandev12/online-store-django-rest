@@ -1,7 +1,17 @@
 {% load notifications_tags %}
+{% notifications_unread as unread_count %}
 <div class="list-group list-group-horizontal" id="roles">
+    {% live_notify_list as live %}
+    {% if unread_count %}
     <a href="#notification" data-bs-toggle="collapse" role="button" aria-expanded="false"
-        aria-controls="collapseExample" class="list-group-item">Notifications</a>
+        aria-controls="collapseExample" class="list-group-item position-relative">Notifications
+        <span class="position-absolute top-2 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 10px; left: 110px !important;">
+            <i class="fa-solid fa-exclamation"></i>
+          </span></a>
+    {% else %}
+    <a href="#notification" data-bs-toggle="collapse" role="button" aria-expanded="false"
+        aria-controls="collapseExample" class="list-group-item position-relative">Notifications</a>
+    {% endif %}
     <a href="" class="list-group-item {% if request.path == '/edit-profile' %}active {% endif %}">Profile</a>
     <a href="#collapse1" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample"
         class="list-group-item">Orders</a>
@@ -33,11 +43,11 @@
                     {% for n in notice %}
                     <tr>
                         <th scope="row">{{ n.id }}</th>
-                        <td>{{ n.actor.buyeraccountmodel.first_name }}</td>
+                        <td><a href="{% url 'authentication:mark_as_read' n.slug %}">{{ n.actor.buyeraccountmodel.first_name }}</a></td>
                         <td>{{ n.actor.buyeraccountmodel.last_name }}</td>
                         <td>{{ n.actor }}</td>
                         <td>{{ n.verb }}</td>
-                        <td>{{ n.description }}</td>
+                        <td>{{ n.description|linebreaksbr }}</td>
                         {% if n.unread == True %}
                         <td><i class="fa-solid fa-envelope" style="color: orange; font-size: 20px;"></i></td>
                         {% else %}
