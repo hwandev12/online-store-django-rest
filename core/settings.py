@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.base.apps.BaseConfig',
     'apps.product.apps.ProductConfig',
     "apps.chat.apps.ChatConfig",
+    'apps.notification.apps.NotificationConfig',
 ]
 
 SITE_ID = 1

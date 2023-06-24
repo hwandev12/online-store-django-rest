@@ -1,4 +1,5 @@
 <!--Main Navigation-->
+{% load notifications_tags %}
 <header>
   <!-- Jumbotron -->
   <div class="p-3 text-center bg-white border-bottom">
@@ -24,6 +25,15 @@
             <a href="{% url 'authentication:general_profile' request.user.selleraccountmodel.first_name  %}"
               class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
               <p class="d-none d-md-block mb-0">Profile</p>
+            </a>
+            <a href="#"
+              class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+              <i class="fa-solid fa-bell position-relative">
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 8px;">
+                  {% live_notify_badge %}
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              </i>
             </a>
             {% elif request.user.is_buyer %}
             <a href="{% url 'authentication:general_profile' request.user.buyeraccountmodel.first_name  %}"
