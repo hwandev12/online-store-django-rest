@@ -1,9 +1,12 @@
+{% load notifications_tags %}
 <div class="col-sm-3 col-md-2">
     <a href="#" class="btn btn-success btn-sm btn-block" role="button"><i
             class="glyphicon glyphicon-edit"></i> Compose</a>
     <hr>
     <ul class="nav nav-pills nav-stacked">
-        <li class="active"><a href="{% url 'authentication:all_notifications' %}"><span class="badge pull-right">32</span> Inbox </a>
+        <li class="active"><a href="{% url 'authentication:all_notifications' %}"><span class="badge pull-right">{{ notifications_count }}</span> Inbox </a>
+        </li>
+        <li><a href="{% url 'authentication:all_notifications' %}"><span class="badge pull-right">{% live_notify_badge %}</span> Unread </a>
         </li>
         <li><a href="#">Starred</a></li>
         <li><a href="#">Important</a></li>
