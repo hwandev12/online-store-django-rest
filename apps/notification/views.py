@@ -147,6 +147,17 @@ class SentMailView(LoginRequiredMixin, ListView):
         context['notifications_count'] = self.request.user.notifications.count()
         return context
     
+@login_required
+def mark_all_as_read(request):
+    request.user.notifications.mark_all_as_read()
+
+    _next = request.GET.get('next')
+
+    if _next and url_has_allowed_host_and_scheme(_next, settings.ALLOWED_HOSTS):
+        return redirect(iri_to_uri(_next))
+    return redirect('authentication:all_notifications')
+    
+    
 all_notifications = AllNotificationsList.as_view()
 single_notification = SingleNotificationView.as_view()
 unread_notifications = UnreadNotificationsList.as_view()

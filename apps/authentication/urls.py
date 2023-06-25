@@ -12,7 +12,8 @@ from apps.notification.views import (
     single_notification,
     all_notifications,
     unread_notifications,
-    sent_mail
+    sent_mail,
+    mark_all_as_read
 )
 
 app_name = "authentication"
@@ -24,6 +25,7 @@ urlpatterns = [
     path("profile/<str:first_name>/", profile, name="general_profile"),
     # notification paths
     re_path(r'^inbox/notify/mark-as-read/(?P<slug>\d+)/$', mark_as_read, name='mark_as_read'),
+    path('inbox/notify/mark-all-as-read/', mark_all_as_read, name='mark_all_as_read'),
     path('inbox/notify/<int:pk>/', single_notification, name='single_notification'),
     path('inbox/notifications/', all_notifications, name='all_notifications'),
     path('inbox/notifications/unread/', unread_notifications, name='unread_notifications'),
