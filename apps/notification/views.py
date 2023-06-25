@@ -134,6 +134,20 @@ class UnreadNotificationsList(ListView):
         return context
     
     
+class SentMailView(LoginRequiredMixin, ListView):
+    template_name = 'notifications/sent.html'
+    context_object_name = 'sent_mail'
+    
+    def get_queryset(self):
+        return ReplyMessage.objects.filter(user=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super(SentMailView, self).get_context_data(**kwargs)
+        context['sent_mail'] = self.get_queryset()
+        context['notifications_count'] = self.request.user.notifications.count()
+        return context
+    
 all_notifications = AllNotificationsList.as_view()
 single_notification = SingleNotificationView.as_view()
 unread_notifications = UnreadNotificationsList.as_view()
+sent_mail = SentMailView.as_view()

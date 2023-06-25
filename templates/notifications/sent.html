@@ -1,0 +1,25 @@
+{% extends 'notifications/list.html' %}
+
+{% block content %}
+<div class="list-group" id="refresh-all-list">
+    {% for n in sent_mail %}
+    <a href="#" class="list-group-item">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">
+            </label>
+        </div>
+        <span class="glyphicon glyphicon-star-empty"></span>
+        <span class="name label label-info" style="min-width: 120px; display: inline-block;">
+            {{ n.user }}
+        </span>
+        to
+        <span class="text-truncate name label label-warning" style="font-size: 12px; display: inline-block; max-width: 100px; transform: translateY(3px);">{{ n.message.content }}</span>
+        <span class="text-muted text-truncate" style="font-size: 11px; display: inline-block; max-width: 100px; transform: translateY(3px);">- {{ n.content }}</span> <span
+            class="badge">{{ n.timestamp }}</span> <span class="pull-right"><span
+                class="glyphicon glyphicon-paperclip">
+            </span></span>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

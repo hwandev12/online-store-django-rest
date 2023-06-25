@@ -8,9 +8,9 @@
         </li>
         <li {% if request.path == '/inbox/notifications/unread/' %} class="active" {% endif %}><a href="{% url 'authentication:unread_notifications' %}"><span class="badge pull-right">{% live_notify_badge %}</span> Unread </a>
         </li>
-        <li><a href="#">Starred</a></li>
+        <li {% if request.path == '/inbox/notifications/sent-mail/' %} class="active" {% endif %}><a href="{% url 'authentication:sent_mail' %}">Sent Mail</a></li>
         <li><a href="#">Important</a></li>
-        <li><a href="#">Sent Mail</a></li>
+        <li><a href="">Starred</a></li>
         <li><a href="#"><span class="badge pull-right">3</span>Drafts</a></li>
     </ul>
 </div>
