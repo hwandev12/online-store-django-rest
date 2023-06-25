@@ -1,0 +1,38 @@
+{% extends 'notifications/list.html' %}
+
+{% block content %}
+<div class="list-group">
+    {% if notifications_unread %}
+    {% for n in notifications_unread %}
+    <a href="{% url 'authentication:mark_as_read' n.slug %}" class="list-group-item">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">
+            </label>
+        </div>
+        <span class="glyphicon glyphicon-star-empty"></span>
+        {% if n.unread == True %}
+        <span class="name label label-danger" style="min-width: 120px; display: inline-block;">
+            {{ n.actor }}
+        </span>
+        {% else %}
+        <span class="name label label-info" style="min-width: 120px; display: inline-block;">
+            {{ n.actor }}
+        </span>
+        {% endif %}
+        <span class="">{{ n.verb }}</span>
+        <span class="text-muted text-truncate"
+            style="font-size: 11px; display: inline-block; max-width: 100px; transform: translateY(3px);">- {{ n.description }}</span> <span class="badge">{{ n.timesince }}</span> <span class="pull-right"><span
+                class="glyphicon glyphicon-paperclip">
+            </span></span>
+    </a>
+    {% endfor %}
+    {% else %}
+    <h5 class="text-center" style="
+    color: #777;
+    font-size: 14px;
+    margin-top: 20px;
+    "><i class="fa-solid fa-circle-exclamation mx-2"></i>You don't have unread messages</h5>
+    {% endif %}
+</div>
+{% endblock %}

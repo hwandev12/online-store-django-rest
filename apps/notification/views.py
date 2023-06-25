@@ -87,5 +87,29 @@ class AllNotificationsList(NotificationViewList):
             qset = self.request.user.notifications.all()
         return qset
     
+    
+class UnreadNotificationsList(ListView):
+    """
+    Unread notifications page for authenticated user
+    """
+    template_name = 'notifications/unread.html'
+    context_object_name = 'notifications_unread'
+
+    def get_queryset(self):
+        if notification_settings.get_config()['SOFT_DELETE']:
+            qset = self.request.user.notifications.unread().active()
+        else:
+            qset = self.request.user.notifications.unread()
+        return qset
+
+    def get_context_data(self, **kwargs):
+        context = super(UnreadNotificationsList, self).get_context_data(**kwargs)
+        context['notifications_unread'] = self.get_queryset()
+        # get all notifications count
+        context['notifications_count'] = self.request.user.notifications.count()
+        return context
+    
+    
 all_notifications = AllNotificationsList.as_view()
 single_notification = SingleNotificationView.as_view()
+unread_notifications = UnreadNotificationsList.as_view()
