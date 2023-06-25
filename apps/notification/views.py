@@ -9,6 +9,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.encoding import iri_to_uri
 
 from django.core.paginator import Paginator
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from notifications.models import Notification
@@ -18,6 +19,10 @@ from apps.authentication.models import (
     SellerAccountModel
 )
 from django.utils.decorators import method_decorator
+
+from apps.chat.models import Message, ReplyMessage
+from apps.chat.forms import MessageForm, ReplyMessageForm
+from notifications.signals import notify
 
 @login_required()
 def mark_as_read(request, slug=None):
@@ -32,26 +37,45 @@ def mark_as_read(request, slug=None):
     if _next and url_has_allowed_host_and_scheme(_next, settings.ALLOWED_HOSTS):
         return redirect(iri_to_uri(_next))
 
-    return redirect("authentication:single_notification", pk=notification_id)
+    return redirect("authentication:single_notification", pk=Message.objects.get(id=notification_id).id)
 
 
-class SingleNotificationView(DetailView):
-    model = Notification
+class SingleNotificationView(LoginRequiredMixin, DetailView):
+    model = Message
     template_name = 'notifications/single.html'
     context_object_name = 'notification'
 
     def get_object(self, queryset=None):
         notification = super(SingleNotificationView, self).get_object(
             queryset=queryset)
-        if notification.recipient == self.request.user:
+        if notification.receiver == self.request.user:
             return notification
         else:
             return redirect('/')
         
     def get_context_data(self, **kwargs):
         context = super(SingleNotificationView, self).get_context_data(**kwargs)
-        context['notification'] = Notification.objects.get(id=self.kwargs['pk'])
+        context['notification'] = Message.objects.get(id=self.kwargs['pk'])
+        context['notifications_count'] = self.request.user.notifications.count()
+        if self.request.user.is_seller:
+            context['form'] = ReplyMessageForm()
         return context
+    
+    
+    def post(self, request, *args, **kwargs):
+        notification = Message.objects.get(id=self.kwargs['pk'])
+        buyer = BuyerAccountModel.objects.get(user=notification.user)
+        if request.user.is_seller:
+            if request.method == 'POST':
+                form = ReplyMessageForm(self.request.POST)
+                if form.is_valid():
+                    form.instance.user = request.user
+                    form.instance.message = notification
+                    notify.send(request.user, recipient=buyer.user, verb='New Message', description=form.cleaned_data['content'])
+                    form.save()
+                    return redirect('authentication:all_notifications')
+        else:
+            pass
     
 class NotificationViewList(ListView):
     template_name = 'notifications/list.html'

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Message
+from .models import Message, ReplyMessage
 from apps.authentication.models import User
 
 class MessageForm(forms.ModelForm):
@@ -15,3 +15,8 @@ class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
         fields = ['content', 'title']
+        
+class ReplyMessageForm(forms.ModelForm):
+    class Meta:
+        model = ReplyMessage
+        fields = ['content']

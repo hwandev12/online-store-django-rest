@@ -1,27 +1,32 @@
 {% extends 'notifications/list.html' %}
-
+{% load widget_tweaks %}
 {% block content %}
+<style>
+    .sizer {
+        width: 100% !important;
+    }
+</style>
 <div class="col-md-8 message-sideright">
     <div class="panel">
         <div class="panel-heading">
             <div class="media">
                 <a href="mail-compose.html" class="btn btn-danger pull-right rounded"><i class="fa fa-share"></i></a>
                 <a class="pull-left" href="#">
-                    {% if notification.actor.is_buyer %}
-                    <img src="{{ notification.actor.buyeraccountmodel.get_buyer_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
+                    {% if notification.user.is_buyer %}
+                    <img src="{{ notification.user.buyeraccountmodel.get_buyer_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
                     {% else %}
-                    <img src="{{ notification.actor.selleraccountmodel.get_seller_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
+                    <img src="{{ notification.user.selleraccountmodel.get_seller_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
                     {% endif %}
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ notification.actor.buyeraccountmodel.first_name }}<small> (Sales Manager)</small></h4>
+                    <h4 class="media-heading">{{ notification.user.buyeraccountmodel.first_name }}<small> (Sales Manager)</small></h4>
                     <small>{{ notification.timestamp }}</small>
                 </div>
             </div>
         </div><!-- /.panel-heading -->
         <div class="panel-body">
             <p class="lead">
-                {{ notification.description }}
+                {{ notification.content }}
             </p>
             <hr>
             <!-- <p>
@@ -32,6 +37,12 @@
                 Thanks! <br>
                 Rebecca.
             </p>
-        </div><!-- /.panel-body -->
-    </div><!-- /.panel -->
+            <hr>
+            <form method="POST" class="input-group" style="width: 100%">
+                {% csrf_token %}
+                {% render_field form.content class+="form-control sizer"  placeholder="Message" %}
+                <button type="submit" class="btn btn-primary" style="margin: 10px 0px;">Reply</button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

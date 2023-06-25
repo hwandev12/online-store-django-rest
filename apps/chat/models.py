@@ -17,4 +17,21 @@ class Message(models.Model):
     # return last 20 messages
     def last_10_messages():
         return Message.objects.order_by('-timestamp').all()[:10]
+    
+    # write a method to get user id
+    def get_user_id(self):
+        return self.user.id
 
+
+class ReplyMessage(models.Model):
+    user = models.ForeignKey(User, related_name='author_reply_messages', on_delete=models.CASCADE)
+    message = models.ForeignKey(Message, related_name='message_reply', on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.email
+
+    # return last 20 messages
+    def last_10_messages():
+        return ReplyMessage.objects.order_by('-timestamp').all()[:10]
