@@ -24,6 +24,7 @@ from apps.chat.models import Message, ReplyMessage
 from apps.chat.forms import MessageForm, ReplyMessageForm
 from notifications.signals import notify
 
+# ----------------------------------------------------------------------------------- #
 @login_required()
 def mark_as_read(request, slug=None):
     notification_id = slug2id(slug)
@@ -39,7 +40,7 @@ def mark_as_read(request, slug=None):
 
     return redirect("authentication:single_notification", pk=Message.objects.get(id=notification_id).id)
 
-
+# ----------------------------------------------------------------------------------- #
 class SingleNotificationView(LoginRequiredMixin, DetailView):
     model = Message
     template_name = 'notifications/single.html'
@@ -76,7 +77,8 @@ class SingleNotificationView(LoginRequiredMixin, DetailView):
                     return redirect('authentication:all_notifications')
         else:
             pass
-    
+
+# ----------------------------------------------------------------------------------- #
 class NotificationViewList(ListView):
     template_name = 'notifications/list.html'
     context_object_name = 'notifications'
@@ -89,8 +91,10 @@ class NotificationViewList(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(NotificationViewList, self).dispatch(
-            request, *args, **kwargs)
+        if request.user.is_seller:
+            return super(NotificationViewList, self).dispatch(request, *args, **kwargs)
+        # later on we will add a 404 page
+        return redirect('/')
 
     def get_context_data(self, **kwargs):
         context = super(NotificationViewList, self).get_context_data(**kwargs)
@@ -98,42 +102,53 @@ class NotificationViewList(ListView):
         context['notifications_count'] = self.request.user.notifications.count()
         context['notifications_count_unread'] = self.request.user.notifications.unread().count()
         return context
+# ----------------------------------------------------------------------------------- #
 
+# ----------------------------------------------------------------------------------- #
 class AllNotificationsList(NotificationViewList):
     """
     Index page for authenticated user
     """
 
     def get_queryset(self):
-        if notification_settings.get_config()['SOFT_DELETE']:
-            qset = self.request.user.notifications.active()
-        else:
-            qset = self.request.user.notifications.all()
-        return qset
+        if self.request.user.is_seller:
+            if notification_settings.get_config()['SOFT_DELETE']:
+                qset = self.request.user.notifications.active()
+            else:
+                qset = self.request.user.notifications.all()
+            return qset
     
+# ----------------------------------------------------------------------------------- #
+class UnreadNotificationsList(ListView):                                              # 
+    """                                                                               # 
+    Unread notifications page for authenticated user                                  #           
+    """                                                                               #      
+    template_name = 'notifications/unread.html'                                       #
+    context_object_name = 'notifications_unread'                                      #                   
+                      
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_seller:
+            return super(UnreadNotificationsList, self).dispatch(request, *args, **kwargs)
+        # later on we will add a 404 page
+        return redirect('/')                      
+                                                                                      #
+    def get_queryset(self):                                                           #
+        if notification_settings.get_config()['SOFT_DELETE']:                         #
+            qset = self.request.user.notifications.unread().active()                  #
+        else:                                                                         #
+            qset = self.request.user.notifications.unread()                           #
+        return qset                                                                   #                                   
+                                                                                      #
+    def get_context_data(self, **kwargs):                                             # 
+        context = super(UnreadNotificationsList, self).get_context_data(**kwargs)     #
+        context['notifications_unread'] = self.get_queryset()                         #
+        # get all notifications count                                                 #
+        context['notifications_count'] = self.request.user.notifications.count()      #
+        return context                                                                #                                                                         #
+# ----------------------------------------------------------------------------------- #
     
-class UnreadNotificationsList(ListView):
-    """
-    Unread notifications page for authenticated user
-    """
-    template_name = 'notifications/unread.html'
-    context_object_name = 'notifications_unread'
-
-    def get_queryset(self):
-        if notification_settings.get_config()['SOFT_DELETE']:
-            qset = self.request.user.notifications.unread().active()
-        else:
-            qset = self.request.user.notifications.unread()
-        return qset
-
-    def get_context_data(self, **kwargs):
-        context = super(UnreadNotificationsList, self).get_context_data(**kwargs)
-        context['notifications_unread'] = self.get_queryset()
-        # get all notifications count
-        context['notifications_count'] = self.request.user.notifications.count()
-        return context
-    
-    
+# ----------------------------------------------------------------------------------- #
 class SentMailView(LoginRequiredMixin, ListView):
     template_name = 'notifications/sent.html'
     context_object_name = 'sent_mail'
@@ -146,7 +161,8 @@ class SentMailView(LoginRequiredMixin, ListView):
         context['sent_mail'] = self.get_queryset()
         context['notifications_count'] = self.request.user.notifications.count()
         return context
-    
+# ----------------------------------------------------------------------------------- #
+# ----------------------------------------------------------------------------------- #
 @login_required
 def mark_all_as_read(request):
     request.user.notifications.mark_all_as_read()
@@ -156,7 +172,10 @@ def mark_all_as_read(request):
     if _next and url_has_allowed_host_and_scheme(_next, settings.ALLOWED_HOSTS):
         return redirect(iri_to_uri(_next))
     return redirect('authentication:all_notifications')
+# ----------------------------------------------------------------------------------- #
     
+# we create FBV and CBV for the buyers and admins for notifications
+
     
 all_notifications = AllNotificationsList.as_view()
 single_notification = SingleNotificationView.as_view()
