@@ -136,7 +136,7 @@
                                 {% endfor %}
                             {% else %}
                                 {% for n in notifications %}
-                                <a href="{% url 'authentication:mark_as_read' n.slug %}" class="list-group-item">
+                                <a href="{% url 'authentication:mark_buyer_notification_as_read' n.slug %}" class="list-group-item">
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox">

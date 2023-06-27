@@ -38,6 +38,7 @@ def mark_as_read(request, slug=None):
         return redirect(iri_to_uri(_next))
 
     return redirect("authentication:single_notification", pk=Message.objects.get(id=notification_id).id)
+# ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
 class SingleNotificationView(LoginRequiredMixin, DetailView):
@@ -90,7 +91,7 @@ class NotificationViewList(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_seller or request.user.is_buyer:
+        if request.user.is_seller:
             return super(NotificationViewList, self).dispatch(request, *args, **kwargs)
         # later on we will add a 404 page
         return redirect('/')
@@ -110,12 +111,13 @@ class AllNotificationsList(NotificationViewList):
     """
 
     def get_queryset(self):
-        if self.request.user.is_seller or self.request.user.is_buyer:
+        if self.request.user.is_seller:
             if notification_settings.get_config()['SOFT_DELETE']:
                 qset = self.request.user.notifications.active()
             else:
                 qset = self.request.user.notifications.all()
             return qset
+        return redirect('/')
     
 # ----------------------------------------------------------------------------------- #
 class UnreadNotificationsList(ListView):                                              # 
@@ -172,11 +174,10 @@ def mark_all_as_read(request):
         return redirect(iri_to_uri(_next))
     return redirect('authentication:all_notifications')
 # ----------------------------------------------------------------------------------- #
-    
-# we create FBV and CBV for the buyers and admins for notifications
 
-    
+# ----------------------------------------------------------------------------------- #
 all_notifications = AllNotificationsList.as_view()
 single_notification = SingleNotificationView.as_view()
 unread_notifications = UnreadNotificationsList.as_view()
 sent_mail = SentMailView.as_view()
+# ----------------------------------------------------------------------------------- #

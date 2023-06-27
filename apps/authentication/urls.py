@@ -13,7 +13,7 @@ from apps.notification.views import (
     all_notifications,
     unread_notifications,
     sent_mail,
-    mark_all_as_read
+    mark_all_as_read,
 )
 
 app_name = "authentication"
@@ -29,5 +29,5 @@ urlpatterns = [
     path('inbox/notify/<int:pk>/', single_notification, name='single_notification'),
     path('inbox/notifications/', all_notifications, name='all_notifications'),
     path('inbox/notifications/unread/', unread_notifications, name='unread_notifications'),
-    path('inbox/notifications/sent-mail/', sent_mail, name='sent_mail')
+    path('inbox/notifications/sent-mail/', sent_mail, name='sent_mail'),
 ]
