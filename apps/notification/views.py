@@ -43,7 +43,7 @@ def mark_as_read(request, slug=None):
 # ----------------------------------------------------------------------------------- #
 class SingleNotificationView(LoginRequiredMixin, DetailView):
     model = Message
-    template_name = 'notifications/single.html'
+    template_name = 'notifications/sellers/single.html'
     context_object_name = 'notification'
 
     def get_object(self, queryset=None):
@@ -80,9 +80,9 @@ class SingleNotificationView(LoginRequiredMixin, DetailView):
 
 # ----------------------------------------------------------------------------------- #
 class NotificationViewList(ListView):
-    template_name = 'notifications/list.html'
+    template_name = 'notifications/sellers/list.html'
     context_object_name = 'notifications'
-    
+
     def get_notifications_by_paginator(self):
         paginate = Paginator(self.get_queryset(), 10)
         page_number = self.request.GET.get('page')
@@ -91,7 +91,7 @@ class NotificationViewList(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_seller:
+        if request.user.is_seller or request.user.is_buyer:
             return super(NotificationViewList, self).dispatch(request, *args, **kwargs)
         # later on we will add a 404 page
         return redirect('/')
@@ -111,7 +111,7 @@ class AllNotificationsList(NotificationViewList):
     """
 
     def get_queryset(self):
-        if self.request.user.is_seller:
+        if self.request.user.is_seller or self.request.user.is_buyer:
             if notification_settings.get_config()['SOFT_DELETE']:
                 qset = self.request.user.notifications.active()
             else:
@@ -123,7 +123,7 @@ class UnreadNotificationsList(ListView):                                        
     """                                                                               # 
     Unread notifications page for authenticated user                                  #           
     """                                                                               #      
-    template_name = 'notifications/unread.html'                                       #
+    template_name = 'notifications/sellers/unread.html'                                       #
     context_object_name = 'notifications_unread'                                      #                   
                       
     @method_decorator(login_required)
@@ -150,7 +150,7 @@ class UnreadNotificationsList(ListView):                                        
     
 # ----------------------------------------------------------------------------------- #
 class SentMailView(LoginRequiredMixin, ListView):
-    template_name = 'notifications/sent.html'
+    template_name = 'notifications/sellers/sent.html'
     context_object_name = 'sent_mail'
     
     def get_queryset(self):
