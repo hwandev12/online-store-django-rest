@@ -70,9 +70,9 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <a href="{% url 'base:product_create' %}" class="btn btn-primary my-3">Upload Product</a>
                     {% include 'components/seller-sidebar.html' %}
-                {% else %}
+                    {% else %}
+                    <a href="{% url 'base:product_create' %}" class="btn btn-primary my-3">Upload Product</a>
                 <h5 class="text-center" style="
                 color: #777;
                 font-size: 16px;

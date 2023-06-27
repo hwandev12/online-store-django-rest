@@ -109,30 +109,57 @@
                 <div class="tab-content">
                     <div class="tab-pane fade in active" id="home">
                         <div class="list-group" id="refresh-all-list">
-                            {% for n in notifications %}
-                            <a href="{% url 'authentication:mark_as_read' n.slug %}" class="list-group-item">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox">
-                                    </label>
-                                </div>
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                                {% if n.unread == True %}
-                                <span class="name label label-danger" style="min-width: 120px; display: inline-block;">
-                                    {{ n.actor }}
-                                </span>
-                                {% else %}
-                                <span class="name label label-info" style="min-width: 120px; display: inline-block;">
-                                    {{ n.actor }}
-                                </span>
-                                {% endif %}
-                                <span class="">{{ n.verb }}</span>
-                                <span class="text-muted text-truncate" style="font-size: 11px; display: inline-block; max-width: 100px; transform: translateY(3px);">- {{ n.description }}</span> <span
-                                    class="badge">{{ n.timesince }}</span> <span class="pull-right"><span
-                                        class="glyphicon glyphicon-paperclip">
-                                    </span></span>
-                            </a>
-                            {% endfor %}
+                            {% if request.user.is_seller %}
+                                {% for n in notifications %}
+                                <a href="{% url 'authentication:mark_as_read' n.slug %}" class="list-group-item">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">
+                                        </label>
+                                    </div>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    {% if n.unread == True %}
+                                    <span class="name label label-danger" style="min-width: 120px; display: inline-block;">
+                                        {{ n.actor }}
+                                    </span>
+                                    {% else %}
+                                    <span class="name label label-info" style="min-width: 120px; display: inline-block;">
+                                        {{ n.actor }}
+                                    </span>
+                                    {% endif %}
+                                    <span class="">{{ n.verb }}</span>
+                                    <span class="text-muted text-truncate" style="font-size: 11px; display: inline-block; max-width: 100px; transform: translateY(3px);">- {{ n.description }}</span> <span
+                                        class="badge">{{ n.timesince }}</span> <span class="pull-right"><span
+                                            class="glyphicon glyphicon-paperclip">
+                                        </span></span>
+                                </a>
+                                {% endfor %}
+                            {% else %}
+                                {% for n in notifications %}
+                                <a href="{% url 'authentication:mark_as_read' n.slug %}" class="list-group-item">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox">
+                                        </label>
+                                    </div>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                    {% if n.unread == True %}
+                                    <span class="name label label-danger" style="min-width: 120px; display: inline-block;">
+                                        {{ n.actor }}
+                                    </span>
+                                    {% else %}
+                                    <span class="name label label-info" style="min-width: 120px; display: inline-block;">
+                                        {{ n.actor }}
+                                    </span>
+                                    {% endif %}
+                                    <span class="">{{ n.verb }}</span>
+                                    <span class="text-muted text-truncate" style="font-size: 11px; display: inline-block; max-width: 100px; transform: translateY(3px);">- {{ n.description }}</span> <span
+                                        class="badge">{{ n.timesince }}</span> <span class="pull-right"><span
+                                            class="glyphicon glyphicon-paperclip">
+                                        </span></span>
+                                </a>
+                                {% endfor %}
+                            {% endif %}
                             {% block content %}
                             {% endblock %}
                         </div>

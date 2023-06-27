@@ -28,7 +28,6 @@ from notifications.signals import notify
 @login_required()
 def mark_as_read(request, slug=None):
     notification_id = slug2id(slug)
-
     notification = get_object_or_404(
         Notification, recipient=request.user, id=notification_id)
     notification.mark_as_read()
@@ -47,8 +46,7 @@ class SingleNotificationView(LoginRequiredMixin, DetailView):
     context_object_name = 'notification'
 
     def get_object(self, queryset=None):
-        notification = super(SingleNotificationView, self).get_object(
-            queryset=queryset)
+        notification = super(SingleNotificationView, self).get_object(queryset=queryset)
         if notification.receiver == self.request.user:
             return notification
         else:
@@ -72,6 +70,7 @@ class SingleNotificationView(LoginRequiredMixin, DetailView):
                 if form.is_valid():
                     form.instance.user = request.user
                     form.instance.message = notification
+                    form.instance.reciever = buyer.user
                     notify.send(request.user, recipient=buyer.user, verb='New Message', description=form.cleaned_data['content'])
                     form.save()
                     return redirect('authentication:all_notifications')
