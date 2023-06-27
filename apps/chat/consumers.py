@@ -3,7 +3,9 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
-from .models import Message
+from .models import (
+    LiveChatMessage
+)
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -38,4 +40,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
 @database_sync_to_async
 def save_message(message, user):
-    return Message.objects.create(user=user, content=message)
+    return LiveChatMessage.objects.create(user=user, content=message)

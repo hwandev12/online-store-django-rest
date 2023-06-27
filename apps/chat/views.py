@@ -6,10 +6,12 @@ from notifications.signals import notify
 from notifications.models import Notification
 
 from django.views.generic.edit import FormView
+from .models import LiveChatMessage
 
 @login_required()
 def room(request, room_name):
-    return render(request, "chat/room.html", {"room_name": room_name})
+    live_chat_message = LiveChatMessage.objects.filter(user=request.user)
+    return render(request, "chat/room.html", {"room_name": room_name, "live_chat_message": live_chat_message})
 
 
 def message_send_view(request, firstname):
