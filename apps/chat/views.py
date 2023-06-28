@@ -13,6 +13,9 @@ def room(request, room_name):
     live_chat_message = LiveChatMessage.objects.filter(user=request.user)
     return render(request, "chat/room.html", {"room_name": room_name, "live_chat_message": live_chat_message})
 
+login_required()
+def livechat(request):
+    return render(request, 'demo.html')
 
 def message_send_view(request, firstname):
     if request.user.is_buyer:

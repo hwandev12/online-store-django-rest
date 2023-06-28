@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'star_ratings',
     'channels',
     'notifications',
+    'rest_framework',
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
