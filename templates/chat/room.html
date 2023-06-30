@@ -6,9 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <title>Chat Room</title>
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <style>
     .card {
@@ -265,95 +263,15 @@
     }
 </style>
 <body>
-    <!-- <textarea id="chat-log" cols="100" rows="20"></textarea><br> -->
-    {{ room_name|json_script:"room-name" }}
-    <div class="container my-5">
-        <div class="row clearfix">
-            <div class="col-lg-12">
-                <div class="card chat-app">
-                    <div id="plist" class="people-list">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fa fa-search"></i></span>
-                            </div>
-                            <input type="text" class="form-control" placeholder="Search...">
-                        </div>
-                        <ul class="list-unstyled chat-list mt-2 mb-0">
-                            <li class="clearfix">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="avatar">
-                                <div class="about">
-                                    <div class="name">Vincent Porter</div>
-                                    <div class="status"> <i class="fa fa-circle offline"></i> left 7 mins ago </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="chat">
-                        <div class="chat-header clearfix">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <a href="javascript:void(0);" data-toggle="modal" data-target="#view_info">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
-                                    </a>
-                                    <div class="chat-about">
-                                        <h6 class="m-b-0">Aiden Chavez</h6>
-                                        <small>Last seen: 2 hours ago</small>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 hidden-sm text-right">
-                                    <a href="javascript:void(0);" class="btn btn-outline-secondary"><i
-                                            class="fa fa-camera"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-outline-primary"><i
-                                            class="fa fa-image"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-outline-info"><i
-                                            class="fa fa-cogs"></i></a>
-                                    <a href="javascript:void(0);" class="btn btn-outline-warning"><i
-                                            class="fa fa-question"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chat-history">
-                            <ul class="m-b-0">
-                                <li class="clearfix">
-                                    <div class="message-data text-right">
-                                        <span class="message-data-time">10:10 AM, Today</span>
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">
-                                    </div>
-                                    <div class="message other-message float-right"> Hi Aiden, how are you? How is the
-                                        project coming along? </div>
-                                </li>
-                                {% for x in live_chat_message %}
-                                <li class="clearfix">
-                                    <div class="message-data">
-                                        <span class="message-data-time">{{ x.timestamp }}</span>
-                                    </div>
-                                    <div class="message my-message">
-                                        <p id="chat-log" style="opacity: 0;"></p>
-                                        <p>{{ x.content }}</p>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="chat-message clearfix">
-                            <div class="input-group mb-0">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fa fa-send" id="chat-message-submit"></i></span>
-                                </div>
-                                <input type="text" id="chat-message-input" class="form-control" placeholder="Enter text here...">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    
+    <div class="form-group w-50 mx-auto mt-5">
+        <textarea cols="100" id="chat-log" class="form-control"></textarea>
+        <input type="text" id="chat-message-input" size="100" class="form-control mt-2">
+        <button type="submit" class="btn btn-primary w-100 mt-2" id="chat-message-submit">Send</button>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
-        crossorigin="anonymous"></script>
+
+    {{ room_name|json_script:"room-name" }}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="{% static 'js/reconnecting_websocket.js' %}"></script>
     <script>
         const roomName = JSON.parse(document.getElementById('room-name').textContent);
@@ -368,7 +286,7 @@
 
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            document.querySelector('#chat-log').innerHTML += (data.message + '\n');
+            document.querySelector('#chat-log').innerHTML += (data.email) + ": " + (data.message + '\n');
         };
 
         chatSocket.onclose = function (e) {
@@ -387,7 +305,8 @@
             const message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'command': "fetch_messages"
+                'command': "fetch_messages",
+                'email': "{{ request.user.email }}"
             }));
             messageInputDom.value = '';
         };
