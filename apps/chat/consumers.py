@@ -14,29 +14,6 @@ from djangochannelsrestframework.observer import model_observer
 from djangochannelsrestframework import permissions
 
 # -------------------------------------------------------- #
-
-class LiveChatConsumer(ListModelMixin, GenericAsyncAPIConsumer):
-    
-    queryset = LiveChatMessage.objects.all()
-    serializer_class = LiveChatMessageSerializer
-    permission_classes = (permissions.AllowAny,)
-    
-    async def connect(self, **kwargs):
-        await self.livechatmessage_consumer_change.subscribe()
-        await super().connect(**kwargs)
-    
-    @model_observer(LiveChatMessage)
-    async def livechatmessage_consumer_change(self, message, observer=None, **kwargs):
-        await self.send_json(message)
-        
-    @livechatmessage_consumer_change.serializer
-    def livechatmessage_model_serializer(self, instance, action, **kwargs):
-        return dict(data=LiveChatMessageSerializer(instance=instance).data, action=action.value)
-
-# -------------------------------------------------------- #
-
-
-# -------------------------------------------------------- #
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope["url_route"]["kwargs"]["room_name"]
