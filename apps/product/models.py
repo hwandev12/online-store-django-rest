@@ -98,6 +98,12 @@ class Product(models.Model):
     def add_to_cart_url(self):
         return reverse('base:add_to_cart', args=[str(self.slug)])
     
+    def remove_from_cart_url(self):
+        return reverse('base:remove_from_cart', args=[str(self.slug)])
+    
+    def remove_single_item_from_cart_url(self):
+        return reverse('base:remove_single_item_from_cart', args=[str(self.slug)])
+    
 # ----------------- Product Model ----------------- #
 
 # ----------------- Product Image Model ----------------- #

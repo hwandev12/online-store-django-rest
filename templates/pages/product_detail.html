@@ -79,9 +79,14 @@
                             <div class="col-xs-6">
                                 {% if request.user.is_buyer %}
                                 <a href="{{ product.add_to_cart_url }}" class="btn btn-primary shop-button">Add to Cart</a>
+                                <a href="#" class="btn btn-primary shop-button">Add to Wishlist</a>
+                                <a href="{{ product.remove_from_cart_url }}" class="btn btn-primary shop-button">Remove from cart</a>
+                                <a href="#" class="btn btn-primary shop-button">Remove from Wishlist</a>
                                 <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy Now</a>
                                 <a href="{% url 'chat:send-message' product.owner.first_name %}" class="btn btn-success shop-button">Send Message</a>
-                                <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button">Chat live with seller</a>
+                                <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button mt-2">Chat live with seller</a>
+                                <a href="#" class="btn btn-warning shop-button mt-2">Check delivery locations</a>
+                                <a href="#" class="btn btn-warning shop-button mt-2">Check coupon status</a>
                                 {% endif %}
                                 {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
                                 <a href="{% url 'base:product_delete' product.slug %}"
@@ -91,7 +96,6 @@
                                     class="btn btn-success shop-button" style="padding-top: 12px;">Update</a>
                                 <!-- create a tag to update product -->
                                 {% endif %}
-                                <div class="product_fav"><i class="fas fa-heart"></i></div>
                             </div>
                         </div>
                     </div>

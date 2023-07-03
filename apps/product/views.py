@@ -112,7 +112,7 @@ def add_to_cart(request, slug):
             return redirect('base:product_detail', slug=slug)
         else:
             checkout.checkout_items.add(checkout_item)
-            messages.info(request, "This item was added to your cart.")
+            messages.info(request, "This item was added to your cart.", extra_tags='add_cart')
             return redirect('base:product_detail', slug=slug)
     else:
         ordered_date = timezone.now()
@@ -122,6 +122,68 @@ def add_to_cart(request, slug):
         
     return redirect('base:product_detail', slug=slug)
 # ----------------- Add to cart ----------------- #
+
+# ----------------- Remove from cart ----------------- #
+@login_required
+def remove_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    checkout_qs = CheckoutItem.objects.filter(product=product, user=request.user, ordered=False)
+    if checkout_qs:
+        checkout_qs.delete()
+        messages.info(request, "This item was removed from your cart.", extra_tags='remove_cart')
+        return redirect('base:product_detail', slug=slug)
+    else:
+        messages.info(request, "This item was not in your cart.", extra_tags='not_in_cart')
+        return redirect('base:product_detail', slug=slug)
+# ----------------- Remove from cart ----------------- #
+
+# ----------------- Remove single item from cart ----------------- #
+@login_required
+def remove_single_item_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    checkout_qs = Checkout.objects.filter(user=request.user, ordered=False)
+    if checkout_qs.exists():
+        checkout = checkout_qs[0]
+        if checkout.checkout_items.filter(product__slug=product.slug).exists():
+            checkout_item = CheckoutItem.objects.filter(product=product, user=request.user, ordered=False)[0]
+            if checkout_item.quantity > 1:
+                checkout_item.quantity -= 1
+                checkout_item.save()
+            else:
+                checkout.checkout_items.remove(checkout_item)
+            messages.info(request, "This item quantity was updated.", extra_tags='remove_single_cart')
+            return redirect('base:product_detail', slug=slug)
+        else:
+            messages.info(request, "This item was not in your cart.", extra_tags='remove_single_cart')
+            return redirect('base:product_detail', slug=slug)
+    else:
+        messages.info(request, "You do not have an active order.", extra_tags='remove_single_cart')
+        return redirect('base:product_detail', slug=slug)
+# ----------------- Remove single item from cart ----------------- #
+
+# ----------------- cart section ----------------- #
+class ProductCart(ListView):
+    model = CheckoutItem
+    template_name = 'pages/cart.html'
+    
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if self.request.user.is_authenticated and self.request.user.is_buyer:
+            return super(ProductCart, self).dispatch(request, *args, **kwargs)
+        else:
+            # later change to 404
+            return redirect('base:home')
+    
+    def get_queryset(self):
+        return CheckoutItem.objects.filter(user=self.request.user, ordered=False)
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProductCart, self).get_context_data(**kwargs)
+        context['carts'] = self.get_queryset()
+        # get total carts
+        context['total_carts'] = self.get_queryset().count()
+        return context
+# ----------------- cart section ----------------- #
 
 # ----------------- My Orders ----------------- #
 class MyOrdersView(ListView):
@@ -159,3 +221,4 @@ product_view = ProductView.as_view()
 checkout_page_view = CheckoutPageView.as_view()
 my_orders_view = MyOrdersView.as_view()
 my_comments_view = CommentForEachUserView.as_view()
+product_cart_view = ProductCart.as_view()

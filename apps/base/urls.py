@@ -14,7 +14,10 @@ from apps.product.views import (
     checkout_page_view,
     my_orders_view,
     my_comments_view,
-    add_to_cart
+    add_to_cart,
+    product_cart_view,
+    remove_from_cart,
+    remove_single_item_from_cart,
 )
 
 app_name = 'base'
@@ -23,7 +26,7 @@ urlpatterns = [
     path("", home_page_view, name='home'),
     path("welcome/", welcome_page, name='welcome'),
     # create a path for product detail
-    path("product/single/<slug:slug>/", product_detail_view, name='product_detail'),
+    path("product/single/user/<slug:slug>/", product_detail_view, name='product_detail'),
     # create a path for product create
     path("product/create/", product_create_view, name='product_create'),
     path("product/delete/<slug:slug>/", product_delete_view, name='product_delete'),
@@ -36,4 +39,7 @@ urlpatterns = [
     # checkout pages
     path("product/single/checkout/<slug:slug>/", checkout_page_view, name='checkout'),
     path("product/single/checkout/add/<slug:slug>/", add_to_cart, name='add_to_cart'),
+    path("product/single/cart/", product_cart_view, name='cart'),
+    path("product/remove-from-cart/<slug>/", remove_from_cart, name='remove_from_cart'),
+    path("product/single/cart/remove/single/<slug>/", remove_single_item_from_cart, name='remove_single_item_from_cart'),
 ]
