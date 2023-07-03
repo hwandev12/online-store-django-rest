@@ -222,6 +222,10 @@ JET_THEMES = [
     }
 ]
 
+SESSION_COOKIE_NAME = 'session'
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+SESSION_SAVE_EVERY_REQUEST = True
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 

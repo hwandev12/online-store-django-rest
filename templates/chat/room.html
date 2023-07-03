@@ -265,9 +265,10 @@
 <body>
     
     <div class="form-group w-50 mx-auto mt-5">
-        <textarea cols="100" id="chat-log" class="form-control"></textarea>
+        <textarea cols="100" id="chat-log" class="form-control" style="height: 300px"></textarea>
         <input type="text" id="chat-message-input" size="100" class="form-control mt-2">
         <button type="submit" class="btn btn-primary w-100 mt-2" id="chat-message-submit">Send</button>
+        <h2>Visit count {{ visit }}</h2>
     </div>
 
     {{ room_name|json_script:"room-name" }}

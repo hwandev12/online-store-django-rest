@@ -12,7 +12,8 @@ from djangochannelsrestframework.generics import GenericAsyncAPIConsumer
 from djangochannelsrestframework.mixins import ListModelMixin
 from djangochannelsrestframework.observer import model_observer
 from djangochannelsrestframework import permissions
-
+import random
+from channels.db import database_sync_to_async
 # -------------------------------------------------------- #
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -35,6 +36,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         email = text_data_json["email"]
 
         # await save_message(message, self.scope["user"])
+        # self.scope["session"].save()
         await self.channel_layer.group_send(
             self.room_group_name, {
                 "type": "chat_message",

@@ -10,8 +10,9 @@ from .models import LiveChatMessage
 
 @login_required()
 def room(request, room_name):
-    live_chat_message = LiveChatMessage.objects.filter(user=request.user)
-    return render(request, "chat/room.html", {"room_name": room_name, "live_chat_message": live_chat_message})
+    visit = request.session.get('visit', 0) + 1
+    request.session['visit'] = visit
+    return render(request, "chat/room.html", {"room_name": room_name, "visit": visit})
 
 login_required()
 def livechat(request):
