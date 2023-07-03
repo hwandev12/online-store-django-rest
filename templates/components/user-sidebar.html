@@ -22,16 +22,20 @@
 						<th>Product Name</th>
 						<th>Delivery</th>
 						<th>Location</th>
+						<th>Truck</th>
+						<th>Delivered</th>
 					</tr>
 				</thead>
 				<tbody>
 					{% for order in orders %}
 					<tr>
-						<td><a href="#" class="btn btn-sm btn-dark">{{order.id}}</a></td>
+						<td><a href="#" class="btn btn-sm btn-dark">{{order.order_code}}</a></td>
 						<td><a href="{% url 'base:product_detail' order.product.slug %}"
 								style="text-decoration: none; color: orange;">{{order.product}}</a></td>
 						<td>{{order.post_office}}</td>
 						<td>{{order.city}}</td>
+						<td><p class="btn btn-warning" style="cursor: auto !important; margin: 0 !important;">{% if order.being_delivered %}on way{% else %}pending{% endif %}</p></td>
+						<td><p class="btn btn-warning" style="cursor: auto !important; margin: 0 !important;">{% if order.received %}delivered{% else %}pending{% endif %}</p></td>
 					</tr>
 					{% endfor %}
 				</tbody>

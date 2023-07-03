@@ -13,7 +13,8 @@ from apps.product.views import (
     product_view,
     checkout_page_view,
     my_orders_view,
-    my_comments_view
+    my_comments_view,
+    add_to_cart
 )
 
 app_name = 'base'
@@ -33,5 +34,6 @@ urlpatterns = [
     path("product/comment/delete/<slug:slug>/<int:comment_id>/", delete_comment, name='delete_comment'),   
     
     # checkout pages
-    path("product/single/checkout/<slug:slug>/", checkout_page_view, name='checkout')
+    path("product/single/checkout/<slug:slug>/", checkout_page_view, name='checkout'),
+    path("product/single/checkout/add/<slug:slug>/", add_to_cart, name='add_to_cart'),
 ]

@@ -7,6 +7,7 @@ from .models import (
     Comment,
     RatingProduct,
     Checkout,
+    CheckoutItem
 )
 # create admin for product
 class ProductAdmin(admin.ModelAdmin):
@@ -21,3 +22,4 @@ admin.site.register(ProductCategory)
 admin.site.register(Comment)
 admin.site.register(RatingProduct)
 admin.site.register(Checkout)
+admin.site.register(CheckoutItem)

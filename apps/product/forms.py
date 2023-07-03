@@ -18,6 +18,7 @@ class ProductForm(forms.ModelForm):
             'product_description',
             'product_cost',
             'product_quantity',
+            'category',
         ]
 
     

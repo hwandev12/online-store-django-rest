@@ -78,7 +78,7 @@
                             </div>
                             <div class="col-xs-6">
                                 {% if request.user.is_buyer %}
-                                <button type="button" class="btn btn-primary shop-button">Add to Cart</button>
+                                <a href="{{ product.add_to_cart_url }}" class="btn btn-primary shop-button">Add to Cart</a>
                                 <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy Now</a>
                                 <a href="{% url 'chat:send-message' product.owner.first_name %}" class="btn btn-success shop-button">Send Message</a>
                                 <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button">Chat live with seller</a>

@@ -17,6 +17,7 @@
     {% render_field form.product_description class+="form-control mb-4" placeholder="Product Description" %}
     {% render_field form.product_cost class+="form-control mb-4" placeholder="Product Cost" %}
     {% render_field form.product_quantity class+="form-control mb-4" placeholder="Product Quantity" %}
+    {% render_field form.category class+="form-control mb-4" %}
     {{ product_image.as_p }}
     <button class="btn btn-primary w-100" type="submit">Create</button>
 </form>
