@@ -101,25 +101,16 @@ class CheckoutPageView(DetailView):
 @login_required
 def add_to_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    checkout_item, created = CheckoutItem.objects.get_or_create(product=product, user=request.user, ordered=False)
-    checkout_qs = Checkout.objects.filter(user=request.user, ordered=False)
-    if checkout_qs.exists():
-        checkout = checkout_qs[0]
-        if checkout.checkout_items.filter(product__slug=product.slug).exists():
-            checkout_item.quantity += 1
-            checkout_item.save()
-            messages.info(request, "This item quantity was updated.")
-            return redirect('base:product_detail', slug=slug)
-        else:
-            checkout.checkout_items.add(checkout_item)
-            messages.info(request, "This item was added to your cart.", extra_tags='add_cart')
-            return redirect('base:product_detail', slug=slug)
+    try:
+        checkout_item = CheckoutItem.objects.get(user=request.user, product=product, ordered=False)
+    except:
+        checkout_item = []
+    if checkout_item:
+        messages.info(request, "You already have this product on your cart", extra_tags="already_have")
+        return redirect('base:product_detail', slug=slug)
     else:
-        ordered_date = timezone.now()
-        checkout = Checkout.objects.create(user=request.user, ordered_date=ordered_date)
-        checkout.checkout_items.add(checkout_item)
-        messages.info(request, "This item was added to your cart.")
-        
+        CheckoutItem.objects.create(user=request.user, product=product, ordered=False)
+        messages.info(request, "This item was added to your cart.", extra_tags='add_cart')
     return redirect('base:product_detail', slug=slug)
 # ----------------- Add to cart ----------------- #
 

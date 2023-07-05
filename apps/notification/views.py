@@ -37,46 +37,27 @@ def mark_as_read(request, slug=None):
     if _next and url_has_allowed_host_and_scheme(_next, settings.ALLOWED_HOSTS):
         return redirect(iri_to_uri(_next))
 
-    return redirect("authentication:single_notification", pk=Message.objects.get(id=notification_id).id)
+    return redirect("authentication:single_notification", pk=Notification.objects.get(id=notification_id).id)
 # ----------------------------------------------------------------------------------- #
 
 # ----------------------------------------------------------------------------------- #
 class SingleNotificationView(LoginRequiredMixin, DetailView):
-    model = Message
+    model = Notification
     template_name = 'notifications/sellers/single.html'
     context_object_name = 'notification'
 
     def get_object(self, queryset=None):
         notification = super(SingleNotificationView, self).get_object(queryset=queryset)
-        if notification.receiver == self.request.user:
+        if notification.recipient == self.request.user:
             return notification
         else:
             return redirect('/')
         
     def get_context_data(self, **kwargs):
         context = super(SingleNotificationView, self).get_context_data(**kwargs)
-        context['notification'] = Message.objects.get(id=self.kwargs['pk'])
         context['notifications_count'] = self.request.user.notifications.count()
-        if self.request.user.is_seller:
-            context['form'] = ReplyMessageForm()
+        context['notification'] = self.get_object()
         return context
-    
-    
-    def post(self, request, *args, **kwargs):
-        notification = Message.objects.get(id=self.kwargs['pk'])
-        buyer = BuyerAccountModel.objects.get(user=notification.user)
-        if request.user.is_seller:
-            if request.method == 'POST':
-                form = ReplyMessageForm(self.request.POST)
-                if form.is_valid():
-                    form.instance.user = request.user
-                    form.instance.message = notification
-                    form.instance.reciever = buyer.user
-                    notify.send(request.user, recipient=buyer.user, verb='New Message', description=form.cleaned_data['content'])
-                    form.save()
-                    return redirect('authentication:all_notifications')
-        else:
-            pass
 
 # ----------------------------------------------------------------------------------- #
 class NotificationViewList(ListView):

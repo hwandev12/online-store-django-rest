@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from allauth.account.views import SignupView
 from django.views import generic, View
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from .forms import (
     StoreSellerAccountForm,
@@ -23,7 +23,8 @@ from datetime import datetime
 from .models import (
     User,
     BuyerAccountModel,
-    SellerAccountModel
+    SellerAccountModel,
+    SellerProfile,
 )
 from apps.product.models import (
     Product,
@@ -33,6 +34,8 @@ from apps.product.models import (
 )
 from notifications.models import Notification
 from notifications.templatetags.notifications_tags import live_notify_list, register_notify_callbacks
+
+# ------------------- Seller Register ------------------- #
 class SellerRegisterView(generic.CreateView):
     model = User
     form_class = CustomSellerAccountFormDjango
@@ -48,8 +51,9 @@ class SellerRegisterView(generic.CreateView):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')
-    
+# ------------------- Seller Register ------------------- #
 
+# ------------------- Buyer Register ------------------- #
 class BuyerRegisterView(generic.CreateView):
     model = User
     form_class = CustomBuyerAccountFormDjango
@@ -68,7 +72,9 @@ class BuyerRegisterView(generic.CreateView):
         user = form.save()
         login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
         return redirect('/')    
+# ------------------- Buyer Register ------------------- #
 
+# ------------------- Update Profile ------------------- #
 def user_profile(request, firstname):
     
     if request.method == 'POST':
@@ -108,21 +114,43 @@ def user_profile(request, firstname):
     }
     
     return render(request, 'account/profile-update.html', context)
+# ------------------- Update Profile ------------------- #
 
+# ------------------- User Profile ------------------- #
 @login_required()
 def profile(request, first_name):
     seller = None
+    seller_profile = None
     buyer = None
     user = None
     product = None
     orders = None
     comments = None
     notice = None
+    followers = None
+    is_following = False
+    count_of_followers = 0
+    product_count = 0
     if request.user.is_seller:
         try:
             seller = get_object_or_404(SellerAccountModel, user=request.user, first_name=first_name)
+            seller_profile = get_object_or_404(SellerProfile, user=seller)
             notice = Notification.objects.filter(recipient=request.user)
             product = Product.objects.filter(owner=request.user.selleraccountmodel)
+            product_count = product.count()
+            followers = seller_profile.followers.all()
+            if len(followers) == 0:
+                is_following = False
+            
+            for follower in followers:
+                if follower == request.user:
+                    is_following = True
+                    break
+                else:
+                    is_following = False    
+                    
+            count_of_followers = len(followers)
+            
         except ValueError as e:
             # we should change this 404 error page later on
             return redirect("/")
@@ -158,10 +186,50 @@ def profile(request, first_name):
         "orders": orders,
         "comments": comments,
         "notice": notice,
+        "followers": followers,
+        "is_following": is_following,
+        "count_of_followers": count_of_followers,
+        "product_count": product_count,
     }
     return render(request, 'account/profile.html', context)
+# ------------------- User Profile ------------------- #
+    
+# ------------------- Follow User ------------------- #
+class AddFollowersForSellerAccountModel(LoginRequiredMixin, UserPassesTestMixin, View):
+    
+    def post(self, request, first_name, slug, *args, **kwargs):
+        seller = get_object_or_404(SellerAccountModel, first_name=first_name)
+        profile = get_object_or_404(SellerProfile, user=seller)
+        product = Product.objects.get(slug=slug)
+        profile.followers.add(request.user)
+        
+        return redirect("base:product_detail", slug=product.slug)
+    
+    def test_func(self):
+        if self.request.user.is_buyer:
+            return True
+        return False
+    
+# ------------------- Follow User ------------------- #
 
+# ------------------- Unfollow User ------------------- #
+class RemoveFollowersForSellerAccountModel(LoginRequiredMixin, UserPassesTestMixin, View):
+
+    def post(self, request, first_name, slug, *args, **kwargs):
+        seller = get_object_or_404(SellerAccountModel, first_name=first_name)
+        profile = get_object_or_404(SellerProfile, user=seller)
+        product = Product.objects.get(slug=slug)
+        profile.followers.remove(request.user)
+
+        return redirect("base:product_detail", slug=product.slug)
+    
+    def test_func(self):
+        if self.request.user.is_buyer:
+            return True
+        return False
+# ------------------- Unfollow User ------------------- #
     
 seller_register = SellerRegisterView.as_view()
 buyer_register = BuyerRegisterView.as_view()
-# user_profile = UserProfileView.as_view()
+add_follower = AddFollowersForSellerAccountModel.as_view()
+remove_follower = RemoveFollowersForSellerAccountModel.as_view()

@@ -9,6 +9,7 @@ from django.contrib import messages
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
 
+# ------------------- Custom User Model ------------------- #
 class CustomUserManager(BaseUserManager):
     
     def create_user(self, email, password=None):
@@ -30,7 +31,9 @@ class CustomUserManager(BaseUserManager):
         user.is_staff = True
         user.save(using=self._db)
         return user
-    
+# ------------------- Custom User Model ------------------- #    
+
+# ------------------- User Model ------------------- #
 class User(AbstractBaseUser, PermissionsMixin):
     
     class Meta:
@@ -62,8 +65,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     # get buyera and seller profile avatar
     def get_buyer_avatar(self):
         return self.buyeraccountmodel.buyerprofile.avatar.url
-    
-# create seller account
+# ------------------- User Model ------------------- #    
+
+# ------------------- Seller Model ------------------- #
 class SellerAccountModel(models.Model):
     
     class Meta:
@@ -82,7 +86,9 @@ class SellerAccountModel(models.Model):
     # get seller profile avatar
     def get_seller_avatar(self):
         return self.sellerprofile.avatar.url
-    
+# ------------------- Seller Model ------------------- #
+
+# ------------------- Buyer Model ------------------- #
 class BuyerAccountModel(models.Model):
     
     class Meta:
@@ -101,7 +107,10 @@ class BuyerAccountModel(models.Model):
     # get buyer profile avatar
     def get_buyer_avatar(self):
         return self.buyerprofile.avatar.url
+    
+# ------------------- Buyer Model ------------------- #
 
+# ------------------- Buyer Profile ------------------- #
 class BuyerProfile(models.Model):
     class Meta:
         verbose_name = "Buyer Profile"
@@ -112,7 +121,9 @@ class BuyerProfile(models.Model):
 
     def __str__(self):
         return self.user.first_name
+# ------------------- Buyer Profile ------------------- #
     
+# ------------------- Seller Profile ------------------- #
 class SellerProfile(models.Model):
     
     class Meta:
@@ -121,10 +132,11 @@ class SellerProfile(models.Model):
         
     user = models.OneToOneField(SellerAccountModel, on_delete=models.CASCADE)
     avatar = models.ImageField(default="users/user.png", upload_to='sellers/')
+    followers = models.ManyToManyField(User, related_name='followers', blank=True)
     
     def __str__(self):
         return self.user.first_name
-
+# ------------------- Seller Profile ------------------- #
 
 @receiver(user_signed_up)
 def user_signup_callback(sender, user, request, **kwargs):

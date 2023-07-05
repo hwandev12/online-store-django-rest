@@ -12,26 +12,19 @@
             <div class="media">
                 <a href="mail-compose.html" class="btn btn-danger pull-right rounded"><i class="fa fa-share"></i></a>
                 <a class="pull-left" href="#">
-                    {% if notification.user.is_buyer %}
-                    <img src="{{ notification.user.buyeraccountmodel.get_buyer_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
-                    {% else %}
-                    <img src="{{ notification.user.selleraccountmodel.get_seller_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
-                    {% endif %}
+                    <img src="{{ notification.actor.get_buyer_avatar }}" alt="Rebecca Cabean" class="img-circle avatar">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">{{ notification.user.buyeraccountmodel.first_name }}<small> (Sales Manager)</small></h4>
+                    <h4 class="media-heading">{{ notification.actor }}<small> (Sales Manager)</small></h4>
                     <small>{{ notification.timestamp }}</small>
                 </div>
             </div>
         </div><!-- /.panel-heading -->
         <div class="panel-body">
             <p class="lead">
-                {{ notification.content }}
+                {{ notification.description }}
             </p>
             <hr>
-            <!-- <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </p> -->
             <br>
             <p>
                 Thanks! <br>

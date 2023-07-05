@@ -55,7 +55,7 @@
             <p class="d-none d-md-block mb-0">Profile</p>
             </a>
             {% endif %}
-            <a href="#"
+            <a href="{% url 'base:cart' %}"
               class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
                 class="fas fa-shopping-cart m-1 me-md-2"></i>
               <p class="d-none d-md-block mb-0">My cart</p>
@@ -99,6 +99,12 @@
       {% endif %}
       {% if 'not_in_cart' in message.tags %}
       <div class="alert alert-info alert-dismissible fade show" style="text-align: left;">
+        <strong><a style="margin-right: 10px; color: #777; text-transform: uppercase;" href="{% url 'base:cart' %}"><u>check cart</u></a></strong> {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endif %}
+      {% if 'already_have' in message.tags %}
+      <div class="alert alert-warning alert-dismissible fade show" style="text-align: left;">
         <strong><a style="margin-right: 10px; color: #777; text-transform: uppercase;" href="{% url 'base:cart' %}"><u>check cart</u></a></strong> {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>

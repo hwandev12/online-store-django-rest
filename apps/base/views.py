@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import (
@@ -25,7 +25,7 @@ from apps.product.forms import (
     ProductRatingForm
 )
 from django.db import transaction
-from apps.authentication.models import SellerAccountModel
+from apps.authentication.models import SellerAccountModel, SellerProfile
 from django.contrib import messages
 
 
@@ -55,6 +55,22 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        if self.request.user.is_buyer:
+            seller = get_object_or_404(SellerAccountModel)
+            seller_profile = get_object_or_404(SellerProfile, user=seller)
+            followers = seller_profile.followers.all()
+            if len(followers) == 0:
+                is_following = False
+                
+            for follower in followers:
+                if follower == self.request.user:
+                    is_following = True
+                    break
+                else:
+                    is_following = False
+                    
+            context['is_following'] = is_following
+            
         if not self.request.user.is_seller and not self.request.user.is_superuser:   
             context['form'] = CommentForm()
             context['rating_form'] = ProductRatingForm()

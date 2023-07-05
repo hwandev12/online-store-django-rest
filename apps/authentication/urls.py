@@ -3,7 +3,9 @@ from .views import (
     seller_register,
     buyer_register,
     user_profile,
-    profile
+    profile,
+    add_follower,
+    remove_follower,
 )
 
 
@@ -30,4 +32,6 @@ urlpatterns = [
     path('inbox/notifications/', all_notifications, name='all_notifications'),
     path('inbox/notifications/unread/', unread_notifications, name='unread_notifications'),
     path('inbox/notifications/sent-mail/', sent_mail, name='sent_mail'),
+    path('profile-following/<str:first_name>/<slug:slug>/', add_follower, name="add_follower"),
+    path('profile-unfollowing/<str:first_name>/<slug:slug>/', remove_follower, name="remove_follower")
 ]

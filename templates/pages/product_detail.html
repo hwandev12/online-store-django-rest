@@ -84,9 +84,29 @@
                                 <a href="#" class="btn btn-primary shop-button">Remove from Wishlist</a>
                                 <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy Now</a>
                                 <a href="{% url 'chat:send-message' product.owner.first_name %}" class="btn btn-success shop-button">Send Message</a>
-                                <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button mt-2">Chat live with seller</a>
                                 <a href="#" class="btn btn-warning shop-button mt-2">Check delivery locations</a>
                                 <a href="#" class="btn btn-warning shop-button mt-2">Check coupon status</a>
+                                <hr>
+                                <div class="seller_details">
+                                    <h5>{{ product.owner.organization }}</h5>
+                                    <p class="text-muted m-0">88.05% seller rating</p>
+                                    <p class="text-muted m-0">{{ product.owner.sellerprofile.followers.count }} subscribers</p>
+                                    {% if product.owner == request.user %}
+                                    {% else %}
+                                    {% if is_following %}
+                                    <form method="POST" class="d-inline" action="{% url 'authentication:remove_follower' product.owner.first_name product.slug %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger shop-button" type="submit">UnFollow</button>
+                                    </form>
+                                    {% else %}
+                                    <form method="POST" action="{% url 'authentication:add_follower' product.owner.first_name product.slug %}" class="d-inline">
+                                        {% csrf_token %}
+                                        <button class="btn btn-warning shop-button" type="submit">Follow</button>
+                                    </form>
+                                    {% endif %}
+                                    {% endif %}
+                                    <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button mt-2">Chat live with seller</a>
+                                </div>
                                 {% endif %}
                                 {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
                                 <a href="{% url 'base:product_delete' product.slug %}"
