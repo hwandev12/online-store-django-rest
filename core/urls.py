@@ -15,3 +15,6 @@ urlpatterns = [
     # re_path(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     # re_path(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# by this way we can append django_unicorn urls to urlpatterns
+urlpatterns.append(path("unicorn/", include("django_unicorn.urls")),)

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'apps.product.apps.ProductConfig',
     "apps.chat.apps.ChatConfig",
     'apps.notification.apps.NotificationConfig',
+    "django_unicorn",
 ]
 
 SITE_ID = 1
@@ -224,6 +225,20 @@ JET_THEMES = [
 
 SESSION_COOKIE_NAME = 'session'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
+
+# settings.py
+UNICORN = {
+    "APPS": [ os.path.join(BASE_DIR / 'apps.authentication') ],
+    "CACHE_ALIAS": "default",
+    "MINIFY_HTML": False,
+    "MINIFIED": True,
+    "RELOAD_SCRIPT_ELEMENTS": False,
+    "SERIAL": {
+        "ENABLED": False,
+        "TIMEOUT": 60,
+    },
+    "SCRIPT_LOCATION": "after",
+}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

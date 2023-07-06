@@ -125,7 +125,7 @@ class BuyerProfile(models.Model):
     
 # ------------------- Seller Profile ------------------- #
 class SellerProfile(models.Model):
-    
+
     class Meta:
         verbose_name = "Seller Profile"
         verbose_name_plural = "Seller Profile"
