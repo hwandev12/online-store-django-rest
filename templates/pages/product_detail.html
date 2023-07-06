@@ -1,7 +1,5 @@
 {% extends 'base/index.html' %}
 {% load static %}
-{% load unicorn %}
-{% unicorn 'comments' %}
 {% load widget_tweaks %}
 {% block title %}Product Details{% endblock %}
 {% block content %}
@@ -50,7 +48,8 @@
                             </ol>
                         </nav>
                         <div class="product_name">{{ product.product_name }}</div>
-                        <div class="product_name" style="font-style: italic;">MCHJ: {{ product.owner.organization }}</div>
+                        <div class="product_name" style="font-style: italic;">MCHJ: {{ product.owner.organization }}
+                        </div>
                         <div> <span class="product_price">{{ product.product_cost }} 000 so'm</span> <strike
                                 class="product_discount"></strike> </div>
                         <hr class="singleline">
@@ -80,34 +79,43 @@
                             </div>
                             <div class="col-xs-6">
                                 {% if request.user.is_buyer %}
-                                <a href="{{ product.add_to_cart_url }}" class="btn btn-primary shop-button">Add to Cart</a>
+                                <a href="{{ product.add_to_cart_url }}" class="btn btn-primary shop-button">Add to
+                                    Cart</a>
                                 <a href="#" class="btn btn-primary shop-button">Add to Wishlist</a>
-                                <a href="{{ product.remove_from_cart_url }}" class="btn btn-primary shop-button">Remove from cart</a>
+                                <a href="{{ product.remove_from_cart_url }}" class="btn btn-primary shop-button">Remove
+                                    from cart</a>
                                 <a href="#" class="btn btn-primary shop-button">Remove from Wishlist</a>
-                                <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy Now</a>
-                                <a href="{% url 'chat:send-message' product.owner.first_name %}" class="btn btn-success shop-button">Send Message</a>
+                                <a href="{% url 'base:checkout' product.slug %}" class="btn btn-success shop-button">Buy
+                                    Now</a>
+                                <a href="{% url 'chat:send-message' product.owner.first_name %}"
+                                    class="btn btn-success shop-button">Send Message</a>
                                 <a href="#" class="btn btn-warning shop-button mt-2">Check delivery locations</a>
                                 <a href="#" class="btn btn-warning shop-button mt-2">Check coupon status</a>
                                 <hr>
                                 <div class="seller_details">
                                     <h5>{{ product.owner.organization }}</h5>
                                     <p class="text-muted m-0">88.05% seller rating</p>
-                                    <p class="text-muted m-0">{{ product.owner.sellerprofile.followers.count }} subscribers</p>
+                                    <p class="text-muted m-0">{{ product.owner.sellerprofile.followers.count }}
+                                        subscribers</p>
                                     {% if product.owner == request.user %}
                                     {% else %}
                                     {% if is_following %}
-                                    <form method="POST" class="d-inline" action="{% url 'authentication:remove_follower' product.owner.first_name product.slug %}">
+                                    <form method="POST" class="d-inline"
+                                        action="{% url 'authentication:remove_follower' product.owner.first_name product.slug %}">
                                         {% csrf_token %}
                                         <button class="btn btn-danger shop-button" type="submit">UnFollow</button>
                                     </form>
                                     {% else %}
-                                    <form method="POST" action="{% url 'authentication:add_follower' product.owner.first_name product.slug %}" class="d-inline">
+                                    <form method="POST"
+                                        action="{% url 'authentication:add_follower' product.owner.first_name product.slug %}"
+                                        class="d-inline">
                                         {% csrf_token %}
                                         <button class="btn btn-warning shop-button" type="submit">Follow</button>
                                     </form>
                                     {% endif %}
                                     {% endif %}
-                                    <a href="{% url 'chat:room' product.owner.first_name %}" class="btn btn-success shop-button mt-2">Chat live with seller</a>
+                                    <a href="{% url 'chat:room' product.owner.first_name %}"
+                                        class="btn btn-success shop-button mt-2">Chat live with seller</a>
                                 </div>
                                 {% endif %}
                                 {% if request.user.is_seller and product.owner == request.user.selleraccountmodel %}
@@ -156,7 +164,48 @@
                                 </div>
                             </div>
                             {% if not request.user.is_seller and not request.user.is_superuser %}
-                            {% unicorn "comments" %}
+                            <div class="bg-light p-2">
+                                <form action="" method="post">
+                                    {% csrf_token %}
+                                    <div class="d-flex flex-row align-items-start">
+                                        <img class="rounded-circle mx-2" src="{{ request.user.get_buyer_avatar }}"
+                                            width="30">
+                                            {% render_field form.comment class+="form-control ml-1 shadow-none textarea" placeholder="Comment" %}
+                                    </div>
+                                    <div class="rating-wrap">
+                                        <div class="center">
+                                            <fieldset class="rating">
+                                                <input type="radio" id="star5" name="rating" value="5" /><label
+                                                    for="star5" class="full" title="Awesome"></label>
+                                                <input type="radio" id="star4.5" name="rating" value="4.5" /><label
+                                                    for="star4.5" class="half"></label>
+                                                <input type="radio" id="star4" name="rating" value="4" /><label
+                                                    for="star4" class="full"></label>
+                                                <input type="radio" id="star3.5" name="rating" value="3.5" /><label
+                                                    for="star3.5" class="half"></label>
+                                                <input type="radio" id="star3" name="rating" value="3" /><label
+                                                    for="star3" class="full"></label>
+                                                <input type="radio" id="star2.5" name="rating" value="2.5" /><label
+                                                    for="star2.5" class="half"></label>
+                                                <input type="radio" id="star2" name="rating" value="2" /><label
+                                                    for="star2" class="full"></label>
+                                                <input type="radio" id="star1.5" name="rating" value="1.5" /><label
+                                                    for="star1.5" class="half"></label>
+                                                <input type="radio" id="star1" name="rating" value="1" /><label
+                                                    for="star1" class="full"></label>
+                                                <input type="radio" id="star0.5" name="rating" value="0.5" /><label
+                                                    for="star0.5" class="half"></label>
+                                            </fieldset>
+                                        </div>
+                                        {% render_field rating_form.rating class+="form-control ml-1 shadow-none textarea vals" placeholder="Comment" %}
+                                    </div>
+                                    <div class="mt-2 text-left">
+                                    </div>
+                                    <button class="btn btn-primary btn-sm shadow-none"
+                                        style="margin-left: 40px; display: block;" type="submit">Post comment</button>
+                                </form>
+                            </div>
+
                             {% endif %}
                         </div>
                     </div>
@@ -235,7 +284,7 @@
         star[i].addEventListener('click', function () {
             i = this.value;
 
-            showValue.value = i 
+            showValue.value = i
         });
     }
 </script>

@@ -228,7 +228,7 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 
 # settings.py
 UNICORN = {
-    "APPS": [ os.path.join(BASE_DIR / 'apps.authentication') ],
+    "APPS": ["apps.base",],
     "CACHE_ALIAS": "default",
     "MINIFY_HTML": False,
     "MINIFIED": True,
