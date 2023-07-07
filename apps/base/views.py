@@ -231,6 +231,12 @@ class WelcomePage(TemplateView):
 #     def dispatch(self, *args, **kwargs):
 #         return super().dispatch(*args, **kwargs)
 
+class PageNotFound(TemplateView):
+    template_name = 'pages/404.html'
+    
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 # make classes to functionable
 home_page_view = HomePageView.as_view()
 welcome_page = WelcomePage.as_view()
@@ -239,3 +245,4 @@ product_detail_view = ProductDetailView.as_view()
 product_create_view = ProductCreateView.as_view()
 product_delete_view = ProductDeleteVeiew.as_view()
 product_update_view = ProductUpdate.as_view()
+not_found_404 = PageNotFound.as_view()

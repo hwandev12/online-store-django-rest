@@ -18,3 +18,6 @@ urlpatterns = [
 
 # by this way we can append django_unicorn urls to urlpatterns
 urlpatterns.append(path("unicorn/", include("django_unicorn.urls")),)
+
+
+handler404 = "apps.base.views.not_found_404"
