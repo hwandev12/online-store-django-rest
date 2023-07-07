@@ -12,6 +12,7 @@ urlpatterns = [
     path("developer/", include("apps.developer.urls")),
     path("chat/", include("apps.chat.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
+    path("__debug__/", include("debug_toolbar.urls")),
     # re_path(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
     # re_path(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'channels',
     'notifications',
     'rest_framework',
+    "debug_toolbar",
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
@@ -54,6 +55,8 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -61,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -226,6 +230,22 @@ JET_THEMES = [
 SESSION_COOKIE_NAME = 'session'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 
+# Cache backend here
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://default:BvdF6ukWOSEOSWV7xw8LfXADD8B1O9Cu@redis-18763.c277.us-east-1-3.ec2.cloud.redislabs.com:18763",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+CACHE_MIDDLEWARE_SECONDS = 60
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
 # settings.py
 UNICORN = {
     "APPS": ["apps.base",],
@@ -254,6 +274,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 AUTH_USER_MODEL = 'authentication.User'
 LOGIN_URL = '/welcome/'
 LOGIN_REDIRECT_URL = "/"
+
+# cache commands
+# docker run -p 6379:6379 -it redis/redis-stack:latest
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
