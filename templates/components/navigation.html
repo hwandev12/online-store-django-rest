@@ -16,11 +16,6 @@
         <!-- Center elements -->
         <div class="order-lg-last col-lg-5 col-sm-8 col-8">
           <div class="d-flex float-end">
-            <a href="/authentication/logout/"
-              class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"> <i
-                class="fas fa-user-alt m-1 me-md-2"></i>
-              <p class="d-none d-md-block mb-0">Sign out</p>
-            </a>
             {% if request.user.is_seller %}
             <a href="{% url 'authentication:general_profile' request.user.selleraccountmodel.first_name  %}"
               class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
@@ -36,6 +31,10 @@
             </i>
           </a>
             {% elif request.user.is_buyer %}
+            <a href="{% url 'authentication:general_profile' request.user.buyeraccountmodel.first_name  %}"
+            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
+            <p class="d-none d-md-block mb-0">Profile</p>
+            </a>
             <a href="{% url 'authentication:all_notifications' %}"
               class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
               <i class="fa-solid fa-bell position-relative">
@@ -44,10 +43,6 @@
                   <span class="visually-hidden">unread messages</span>
                 </span>
               </i>
-            </a>
-            <a href="{% url 'authentication:general_profile' request.user.buyeraccountmodel.first_name  %}"
-            class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
-            <p class="d-none d-md-block mb-0">Profile</p>
             </a>
             <a href="{% url 'base:cart' %}"
               class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
@@ -62,7 +57,7 @@
             {% endif %}
             {% if request.user.is_developer %}
               <a href="{% url 'developer:home' %}"
-                class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i
+                class="border rounded py-1 px-3 nav-link d-flex align-items-center mx-1"> <i
                   class="fas fa-shopping-cart m-1 me-md-2"></i>
                 <p class="d-none d-md-block mb-0">Developer</p>
               </a>
