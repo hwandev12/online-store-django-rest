@@ -10,61 +10,38 @@
                     <tr class="text-dark">
                         <th scope="col"><input class="form-check-input" type="checkbox"></th>
                         <th scope="col">Date</th>
-                        <th scope="col">Invoice</th>
+                        <th scope="col">Order Code</th>
                         <th scope="col">Customer</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
+                {% if recent_sales %}
                 <tbody>
+                    {% for recent in recent_sales %}
                     <tr>
                         <td><input class="form-check-input" type="checkbox"></td>
-                        <td>01 Jan 2045</td>
-                        <td>INV-0123</td>
-                        <td>Jhon Doe</td>
-                        <td>$123</td>
-                        <td>Paid</td>
-                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+                        <td>{{ recent.ordered_date|date:"d.m.Y" }}</td>
+                        <td>{{ recent.order_code }}</td>
+                        <td>{{ recent.firstname }}</td>
+                        <td>${{ recent.product.product_cost }}</td>
+                        {% if recent.being_delivered %}
+                        <td>Delivered</td>
+                        {% else %}
+                        <td>Pending</td>
+                        {% endif %}
+                        <td><a class="btn btn-sm btn-primary" href="#">Detail</a></td>
                     </tr>
-                    <tr>
-                        <td><input class="form-check-input" type="checkbox"></td>
-                        <td>01 Jan 2045</td>
-                        <td>INV-0123</td>
-                        <td>Jhon Doe</td>
-                        <td>$123</td>
-                        <td>Paid</td>
-                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-check-input" type="checkbox"></td>
-                        <td>01 Jan 2045</td>
-                        <td>INV-0123</td>
-                        <td>Jhon Doe</td>
-                        <td>$123</td>
-                        <td>Paid</td>
-                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-check-input" type="checkbox"></td>
-                        <td>01 Jan 2045</td>
-                        <td>INV-0123</td>
-                        <td>Jhon Doe</td>
-                        <td>$123</td>
-                        <td>Paid</td>
-                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-check-input" type="checkbox"></td>
-                        <td>01 Jan 2045</td>
-                        <td>INV-0123</td>
-                        <td>Jhon Doe</td>
-                        <td>$123</td>
-                        <td>Paid</td>
-                        <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
+                {% else %}
             </table>
+            <h5 class="text-center" style="
+            color: #777;
+            font-size: 16px;
+            "><i class="fa-solid fa-circle-exclamation mx-2 mt-3"></i>No orders in last 5 days</h5>
+            {% endif %}
         </div>
     </div>
 </div>
