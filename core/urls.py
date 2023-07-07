@@ -21,3 +21,4 @@ urlpatterns.append(path("unicorn/", include("django_unicorn.urls")),)
 
 
 handler404 = "apps.base.views.not_found_404"
+handler403 = "apps.base.views.page_not_permission"

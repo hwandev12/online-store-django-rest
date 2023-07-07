@@ -237,6 +237,12 @@ class PageNotFound(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
+class PageNotPermission(TemplateView):
+    template_name = 'pages/403.html'
+    
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
 # make classes to functionable
 home_page_view = HomePageView.as_view()
 welcome_page = WelcomePage.as_view()
@@ -246,3 +252,4 @@ product_create_view = ProductCreateView.as_view()
 product_delete_view = ProductDeleteVeiew.as_view()
 product_update_view = ProductUpdate.as_view()
 not_found_404 = PageNotFound.as_view()
+page_not_permission = PageNotPermission.as_view()

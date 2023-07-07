@@ -46,9 +46,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     
-    # 
+    # custom
     is_seller = models.BooleanField(default=False)
     is_buyer = models.BooleanField(default=False)
+    
+    # permissionable users
+    is_developer = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

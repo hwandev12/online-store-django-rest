@@ -49,17 +49,24 @@
             class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
             <p class="d-none d-md-block mb-0">Profile</p>
             </a>
+            <a href="{% url 'base:cart' %}"
+              class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
+                class="fas fa-shopping-cart m-1 me-md-2"></i>
+              <p class="d-none d-md-block mb-0">My cart</p>
+            </a>
             {% else %}
             <a href="{% url 'authentication:general_profile' request.user.id  %}"
             class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center"><i class="fa-regular fa-address-card mx-2"></i>
             <p class="d-none d-md-block mb-0">Profile</p>
             </a>
             {% endif %}
-            <a href="{% url 'base:cart' %}"
-              class="border rounded py-1 px-3 nav-link d-flex align-items-center" target="_blank"> <i
-                class="fas fa-shopping-cart m-1 me-md-2"></i>
-              <p class="d-none d-md-block mb-0">My cart</p>
-            </a>
+            {% if request.user.is_developer %}
+              <a href="{% url 'developer:home' %}"
+                class="border rounded py-1 px-3 nav-link d-flex align-items-center"> <i
+                  class="fas fa-shopping-cart m-1 me-md-2"></i>
+                <p class="d-none d-md-block mb-0">Developer</p>
+              </a>
+            {% endif %}
           </div>
         </div>
         <!-- Center elements -->

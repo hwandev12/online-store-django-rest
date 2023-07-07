@@ -1,10 +1,12 @@
+from typing import Optional
 from django.shortcuts import render
 from django.views.generic import TemplateView, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from apps.product.models import Product
 
-class DeveloperHomePage(ListView):
+from django.contrib.auth.mixins import UserPassesTestMixin
+class DeveloperHomePage(UserPassesTestMixin ,ListView):
     template_name = 'developer/pages/develop.html'
     context_object_name = 'apps'
     model = Product
@@ -15,10 +17,12 @@ class DeveloperHomePage(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        if self.request.user.is_superuser:
-            return super(DeveloperHomePage, self).dispatch(*args, **kwargs)
-        else:
-            return render(self.request, 'pages/404.html', status=404)
+        return super(DeveloperHomePage, self).dispatch(*args, **kwargs)
+    
+    def test_func(self):
+        if self.request.user.is_developer:
+            return True
+        return False
 
 
 developer_home_page = DeveloperHomePage.as_view()
