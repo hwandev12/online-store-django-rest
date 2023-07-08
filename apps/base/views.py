@@ -51,10 +51,11 @@ class ProductDetailView(DetailView):
     template_name = 'pages/product_detail.html'
     context_object_name = 'product'
 
-        
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        recently_viewed = None
         if self.request.user.is_buyer:
             seller = get_object_or_404(SellerAccountModel)
             seller_profile = get_object_or_404(SellerProfile, user=seller)
@@ -76,6 +77,24 @@ class ProductDetailView(DetailView):
             context['rating_form'] = ProductRatingForm()
         context['comments'] = self.object.comment.all()
         context['comments_by_owner'] = self.object.comment.filter(user=self.request.user)
+        
+        if self.request.user.is_buyer:
+            if 'recently_viewed' in self.request.session:
+                if self.object.slug in self.request.session['recently_viewed']:
+                    self.request.session['recently_viewed'].remove(self.object.slug)
+                    
+                products = Product.objects.filter(slug__in=self.request.session['recently_viewed'])
+                recently_viewed = sorted(products, key=lambda a: self.request.session['recently_viewed'].index(a.slug))
+                self.request.session['recently_viewed'].insert(0, self.object.slug)
+                if len(self.request.session['recently_viewed']) > 5:
+                    del self.request.session['recently_viewed'][-1]
+            else:
+                self.request.session['recently_viewed'] = [self.object.slug]
+                
+            self.request.session.modified = True
+                
+            context["recently_viewed_products"] = recently_viewed
+        print(recently_viewed)
         return context
     
     # write a post method to add comment

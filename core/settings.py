@@ -55,7 +55,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 MIDDLEWARE = [
-    "django.middleware.cache.UpdateCacheMiddleware",
+    # "django.middleware.cache.UpdateCacheMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "django.middleware.cache.FetchFromCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -231,17 +231,23 @@ SESSION_COOKIE_NAME = 'session'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 
 # Cache backend here
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://default:BvdF6ukWOSEOSWV7xw8LfXADD8B1O9Cu@redis-18763.c277.us-east-1-3.ec2.cloud.redislabs.com:18763",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://default:BvdF6ukWOSEOSWV7xw8LfXADD8B1O9Cu@redis-18763.c277.us-east-1-3.ec2.cloud.redislabs.com:18763",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
-CACHE_MIDDLEWARE_SECONDS = 60
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+#     }
+# }
+
+# CACHE_MIDDLEWARE_SECONDS = 60
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
