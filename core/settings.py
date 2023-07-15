@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'apps.product.apps.ProductConfig',
     "apps.chat.apps.ChatConfig",
     'apps.notification.apps.NotificationConfig',
+    'apps.api.apps.ApiConfig',
     "django_unicorn",
 ]
 

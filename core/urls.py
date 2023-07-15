@@ -7,10 +7,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("apps.base.urls")),
     path('authentication/', include('allauth.urls')),
-    re_path(r"^inboxes/great/sk/", include("notifications.urls", namespace="notifications")),
+    re_path(r"^inboxes/notify/", include("notifications.urls", namespace="notifications")),
     path("", include("apps.authentication.urls")),
     path("developer/", include("apps.developer.urls")),
     path("chat/", include("apps.chat.urls")),
+    path('api/', include("apps.api.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("__debug__/", include("debug_toolbar.urls")),
     # re_path(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
