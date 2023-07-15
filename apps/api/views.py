@@ -2,12 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from .serializers import ProductSerializer, SellerUserSerializer
+from .serializers import (
+    ProductSerializer,
+    SellerUserSerializer,
+    BuyerUserSerializer
+)
 from apps.product.models import Product, ProductImage
 from rest_framework import mixins
 from rest_framework import generics
 
-from apps.authentication.models import SellerAccountModel, User
+from apps.authentication.models import SellerAccountModel, User, BuyerAccountModel
 import json
 
 # ----------------- Product Api ----------------- #
@@ -37,8 +41,22 @@ class SellerUserDetailApiView(generics.RetrieveAPIView):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
 # ----------------- Seller User Detail Api ----------------- #
+
+# ----------------- Buyer User Api ----------------- #
+class BuyerUserApiView(generics.ListAPIView):
+    queryset = BuyerAccountModel.objects.all()
+    serializer_class = BuyerUserSerializer
+# ----------------- Buyer User Api ----------------- #
+
+# ----------------- Buyer User Detail Api ----------------- #
+class BuyerUserDetailApiView(generics.RetrieveAPIView):
+    queryset = BuyerAccountModel.objects.all()
+    serializer_class = BuyerUserSerializer
+# ----------------- Buyer User Detail Api ----------------- #
     
 product_lists = ProductListApiView.as_view()
 product_detail = ProductDetailApiView.as_view()
 seller_user_lists = SellerUserApiView.as_view()
 seller_user_detail = SellerUserDetailApiView.as_view()
+buyer_user_lists = BuyerUserApiView.as_view()
+buyer_user_detail = BuyerUserDetailApiView.as_view()

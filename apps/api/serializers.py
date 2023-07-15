@@ -32,6 +32,11 @@ class SellerUserSerializer(serializers.ModelSerializer):
             "id": obj.user.id,
             "email": obj.user.email,
         }
+        
+class BuyerUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BuyerAccountModel
+        fields = "__all__"
     
     
     
