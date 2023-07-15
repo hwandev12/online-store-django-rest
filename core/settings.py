@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     
     # third party apps
     'allauth',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'notifications',
     'rest_framework',
     "debug_toolbar",
+    "django_filters",
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',

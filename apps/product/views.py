@@ -24,6 +24,17 @@ from .forms import (
     CheckoutForm,
 )
 
+import django_filters
+
+# filter products
+class ProductFilter(django_filters.FilterSet):
+    product_cost = django_filters.NumberFilter()
+    product_cost__gt = django_filters.NumberFilter(field_name='product_cost', lookup_expr='gt')
+    product_cost__lt = django_filters.NumberFilter(field_name='product_cost', lookup_expr='lt')
+    class Meta:
+        model = Product
+        fields = ['product_name', 'product_cost']
+
 # ----------------- Products ----------------- #
 class ProductView(ListView):
     model = Product
@@ -33,7 +44,8 @@ class ProductView(ListView):
     # write a method to get products by category
     def get_products_by_category(self):
         # write a code to paginate products
-        paginate = Paginator(self.get_queryset(), 3)
+        product_filter = ProductFilter(self.request.GET, queryset=self.get_queryset())
+        paginate = Paginator(product_filter.qs, 3)
         page_number = self.request.GET.get('page')
         product_page_obj = paginate.get_page(page_number)
         category = self.request.GET.get('product-category', None)
@@ -51,6 +63,8 @@ class ProductView(ListView):
         context['product_categories'] = ProductCategory.objects.all()
         # write a method to get products by category
         context['product_page_obj'] = self.get_products_by_category()
+        context["product_filter"] = ProductFilter(self.request.GET, queryset=self.get_queryset())
+        
         return context
 # ----------------- Products ----------------- #
 

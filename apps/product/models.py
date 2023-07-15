@@ -36,7 +36,7 @@ class Product(models.Model):
     slug = models.SlugField(max_length=200, unique=True, null=True)
     owner = models.ForeignKey(SellerAccountModel, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=200)
-    product_cost = models.IntegerField()
+    product_cost = models.IntegerField(default=0, blank=True, null=True)
     product_quantity = models.IntegerField()
     product_description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True, null=True)

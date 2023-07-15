@@ -1,4 +1,5 @@
 {% extends 'base/index.html' %}
+{% load widget_tweaks %}
 {% load static %}
 {% load pagination_extras_app %}
 {% block title %}All Products{% endblock %}
@@ -62,7 +63,7 @@
                     </ul>
                 </li>
             </ul>
-            <div class="mb-5">
+            <div class="mb-2">
                 <h5>Tag Cloud</h5>
                 <div class="tagcloud">
                     {% for category in product_categories %}
@@ -70,6 +71,15 @@
                     {% endfor %}
                     <a href="{% url 'base:products' %}" class="tag-cloud-link">all</a>
                 </div>
+            </div>
+            <div class="my-2">
+                <h5>Filter</h5>
+                <form method="get">
+                    {% render_field product_filter.form.product_name class+="my-2 form-control" placeholder="Name" %}
+                    {% render_field product_filter.form.product_cost__gt class+="mb-2 form-control" placeholder="Greater than cost" %}
+                    {% render_field product_filter.form.product_cost__lt class+="form-control" placeholder="Less than cost" %}
+                    <input class="btn btn-danger my-2" type="submit" value="Search"  />
+                </form>
             </div>
             <!-- <div class="mb-5">
                 <h5>Newsletter</h5>
