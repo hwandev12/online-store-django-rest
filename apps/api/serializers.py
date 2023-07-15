@@ -3,7 +3,7 @@ from apps.product.models import Product, ProductCategory
 
 class ProductSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    slug = serializers.SlugField()
+    slug = serializers.SlugField(read_only=True)
     product_name = serializers.CharField(max_length=200)
     product_cost = serializers.IntegerField(default=0)
     product_quantity = serializers.IntegerField()

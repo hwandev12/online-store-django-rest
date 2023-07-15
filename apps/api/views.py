@@ -4,43 +4,38 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from .serializers import ProductSerializer
 from apps.product.models import Product
+from rest_framework import mixins
+from rest_framework import generics
 
-@csrf_exempt
-def product_lists(request):
+class ProductListApiView(mixins.ListModelMixin,
+                         mixins.CreateModelMixin,
+                         generics.GenericAPIView):
     
-    if request.method == 'GET':
-        product = Product.objects.all()
-        serializer = ProductSerializer(product, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = ProductSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
     
-@csrf_exempt
-def product_detail(request, pk):
-    try:
-        product = Product.objects.get(pk=pk)
-    except Product.DoesNotExist:
-        return HttpResponse(status=404)
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
     
-    if request.method == "GET":
-        serializer = ProductSerializer(product)
-        return JsonResponse(serializer.data)
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
     
-    elif request.method == "PUT":
-        data = JSONParser().parse(request)
-        serializer = ProductSerializer(product, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        
-        return JsonResponse(serializer.errors, status=400)
+class ProductDetailApiView(mixins.RetrieveModelMixin,
+                           mixins.UpdateModelMixin,
+                           mixins.DestroyModelMixin,
+                           generics.GenericAPIView):
     
-    elif request.method == "DELETE":
-        product.delete()
-        return HttpResponse(status=204)
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+product_lists = ProductListApiView.as_view()
+product_detail = ProductDetailApiView.as_view()
