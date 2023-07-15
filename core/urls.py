@@ -11,7 +11,7 @@ urlpatterns = [
     path("", include("apps.authentication.urls")),
     path("developer/", include("apps.developer.urls")),
     path("chat/", include("apps.chat.urls")),
-    path('api/', include("apps.api.urls")),
+    path('api/v1/', include("apps.api.urls")),
     path('ratings/', include('star_ratings.urls', namespace='ratings')),
     path("__debug__/", include("debug_toolbar.urls")),
     # re_path(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "debug_toolbar",
     "django_filters",
+    "corsheaders",
 
     # local apps
     'apps.authentication.apps.AuthenticationConfig',
@@ -61,6 +62,8 @@ MIDDLEWARE = [
     # "django.middleware.cache.UpdateCacheMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -268,6 +271,14 @@ UNICORN = {
     },
     "SCRIPT_LOCATION": "after",
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    "https://example.com",
+    "https://sub.example.com",
+    "http://localhost:8080",
+    "http://127.0.0.1:9000",
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/

@@ -34,7 +34,7 @@ class Product(models.Model):
         
     # add slug field
     slug = models.SlugField(max_length=200, unique=True, null=True)
-    owner = models.ForeignKey(SellerAccountModel, on_delete=models.CASCADE)
+    owner = models.ForeignKey(SellerAccountModel, on_delete=models.CASCADE, related_name='owner_product')
     product_name = models.CharField(max_length=200)
     product_cost = models.IntegerField(default=0, blank=True, null=True)
     product_quantity = models.IntegerField()
@@ -111,10 +111,9 @@ class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='image')
     product_image = models.ImageField(upload_to='products/')
     
-    
     def __str__(self):
         return self.product.product_name
-    
+
     # create method product only created 4 times allow update
     def save(self, *args, **kwargs):
         if not self.pk and self.product.image.count() >= 4:
