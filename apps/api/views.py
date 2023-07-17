@@ -11,7 +11,12 @@ from apps.product.models import Product, ProductImage
 from rest_framework import mixins
 from rest_framework import generics
 
-from apps.authentication.models import SellerAccountModel, User, BuyerAccountModel
+from apps.authentication.models import (
+    SellerAccountModel,
+    User,
+    BuyerAccountModel
+)
+from rest_framework import permissions
 import json
 
 # ----------------- Product Api ----------------- #
@@ -34,24 +39,32 @@ class ProductDetailApiView(generics.RetrieveUpdateDestroyAPIView):
 class SellerUserApiView(generics.ListAPIView):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
+    
+    permission_classes = [permissions.IsAdminUser]
 # ----------------- Seller User Api ----------------- #
     
 # ----------------- Seller User Detail Api ----------------- #
 class SellerUserDetailApiView(generics.RetrieveAPIView):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
+    
+    permission_classes = [permissions.IsAdminUser]
 # ----------------- Seller User Detail Api ----------------- #
 
 # ----------------- Buyer User Api ----------------- #
 class BuyerUserApiView(generics.ListAPIView):
     queryset = BuyerAccountModel.objects.all()
     serializer_class = BuyerUserSerializer
+    
+    permission_classes = [permissions.IsAdminUser]
 # ----------------- Buyer User Api ----------------- #
 
 # ----------------- Buyer User Detail Api ----------------- #
 class BuyerUserDetailApiView(generics.RetrieveAPIView):
     queryset = BuyerAccountModel.objects.all()
     serializer_class = BuyerUserSerializer
+    
+    permission_classes = [permissions.IsAdminUser]
 # ----------------- Buyer User Detail Api ----------------- #
     
 product_lists = ProductListApiView.as_view()
