@@ -1,15 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from .serializers import (
     ProductSerializer,
     SellerUserSerializer,
-    BuyerUserSerializer
+    BuyerUserSerializer,
+    AllUserSerializer
 )
 from apps.product.models import Product, ProductImage
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from apps.authentication.models import (
     SellerAccountModel,
@@ -18,6 +22,15 @@ from apps.authentication.models import (
 )
 from rest_framework import permissions
 import json
+
+@api_view(["GET"])
+def api_root(request, format=None):
+    return Response({
+        "users": reverse("user-lists", request=request, format=format),
+        "products": reverse("products-api", request=request, format=format),
+        "seller users": reverse("seller-users-api", request=request, format=format),
+        "buyer users": reverse("buyer-users-api", request=request, format=format),
+    })
 
 # ----------------- Product Api ----------------- #
 class ProductListApiView(generics.ListCreateAPIView):
@@ -66,10 +79,28 @@ class BuyerUserDetailApiView(generics.RetrieveAPIView):
     
     permission_classes = [permissions.IsAdminUser]
 # ----------------- Buyer User Detail Api ----------------- #
+
+# ----------------- User Api ----------------- #
+class UserApiView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = AllUserSerializer
     
+    permission_classes = [permissions.IsAdminUser]
+# ----------------- User Api ----------------- #
+# ----------------- User Detail Api ----------------- #
+class UserDetailApiView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = AllUserSerializer
+    
+    permission_classes = [permissions.IsAdminUser]
+# ----------------- User Detail Api ----------------- #
+
+
 product_lists = ProductListApiView.as_view()
 product_detail = ProductDetailApiView.as_view()
 seller_user_lists = SellerUserApiView.as_view()
 seller_user_detail = SellerUserDetailApiView.as_view()
 buyer_user_lists = BuyerUserApiView.as_view()
 buyer_user_detail = BuyerUserDetailApiView.as_view()
+user_lists = UserApiView.as_view()
+user_detail = UserDetailApiView.as_view()

@@ -4,8 +4,6 @@ from apps.product.models import Product, ProductCategory, ProductImage
 from django.contrib.auth import get_user_model
 from apps.authentication.models import SellerAccountModel, BuyerAccountModel, User
 
-User = get_user_model()
-
 class ProductImageSerializer(serializers.Serializer):
     
     class Meta:
@@ -19,8 +17,8 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
         
-class SellerUserSerializer(serializers.ModelSerializer):
-    owner_product = serializers.PrimaryKeyRelatedField(many=True, queryset=Product.objects.all())
+class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
+    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail-api", queryset=Product.objects.all())
     user = serializers.SerializerMethodField(read_only=True)
     class Meta:
         model = SellerAccountModel
@@ -31,6 +29,9 @@ class SellerUserSerializer(serializers.ModelSerializer):
         return {
             "id": obj.user.id,
             "email": obj.user.email,
+            "is_staff": obj.user.is_staff,
+            "is_superuser": obj.user.is_superuser,
+            "is_active": obj.user.is_active
         }
         
 class BuyerUserSerializer(serializers.ModelSerializer):
@@ -38,5 +39,11 @@ class BuyerUserSerializer(serializers.ModelSerializer):
         model = BuyerAccountModel
         fields = "__all__"
     
+
+class AllUserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = '__all__'
     
     
