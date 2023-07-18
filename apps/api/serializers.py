@@ -20,6 +20,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail-api", queryset=Product.objects.all())
     user = serializers.SerializerMethodField(read_only=True)
+    lookup_field = 'first_name'
+    extra_kwargs = {
+        "url": {"lookup_field": "first_name"}
+    }
+    
     class Meta:
         model = SellerAccountModel
         fields = ['id', 'user', 'first_name', 'last_name', 'phone_number', 'organization', 'owner_product']
@@ -45,5 +50,6 @@ class AllUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-    
+
+
     

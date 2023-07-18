@@ -7,7 +7,8 @@ from .serializers import (
     ProductSerializer,
     SellerUserSerializer,
     BuyerUserSerializer,
-    AllUserSerializer
+    AllUserSerializer,
+    ProductImageSerializer
 )
 from apps.product.models import Product, ProductImage
 from rest_framework import mixins
@@ -48,6 +49,12 @@ class ProductDetailApiView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ProductSerializer
 # ----------------- Product Detail Api ----------------- #    
 
+# ----------------- Product Image Api ----------------- #    
+class ProductImageApiView(generics.RetrieveAPIView):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer
+# ----------------- Product Image Api ----------------- #    
+
 # ----------------- Seller User Api ----------------- #
 class SellerUserApiView(generics.ListAPIView):
     queryset = SellerAccountModel.objects.all()
@@ -60,6 +67,7 @@ class SellerUserApiView(generics.ListAPIView):
 class SellerUserDetailApiView(generics.RetrieveAPIView):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
+    lookup_field = 'first_name'
     
     permission_classes = [permissions.IsAdminUser]
 # ----------------- Seller User Detail Api ----------------- #
@@ -98,6 +106,7 @@ class UserDetailApiView(generics.RetrieveAPIView):
 
 product_lists = ProductListApiView.as_view()
 product_detail = ProductDetailApiView.as_view()
+product_image_detail = ProductImageApiView.as_view()
 seller_user_lists = SellerUserApiView.as_view()
 seller_user_detail = SellerUserDetailApiView.as_view()
 buyer_user_lists = BuyerUserApiView.as_view()
