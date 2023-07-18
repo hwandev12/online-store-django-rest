@@ -4,21 +4,42 @@ from apps.product.models import Product, ProductCategory, ProductImage
 from django.contrib.auth import get_user_model
 from apps.authentication.models import SellerAccountModel, BuyerAccountModel, User
 
-class ProductImageSerializer(serializers.Serializer):
-    
+class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
-        fields = "__all__"
+        fields = ["product_image"]
+        
 
-class ProductSerializer(serializers.ModelSerializer):
-    image = serializers.PrimaryKeyRelatedField(many=True, queryset=ProductImage.objects.all())
-    
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.SerializerMethodField(read_only=True)
+    image = ProductImageSerializer(many=True)
     class Meta:
         model = Product
-        fields = "__all__"
+        fields = [
+            "id",
+            "owner",
+            "image",
+            "slug",
+            "product_name",
+            "product_cost",
+            "product_quantity",
+            "product_description",
+            "created_at",
+            "updated_at",
+            "product_status",
+            "discount_price",
+        ]
+        
+    def get_owner(self, obj):
+        return {
+            "first_name": obj.owner.first_name,
+            "last_name": obj.owner.last_name,
+            "organization": obj.owner.organization,
+            "followers": obj.owner.get_followers_count()
+        }
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
-    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail-api", queryset=Product.objects.all())
+    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", queryset=Product.objects.all())
     user = serializers.SerializerMethodField(read_only=True)
     lookup_field = 'first_name'
     extra_kwargs = {

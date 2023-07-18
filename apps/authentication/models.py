@@ -89,6 +89,9 @@ class SellerAccountModel(models.Model):
     # get seller profile avatar
     def get_seller_avatar(self):
         return self.sellerprofile.avatar.url
+    
+    def get_followers_count(self):
+        return self.sellerprofile.followers.count()
 # ------------------- Seller Model ------------------- #
 
 # ------------------- Buyer Model ------------------- #

@@ -12,7 +12,7 @@ from .serializers import (
 )
 from apps.product.models import Product, ProductImage
 from rest_framework import mixins
-from rest_framework import generics
+from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -34,7 +34,7 @@ def api_root(request, format=None):
     })
 
 # ----------------- Product Api ----------------- #
-class ProductListApiView(generics.ListCreateAPIView):
+class ProductListApiView(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     
@@ -43,73 +43,33 @@ class ProductListApiView(generics.ListCreateAPIView):
     
 # ----------------- Product Api ----------------- #
 
-# ----------------- Product Detail Api ----------------- #    
-class ProductDetailApiView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-# ----------------- Product Detail Api ----------------- #    
-
 # ----------------- Product Image Api ----------------- #    
-class ProductImageApiView(generics.RetrieveAPIView):
+class ProductImageApiView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductImage.objects.all()
     serializer_class = ProductImageSerializer
 # ----------------- Product Image Api ----------------- #    
 
 # ----------------- Seller User Api ----------------- #
-class SellerUserApiView(generics.ListAPIView):
-    queryset = SellerAccountModel.objects.all()
-    serializer_class = SellerUserSerializer
-    
-    permission_classes = [permissions.IsAdminUser]
-# ----------------- Seller User Api ----------------- #
-    
-# ----------------- Seller User Detail Api ----------------- #
-class SellerUserDetailApiView(generics.RetrieveAPIView):
+class SellerUserApiView(viewsets.ReadOnlyModelViewSet):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = 'first_name'
     
     permission_classes = [permissions.IsAdminUser]
-# ----------------- Seller User Detail Api ----------------- #
+# ----------------- Seller User Api ----------------- #
 
 # ----------------- Buyer User Api ----------------- #
-class BuyerUserApiView(generics.ListAPIView):
+class BuyerUserApiView(viewsets.ReadOnlyModelViewSet):
     queryset = BuyerAccountModel.objects.all()
     serializer_class = BuyerUserSerializer
     
     permission_classes = [permissions.IsAdminUser]
 # ----------------- Buyer User Api ----------------- #
 
-# ----------------- Buyer User Detail Api ----------------- #
-class BuyerUserDetailApiView(generics.RetrieveAPIView):
-    queryset = BuyerAccountModel.objects.all()
-    serializer_class = BuyerUserSerializer
-    
-    permission_classes = [permissions.IsAdminUser]
-# ----------------- Buyer User Detail Api ----------------- #
-
 # ----------------- User Api ----------------- #
-class UserApiView(generics.ListAPIView):
+class UserApiView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = AllUserSerializer
     
     permission_classes = [permissions.IsAdminUser]
 # ----------------- User Api ----------------- #
-# ----------------- User Detail Api ----------------- #
-class UserDetailApiView(generics.RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = AllUserSerializer
-    
-    permission_classes = [permissions.IsAdminUser]
-# ----------------- User Detail Api ----------------- #
-
-
-product_lists = ProductListApiView.as_view()
-product_detail = ProductDetailApiView.as_view()
-product_image_detail = ProductImageApiView.as_view()
-seller_user_lists = SellerUserApiView.as_view()
-seller_user_detail = SellerUserDetailApiView.as_view()
-buyer_user_lists = BuyerUserApiView.as_view()
-buyer_user_detail = BuyerUserDetailApiView.as_view()
-user_lists = UserApiView.as_view()
-user_detail = UserDetailApiView.as_view()
