@@ -38,6 +38,11 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             "followers": obj.owner.get_followers_count()
         }
         
+    lookup_field = "slug"
+    extra_kwargs = {
+        "url": {"lookup_field": "slug"}
+    }
+        
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", queryset=Product.objects.all())
     user = serializers.SerializerMethodField(read_only=True)
