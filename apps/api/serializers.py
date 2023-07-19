@@ -3,7 +3,8 @@ from apps.product.models import (
     Product,
     ProductCategory,
     ProductImage,
-    Comment
+    Comment,
+    RatingProduct
 )
 
 from django.contrib.auth import get_user_model
@@ -69,6 +70,17 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             "created_at",
         ]
 
+        
+class RatingProductSerializer(serializers.HyperlinkedModelSerializer):
+    post = serializers.HyperlinkedRelatedField(
+        view_name="product-detail",
+        lookup_field="slug",
+        queryset=Product.objects.all()
+        )
+    
+    class Meta:
+        model = RatingProduct
+        fields = ["user", "post", "rating"]
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())

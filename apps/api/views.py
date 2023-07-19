@@ -10,13 +10,15 @@ from .serializers import (
     AllUserSerializer,
     ProductImageSerializer,
     ProductCategorySerializer,
-    CommentSerializer
+    CommentSerializer,
+    RatingProductSerializer
 )
 from apps.product.models import (
     Product,
     ProductImage,
     ProductCategory,
-    Comment
+    Comment,
+    RatingProduct
 )
 from rest_framework import mixins
 from rest_framework import generics, viewsets
@@ -90,3 +92,8 @@ class CommentApiView(viewsets.ReadOnlyModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 # ----------------- Comment Api ----------------- #
+# ----------------- Rating Api ----------------- #
+class RatingProductApiView(viewsets.ReadOnlyModelViewSet):
+    queryset = RatingProduct.objects.all()
+    serializer_class = RatingProductSerializer
+# ----------------- Rating Api ----------------- #
