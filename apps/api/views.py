@@ -8,9 +8,14 @@ from .serializers import (
     SellerUserSerializer,
     BuyerUserSerializer,
     AllUserSerializer,
-    ProductImageSerializer
+    ProductImageSerializer,
+    ProductCategorySerializer
 )
-from apps.product.models import Product, ProductImage
+from apps.product.models import (
+    Product,
+    ProductImage,
+    ProductCategory
+)
 from rest_framework import mixins
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
@@ -34,13 +39,10 @@ def api_root(request, format=None):
     })
 
 # ----------------- Product Api ----------------- #
-class ProductListApiView(viewsets.ModelViewSet):
+class ProductListApiView(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "slug"
-    
-    def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
     
 # ----------------- Product Api ----------------- #
 
@@ -74,3 +76,9 @@ class UserApiView(viewsets.ReadOnlyModelViewSet):
     
     permission_classes = [permissions.IsAdminUser]
 # ----------------- User Api ----------------- #
+
+# ----------------- Product Category Api ----------------- #
+class ProductCategoryApiView(viewsets.ReadOnlyModelViewSet):
+    queryset = ProductCategory.objects.all()
+    serializer_class = ProductCategorySerializer
+# ----------------- Product Category Api ----------------- #

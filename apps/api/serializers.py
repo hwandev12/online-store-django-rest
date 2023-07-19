@@ -1,14 +1,27 @@
 from rest_framework import serializers
-from apps.product.models import Product, ProductCategory, ProductImage
+from apps.product.models import (
+    Product,
+    ProductCategory,
+    ProductImage
+)
 
 from django.contrib.auth import get_user_model
-from apps.authentication.models import SellerAccountModel, BuyerAccountModel, User
+from apps.authentication.models import (
+    SellerAccountModel,
+    BuyerAccountModel,
+    User
+)
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = ProductCategory
+        fields = ["category_name"]
 
 class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = ["product_image"]
-        
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
@@ -44,7 +57,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     }
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
-    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", queryset=Product.objects.all())
+    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
     user = serializers.SerializerMethodField(read_only=True)
     lookup_field = 'first_name'
     extra_kwargs = {
@@ -69,7 +82,6 @@ class BuyerUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyerAccountModel
         fields = "__all__"
-    
 
 class AllUserSerializer(serializers.ModelSerializer):
     
