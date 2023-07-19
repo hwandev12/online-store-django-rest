@@ -10,6 +10,7 @@ router.register(r"sellers", views.SellerUserApiView, basename='seller'),
 router.register(r"buyers", views.BuyerUserApiView, basename='buyer'),
 router.register(r"product-image", views.ProductImageApiView, basename='product-image'),
 router.register(r"product-category", views.ProductCategoryApiView, basename="product-category")
+router.register(r"product-comment", views.CommentApiView, basename="product-comment")
 
 urlpatterns = [
     path("", include(router.urls))

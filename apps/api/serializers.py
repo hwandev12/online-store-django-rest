@@ -2,7 +2,8 @@ from rest_framework import serializers
 from apps.product.models import (
     Product,
     ProductCategory,
-    ProductImage
+    ProductImage,
+    Comment
 )
 
 from django.contrib.auth import get_user_model
@@ -55,6 +56,19 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     extra_kwargs = {
         "url": {"lookup_field": "slug"}
     }
+
+
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    product_name = ProductSerializer()
+    class Meta:
+        model = Comment
+        fields = [
+            "user",
+            "product_name",
+            "comment",
+            "created_at",
+        ]
+
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
