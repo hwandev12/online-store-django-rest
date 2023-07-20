@@ -12,7 +12,8 @@ from .serializers import (
     ProductCategorySerializer,
     CommentSerializer,
     RatingProductSerializer,
-    CheckoutItemProductSerializer
+    CheckoutItemProductSerializer,
+    OrderSerializer
 )
 from apps.product.models import (
     Product,
@@ -20,7 +21,8 @@ from apps.product.models import (
     ProductCategory,
     Comment,
     RatingProduct,
-    CheckoutItem
+    CheckoutItem,
+    Checkout
 )
 from rest_framework import mixins
 from rest_framework import generics, viewsets
@@ -104,3 +106,8 @@ class CheckoutItemApiView(viewsets.ReadOnlyModelViewSet):
     queryset = CheckoutItem.objects.all()
     serializer_class = CheckoutItemProductSerializer
 # ----------------- Cart Api ----------------- #
+# ----------------- Order Api ----------------- #
+class OrderApiView(viewsets.ReadOnlyModelViewSet):
+    queryset = Checkout.objects.all()
+    serializer_class = OrderSerializer
+# ----------------- Order Api ----------------- #

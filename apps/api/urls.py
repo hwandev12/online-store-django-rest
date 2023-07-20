@@ -13,6 +13,7 @@ router.register(r"product-category", views.ProductCategoryApiView, basename="pro
 router.register(r"product-comment", views.CommentApiView, basename="product-comment")
 router.register(r"rating-product", views.RatingProductApiView, basename="product-rating")
 router.register(r"product-cart", views.CheckoutItemApiView, basename="product-cart")
+router.register(r"product-order", views.OrderApiView, basename="product-order")
 
 urlpatterns = [
     path("", include(router.urls))

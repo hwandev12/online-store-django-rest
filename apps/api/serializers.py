@@ -5,7 +5,8 @@ from apps.product.models import (
     ProductImage,
     Comment,
     RatingProduct,
-    CheckoutItem
+    CheckoutItem,
+    Checkout
 )
 
 from django.contrib.auth import get_user_model
@@ -100,6 +101,44 @@ class CheckoutItemProductSerializer(serializers.HyperlinkedModelSerializer):
             "Email": obj.user.email,
             "Total Cost": f"${obj.get_total_product_cost()}",
         }
+        
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    product = serializers.HyperlinkedRelatedField(
+        view_name="product-detail",
+        lookup_field='slug',
+        queryset=Product.objects.all()
+    )
+    
+    user_data = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = Checkout
+        fields = [
+            "user_data",
+            "product",
+            "order_code",
+            "ordered_date",
+            "ordered",
+            "being_delivered",
+            "received",
+            "firstname",
+            "lastname",
+            "phone_number",
+            "email",
+            "post_office",
+            "address",
+            "city",
+            "house",
+            "postal_code",
+            "message"
+        ]
+        
+    def get_user_data(self, obj):
+        return {
+            "Email": obj.user.email,
+            "First Name": obj.user.first_name
+        }
+        
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
