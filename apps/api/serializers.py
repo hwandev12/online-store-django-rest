@@ -13,7 +13,9 @@ from django.contrib.auth import get_user_model
 from apps.authentication.models import (
     SellerAccountModel,
     BuyerAccountModel,
-    User
+    User,
+    BuyerProfile,
+    SellerProfile,
 )
 
 class ProductCategorySerializer(serializers.ModelSerializer):
@@ -168,6 +170,11 @@ class BuyerUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = BuyerAccountModel
         fields = "__all__"
+        
+    lookup_field = 'first_name'
+    extra_kwargs = {
+        "url": {"lookup_field": "first_name"}
+    }
 
 class AllUserSerializer(serializers.ModelSerializer):
     
@@ -175,5 +182,19 @@ class AllUserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+# create a serializer for users that: buyer | seller
+
+class BuyerProfileSerializer(serializers.HyperlinkedModelSerializer):
+    
+    user = serializers.HyperlinkedIdentityField(view_name="buyer-detail", lookup_field="first_name")
+    
+    class Meta:
+        model = BuyerProfile
+        fields = ["user", "avatar"]
+        
+    lookup_field = 'first_name'
+    extra_kwargs = {
+        "url": {"lookup_field": "first_name"}
+    }
 
     

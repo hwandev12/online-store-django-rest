@@ -13,7 +13,8 @@ from .serializers import (
     CommentSerializer,
     RatingProductSerializer,
     CheckoutItemProductSerializer,
-    OrderSerializer
+    OrderSerializer,
+    BuyerProfileSerializer
 )
 from apps.product.models import (
     Product,
@@ -24,7 +25,7 @@ from apps.product.models import (
     CheckoutItem,
     Checkout
 )
-from rest_framework import mixins, permissions
+from rest_framework import mixins, permissions, status
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -32,12 +33,14 @@ from rest_framework.reverse import reverse
 from apps.authentication.models import (
     SellerAccountModel,
     User,
-    BuyerAccountModel
+    BuyerAccountModel,
+    BuyerProfile,
+    SellerProfile
 )
 from rest_framework import permissions
 import json
 
-from .permissions import DocumentIsOwnerPermission
+from .permissions import DocumentIsOwnerPermission, ProfileIsOwnerPermission
 
 @api_view(["GET"])
 def api_root(request, format=None):
@@ -72,11 +75,12 @@ class SellerUserApiView(viewsets.ReadOnlyModelViewSet):
 # ----------------- Seller User Api ----------------- #
 
 # ----------------- Buyer User Api ----------------- #
-class BuyerUserApiView(viewsets.ReadOnlyModelViewSet):
+class BuyerUserApiView(viewsets.ModelViewSet):
     queryset = BuyerAccountModel.objects.all()
     serializer_class = BuyerUserSerializer
+    lookup_field = "first_name"
     
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [ProfileIsOwnerPermission]
 # ----------------- Buyer User Api ----------------- #
 
 # ----------------- User Api ----------------- #
@@ -120,9 +124,24 @@ class OrderApiView(viewsets.ModelViewSet):
             user = self.request.user.buyeraccountmodel
             return Checkout.objects.filter(user=user)
         else:
+            # show error log here later
             pass
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     
 # ----------------- Order Api ----------------- #
+
+# ----------------- BuyerProfile Api ----------------- #
+class BuyerProfileApiView(viewsets.ModelViewSet):
+    queryset = BuyerProfile.objects.all()
+    serializer_class = BuyerProfileSerializer
+    
+    def get_queryset(self):
+        if self.request.user.is_buyer:
+            return BuyerProfile.objects.filter(user=self.request.user.buyeraccountmodel)
+        else:
+            return Response(status=status.HTTP_403_FORBIDDEN)
+    
+    permission_classes = [DocumentIsOwnerPermission]
+# ----------------- BuyerProfile Api ----------------- #

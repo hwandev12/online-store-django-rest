@@ -122,7 +122,7 @@ class BuyerProfile(models.Model):
         verbose_name = "Buyer Profile"
         verbose_name_plural = "Buyer Profile"
         
-    user = models.OneToOneField(BuyerAccountModel, on_delete=models.CASCADE)
+    user = models.OneToOneField(BuyerAccountModel, on_delete=models.CASCADE, related_name="buyer_profile")
     avatar = models.ImageField(default='users/user.png', upload_to='buyers/')
 
     def __str__(self):
@@ -136,7 +136,7 @@ class SellerProfile(models.Model):
         verbose_name = "Seller Profile"
         verbose_name_plural = "Seller Profile"
         
-    user = models.OneToOneField(SellerAccountModel, on_delete=models.CASCADE)
+    user = models.OneToOneField(SellerAccountModel, on_delete=models.CASCADE, related_name="seller_profile")
     avatar = models.ImageField(default="users/user.png", upload_to='sellers/')
     followers = models.ManyToManyField(User, related_name='followers', blank=True)
     
