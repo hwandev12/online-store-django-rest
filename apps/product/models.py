@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.template.defaultfilters import truncatechars, slugify
 from django.contrib import messages
 
-from apps.authentication.models import SellerAccountModel, User
+from apps.authentication.models import SellerAccountModel, User, BuyerAccountModel
 
 import random
 
@@ -160,7 +160,7 @@ class RatingProduct(models.Model):
 
 #  ----------------- Checkout Item Model ----------------- #
 class CheckoutItem(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(BuyerAccountModel, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
@@ -206,7 +206,7 @@ class Checkout(models.Model):
         verbose_name = "Checkout"
         verbose_name_plural = "Checkouts"
         
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(BuyerAccountModel, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='checkout')
     checkout_items = models.ManyToManyField(CheckoutItem)
     order_code = models.IntegerField(default=random_randints(8), null=True)

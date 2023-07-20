@@ -24,7 +24,7 @@ from apps.product.models import (
     CheckoutItem,
     Checkout
 )
-from rest_framework import mixins
+from rest_framework import mixins, permissions
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -36,6 +36,8 @@ from apps.authentication.models import (
 )
 from rest_framework import permissions
 import json
+
+from .permissions import DocumentIsOwnerPermission
 
 @api_view(["GET"])
 def api_root(request, format=None):
@@ -107,7 +109,20 @@ class CheckoutItemApiView(viewsets.ReadOnlyModelViewSet):
     serializer_class = CheckoutItemProductSerializer
 # ----------------- Cart Api ----------------- #
 # ----------------- Order Api ----------------- #
-class OrderApiView(viewsets.ReadOnlyModelViewSet):
+class OrderApiView(viewsets.ModelViewSet):
     queryset = Checkout.objects.all()
     serializer_class = OrderSerializer
+    
+    permission_classes = [DocumentIsOwnerPermission, ]        
+    
+    def get_queryset(self):
+        if self.request.user.is_buyer:
+            user = self.request.user.buyeraccountmodel
+            return Checkout.objects.filter(user=user)
+        else:
+            pass
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+    
 # ----------------- Order Api ----------------- #

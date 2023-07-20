@@ -104,7 +104,7 @@ class CheckoutPageView(DetailView):
                     house = form.cleaned_data.get('house')
                     postal_code = form.cleaned_data.get('postal_code')
                     message = form.cleaned_data.get('message')
-                new_checkout = Checkout(firstname=firstname, lastname=lastname, phone_number=phone_number, post_office=post_office, email=email, address=address, city=city, house=house, postal_code=postal_code, message=message, user=self.request.user, ordered=True, product=self.get_object())
+                new_checkout = Checkout(firstname=firstname, lastname=lastname, phone_number=phone_number, post_office=post_office, email=email, address=address, city=city, house=house, postal_code=postal_code, message=message, user=self.request.user.buyeraccountmodel, ordered=True, product=self.get_object())
                 new_checkout.save()
                 return redirect('base:product_detail', slug=self.get_object().slug)
         else:
@@ -173,14 +173,14 @@ class ProductCart(ListView):
     
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated and self.request.user.is_buyer:
+        if self.request.user.is_authenticated and self.request.user.buyeraccountmodel:
             return super(ProductCart, self).dispatch(request, *args, **kwargs)
         else:
             # later change to 404
             return redirect('base:home')
     
     def get_queryset(self):
-        return CheckoutItem.objects.filter(user=self.request.user, ordered=False)
+        return CheckoutItem.objects.filter(user=self.request.user.buyeraccountmodel, ordered=False)
     
     def get_context_data(self, **kwargs):
         context = super(ProductCart, self).get_context_data(**kwargs)

@@ -157,7 +157,7 @@ def profile(request, first_name):
     elif request.user.is_buyer:
         try:
             buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
-            orders = Checkout.objects.filter(user=request.user)
+            orders = Checkout.objects.filter(user=request.user.buyeraccountmodel)
             comments = Comment.objects.filter(user=request.user)
         except ValueError as e:
             print("Hatoo")

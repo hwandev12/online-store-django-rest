@@ -110,11 +110,13 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     )
     
     user_data = serializers.SerializerMethodField()
+    user = serializers.HyperlinkedIdentityField(view_name='buyer-detail')
     
     class Meta:
         model = Checkout
         fields = [
             "user_data",
+            "user",
             "product",
             "order_code",
             "ordered_date",
@@ -135,7 +137,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         
     def get_user_data(self, obj):
         return {
-            "Email": obj.user.email,
+            "Email": obj.user.user.email,
             "First Name": obj.user.first_name
         }
         
