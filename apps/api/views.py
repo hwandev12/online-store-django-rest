@@ -14,7 +14,8 @@ from .serializers import (
     RatingProductSerializer,
     CheckoutItemProductSerializer,
     OrderSerializer,
-    BuyerProfileSerializer
+    BuyerProfileSerializer,
+    SellerProfileSerializer
 )
 from apps.product.models import (
     Product,
@@ -66,12 +67,12 @@ class ProductImageApiView(viewsets.ReadOnlyModelViewSet):
 # ----------------- Product Image Api ----------------- #    
 
 # ----------------- Seller User Api ----------------- #
-class SellerUserApiView(viewsets.ReadOnlyModelViewSet):
+class SellerUserApiView(viewsets.ModelViewSet):
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = 'first_name'
     
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
 # ----------------- Seller User Api ----------------- #
 
 # ----------------- Buyer User Api ----------------- #
@@ -80,7 +81,7 @@ class BuyerUserApiView(viewsets.ModelViewSet):
     serializer_class = BuyerUserSerializer
     lookup_field = "first_name"
     
-    permission_classes = [ProfileIsOwnerPermission]
+    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
 # ----------------- Buyer User Api ----------------- #
 
 # ----------------- User Api ----------------- #
@@ -88,7 +89,7 @@ class UserApiView(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = AllUserSerializer
     
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.IsAdminUser, permissions.IsAuthenticated]
 # ----------------- User Api ----------------- #
 
 # ----------------- Product Category Api ----------------- #
@@ -101,23 +102,29 @@ class ProductCategoryApiView(viewsets.ReadOnlyModelViewSet):
 class CommentApiView(viewsets.ReadOnlyModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    
+    permission_classes = [permissions.IsAuthenticated]
 # ----------------- Comment Api ----------------- #
 # ----------------- Rating Api ----------------- #
 class RatingProductApiView(viewsets.ReadOnlyModelViewSet):
     queryset = RatingProduct.objects.all()
     serializer_class = RatingProductSerializer
+    
+    permission_classes = [permissions.IsAuthenticated]
 # ----------------- Rating Api ----------------- #
 # ----------------- Cart Api ----------------- #
 class CheckoutItemApiView(viewsets.ReadOnlyModelViewSet):
     queryset = CheckoutItem.objects.all()
     serializer_class = CheckoutItemProductSerializer
+    
+    permission_classes = [permissions.IsAuthenticated]
 # ----------------- Cart Api ----------------- #
 # ----------------- Order Api ----------------- #
 class OrderApiView(viewsets.ModelViewSet):
     queryset = Checkout.objects.all()
     serializer_class = OrderSerializer
     
-    permission_classes = [DocumentIsOwnerPermission, ]        
+    permission_classes = [DocumentIsOwnerPermission, permissions.IsAuthenticated]        
     
     def get_queryset(self):
         if self.request.user.is_buyer:
@@ -137,11 +144,13 @@ class BuyerProfileApiView(viewsets.ModelViewSet):
     queryset = BuyerProfile.objects.all()
     serializer_class = BuyerProfileSerializer
     
-    def get_queryset(self):
-        if self.request.user.is_buyer:
-            return BuyerProfile.objects.filter(user=self.request.user.buyeraccountmodel)
-        else:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-    
-    permission_classes = [DocumentIsOwnerPermission]
+    permission_classes = [DocumentIsOwnerPermission, permissions.IsAuthenticated]
 # ----------------- BuyerProfile Api ----------------- #
+
+# ----------------- SellerProfile Api ----------------- #
+class SellerProfileApiView(viewsets.ModelViewSet):
+    queryset = SellerProfile.objects.all()
+    serializer_class = SellerProfileSerializer
+    
+    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
+# ----------------- SellerProfile Api ----------------- #

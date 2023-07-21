@@ -7,6 +7,7 @@ router = DefaultRouter()
 router.register(r"products", views.ProductListApiView, basename="product")
 router.register(r"users", views.UserApiView, basename='user'),
 router.register(r"sellers", views.SellerUserApiView, basename='seller'),
+router.register(r"seller-profile", views.SellerProfileApiView, basename="seller-profile")
 router.register(r"buyer-profile", views.BuyerProfileApiView, basename="buyer-profile")
 router.register(r"buyers", views.BuyerUserApiView, basename='buyer'),
 # for product section

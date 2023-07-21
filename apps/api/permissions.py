@@ -11,6 +11,7 @@ class DocumentIsOwnerPermission(permissions.BasePermission):
         return obj.user == request.user.buyeraccountmodel
     
 class ProfileIsOwnerPermission(permissions.BasePermission):
+    message = "Sorry redirect home page"
     
     def has_object_permission(self, request, view, obj):
     

@@ -31,7 +31,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
-    image = ProductImageSerializer(many=True)
+    image = ProductImageSerializer(many=True, read_only=True)
     class Meta:
         model = Product
         fields = [
@@ -189,15 +189,22 @@ class AllUserSerializer(serializers.ModelSerializer):
 
 class BuyerProfileSerializer(serializers.HyperlinkedModelSerializer):
     
-    user = serializers.HyperlinkedIdentityField(view_name="buyer-detail", lookup_field="first_name")
+    user = serializers.HyperlinkedRelatedField(
+        view_name="buyer-detail",
+        lookup_field="first_name",
+        queryset=BuyerAccountModel.objects.all()
+    )
     
     class Meta:
         model = BuyerProfile
         fields = ["user", "avatar"]
-        
-    lookup_field = 'first_name'
-    extra_kwargs = {
-        "url": {"lookup_field": "first_name"}
-    }
-
     
+class SellerProfileSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.HyperlinkedRelatedField(
+        view_name="seller-detail",
+        lookup_field="first_name",
+        queryset=SellerAccountModel.objects.all()
+    )
+    class Meta:
+        model = SellerProfile
+        fields = ["user", "avatar"]
