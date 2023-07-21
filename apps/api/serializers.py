@@ -103,7 +103,7 @@ class CheckoutItemProductSerializer(serializers.HyperlinkedModelSerializer):
             "Email": obj.user.email,
             "Total Cost": f"${obj.get_total_product_cost()}",
         }
-        
+
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     product = serializers.HyperlinkedRelatedField(
         view_name="product-detail",
@@ -112,7 +112,11 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
     )
     
     user_data = serializers.SerializerMethodField()
-    user = serializers.HyperlinkedIdentityField(view_name='buyer-detail')
+    user = serializers.HyperlinkedRelatedField(
+        view_name="buyer-detail",
+        lookup_field="first_name",
+        queryset=BuyerAccountModel.objects.all()
+    )
     
     class Meta:
         model = Checkout
@@ -142,7 +146,6 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             "Email": obj.user.user.email,
             "First Name": obj.user.first_name
         }
-        
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
