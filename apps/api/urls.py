@@ -3,6 +3,11 @@ from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 router = DefaultRouter()
 router.register(r"products", views.ProductListApiView, basename="product")
 router.register(r"users", views.UserApiView, basename='user'),
@@ -19,5 +24,9 @@ router.register(r"product-cart", views.CheckoutItemApiView, basename="product-ca
 router.register(r"product-order", views.OrderApiView, basename="product-order")
 
 urlpatterns = [
-    path("", include(router.urls))
+    path("", include(router.urls)),
+    # for user authentication and authorization
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api-auth/', include('rest_framework.urls'))
 ]

@@ -18,6 +18,8 @@ from apps.authentication.models import (
     SellerProfile,
 )
 
+# create a serializer to register user as buyer and seller in order
+
 class ProductCategorySerializer(serializers.ModelSerializer):
     
     class Meta:
