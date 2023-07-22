@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.routers import DefaultRouter
@@ -7,6 +7,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+
+from allauth.account.views import ConfirmEmailView
 
 router = DefaultRouter()
 router.register(r"products", views.ProductListApiView, basename="product")
@@ -31,6 +33,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(),
+    name='account_confirm_email'),
     path('register/seller', views.SellerRegisterApiView.as_view()),
     path('register/buyer/', views.BuyerRegisterApiView.as_view())
 ]

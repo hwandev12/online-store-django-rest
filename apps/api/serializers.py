@@ -19,7 +19,13 @@ from apps.authentication.models import (
 )
 
 from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import LoginSerializer
 from rest_framework.authtoken.models import Token
+
+
+# remove default username field from buyer and seller registration
+class CustomUserLoginSerializer(LoginSerializer):
+    username = None 
 
 # create a serializer to register user as buyer and seller in order
 class SellerUserRegisterSerializer(RegisterSerializer):

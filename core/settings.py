@@ -292,6 +292,11 @@ REST_FRAMEWORK = {
     ),
 }
 
+REST_AUTH = {
+    'LOGIN_SERIALIZER': 'apps.api.serializers.CustomUserLoginSerializer',
+    'USE_JWT': True,
+}
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
