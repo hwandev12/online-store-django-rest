@@ -7,6 +7,14 @@ from .models import (
     SellerProfile
 )
 from django.dispatch import receiver
+from allauth.account.signals import email_confirmed
+
+@receiver(email_confirmed)
+def email_is_confirmed_(request, email_address, **kwargs):
+    user = request.user
+    user.is_verified = True
+    
+    user.save()
 
 # for buyer profile
 @receiver(post_save, sender=BuyerAccountModel)
