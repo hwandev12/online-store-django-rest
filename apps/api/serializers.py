@@ -18,7 +18,75 @@ from apps.authentication.models import (
     SellerProfile,
 )
 
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from rest_framework.authtoken.models import Token
+
 # create a serializer to register user as buyer and seller in order
+class SellerUserRegisterSerializer(RegisterSerializer):
+    username = None
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    phone_number = serializers.IntegerField(default=998)
+    organization = serializers.CharField()
+    
+    def get_cleaned_data(self):
+        data = super(SellerUserRegisterSerializer, self).get_cleaned_data()
+        extra_data = {
+            "first_name": self.validated_data.get("first_name", ""),
+            "last_name": self.validated_data.get("last_name", ""),
+            "phone_number": self.validated_data.get("phone_number", ""),
+            "organization": self.validated_data.get("organization", "")
+        }
+        data.update(extra_data)
+        return data
+    
+    def save(self, request):
+        user = super(SellerUserRegisterSerializer, self).save(request)
+        user.is_seller = True
+        user.save()
+        seller = SellerAccountModel(
+            user=user,
+            first_name=self.cleaned_data.get("first_name"),
+            last_name=self.cleaned_data.get("last_name"),
+            phone_number=self.cleaned_data.get("phone_number"),
+            organization=self.cleaned_data.get("organization")
+        )
+        seller.save()
+        return user
+    
+class BuyerUserRegisterSerializer(RegisterSerializer):
+    username = None
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    phone_number = serializers.IntegerField(default=998)
+    company = serializers.CharField()
+    
+    def get_cleaned_data(self):
+        data = super(BuyerUserRegisterSerializer, self).get_cleaned_data()
+        extra_data = {
+            "first_name": self.validated_data.get("first_name", ""),
+            "last_name": self.validated_data.get("last_name", ""),
+            "phone_number": self.validated_data.get("phone_number", ""),
+            "company": self.validated_data.get("company", "")
+        }
+        data.update(extra_data)
+        return data
+    
+    def save(self, request):
+        user = super(BuyerUserRegisterSerializer, self).save(request)
+        user.is_buyer = True
+        user.save()
+        buyer = BuyerAccountModel(
+            user=user,
+            first_name=self.cleaned_data.get("first_name"),
+            last_name=self.cleaned_data.get("last_name"),
+            phone_number=self.cleaned_data.get("phone_number"),
+            company=self.cleaned_data.get("company"),
+        )
+        buyer.save()
+        return user
 
 class ProductCategorySerializer(serializers.ModelSerializer):
     

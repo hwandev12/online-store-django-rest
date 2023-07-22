@@ -88,10 +88,10 @@ class SellerAccountModel(models.Model):
 
     # get seller profile avatar
     def get_seller_avatar(self):
-        return self.sellerprofile.avatar.url
+        return self.seller_profile.avatar.url
     
     def get_followers_count(self):
-        return self.sellerprofile.followers.count()
+        return self.seller_profile.followers.count()
 # ------------------- Seller Model ------------------- #
 
 # ------------------- Buyer Model ------------------- #
@@ -112,7 +112,7 @@ class BuyerAccountModel(models.Model):
     
     # get buyer profile avatar
     def get_buyer_avatar(self):
-        return self.buyerprofile.avatar.url
+        return self.buyer_profile.avatar.url
     
 # ------------------- Buyer Model ------------------- #
 

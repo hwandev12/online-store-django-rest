@@ -15,7 +15,10 @@ from .serializers import (
     CheckoutItemProductSerializer,
     OrderSerializer,
     BuyerProfileSerializer,
-    SellerProfileSerializer
+    SellerProfileSerializer,
+    # for registration
+    SellerUserRegisterSerializer,
+    BuyerUserRegisterSerializer
 )
 from apps.product.models import (
     Product,
@@ -30,6 +33,7 @@ from rest_framework import mixins, permissions, status
 from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from dj_rest_auth.registration.views import RegisterView
 
 from apps.authentication.models import (
     SellerAccountModel,
@@ -154,3 +158,12 @@ class SellerProfileApiView(viewsets.ModelViewSet):
     
     permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
 # ----------------- SellerProfile Api ----------------- #
+
+
+# ----------------- For User Registration ----------------- #
+class SellerRegisterApiView(RegisterView):
+    serializer_class = SellerUserRegisterSerializer
+class BuyerRegisterApiView(RegisterView):
+    serializer_class = BuyerUserRegisterSerializer
+# ----------------- For User Registration ----------------- #
+

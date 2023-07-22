@@ -28,5 +28,9 @@ urlpatterns = [
     # for user authentication and authorization
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    path('register/seller', views.SellerRegisterApiView.as_view()),
+    path('register/buyer/', views.BuyerRegisterApiView.as_view())
 ]
