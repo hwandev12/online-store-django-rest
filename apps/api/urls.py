@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
+    TokenVerifyView
 )
 
 from allauth.account.views import ConfirmEmailView
@@ -28,8 +29,8 @@ router.register(r"product-order", views.OrderApiView, basename="product-order")
 urlpatterns = [
     path("", include(router.urls)),
     # for user authentication and authorization
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api-auth/', include('rest_framework.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
@@ -38,3 +39,4 @@ urlpatterns = [
     path('register/seller', views.SellerRegisterApiView.as_view()),
     path('register/buyer/', views.BuyerRegisterApiView.as_view())
 ]
+
