@@ -140,7 +140,11 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    product_name = ProductSerializer()
+    product_name = serializers.HyperlinkedRelatedField(
+        lookup_field="slug",
+        view_name="product-detail",
+        queryset=Product.objects.all()
+    )
     class Meta:
         model = Comment
         fields = [

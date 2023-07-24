@@ -34,6 +34,7 @@ from rest_framework import generics, viewsets
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from dj_rest_auth.registration.views import RegisterView
+from . import permissions as custom_perm
 
 from apps.authentication.models import (
     SellerAccountModel,
@@ -103,11 +104,11 @@ class ProductCategoryApiView(viewsets.ReadOnlyModelViewSet):
 # ----------------- Product Category Api ----------------- #
 
 # ----------------- Comment Api ----------------- #
-class CommentApiView(viewsets.ReadOnlyModelViewSet):
+class CommentApiView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, custom_perm.CustomModelPermissionToCheckWriteComment,]
 # ----------------- Comment Api ----------------- #
 # ----------------- Rating Api ----------------- #
 class RatingProductApiView(viewsets.ReadOnlyModelViewSet):
