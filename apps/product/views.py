@@ -123,7 +123,7 @@ def add_to_cart(request, slug):
         messages.info(request, "You already have this product on your cart", extra_tags="already_have")
         return redirect('base:product_detail', slug=slug)
     else:
-        CheckoutItem.objects.create(user=request.user, product=product, ordered=False)
+        CheckoutItem.objects.create(user=request.user.buyeraccountmodel, product=product, ordered=False)
         messages.info(request, "This item was added to your cart.", extra_tags='add_cart')
     return redirect('base:product_detail', slug=slug)
 # ----------------- Add to cart ----------------- #

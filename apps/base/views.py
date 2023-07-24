@@ -25,7 +25,7 @@ from apps.product.forms import (
     ProductRatingForm
 )
 from django.db import transaction
-from apps.authentication.models import SellerAccountModel, SellerProfile
+from apps.authentication.models import SellerAccountModel, SellerProfile, BuyerAccountModel
 from django.contrib import messages
 
 
@@ -55,9 +55,10 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = Product.objects.get(slug=self.kwargs['slug'])
+        product = Product.objects.get(slug=self.kwargs['slug'])
         recently_viewed = None
         if self.request.user.is_buyer:
-            seller = get_object_or_404(SellerAccountModel)
+            seller = get_object_or_404(SellerAccountModel, owner_product=product)
             seller_profile = get_object_or_404(SellerProfile, user=seller)
             followers = seller_profile.followers.all()
             if len(followers) == 0:
@@ -75,6 +76,7 @@ class ProductDetailView(DetailView):
         if not self.request.user.is_seller and not self.request.user.is_superuser:   
             context['form'] = CommentForm()
             context['rating_form'] = ProductRatingForm()
+            context["buyer"] = BuyerAccountModel.objects.get(user=self.request.user)
         context['comments'] = self.object.comment.all()
         context['comments_by_owner'] = self.object.comment.filter(user=self.request.user)
         

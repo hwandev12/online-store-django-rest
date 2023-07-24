@@ -99,10 +99,10 @@ def user_profile(request, firstname):
         user_form = UpdateUserForm(instance=request.user)
         if request.user.is_buyer:
             account_model_update = UpdateBuyerAccount(instance=request.user.buyeraccountmodel)
-            account_profile_update = UpdateBuyerProfile(instance=request.user.buyeraccountmodel.buyerprofile)
+            account_profile_update = UpdateBuyerProfile(instance=request.user.buyeraccountmodel.buyer_profile)
         elif request.user.is_seller:
             account_model_update = UpdateSellerAccount(instance=request.user.selleraccountmodel)  
-            account_profile_update = UpdateSellerProfile(instance=request.user.selleraccountmodel.sellerprofile)  
+            account_profile_update = UpdateSellerProfile(instance=request.user.selleraccountmodel.seller_profile)  
         else:
             account_model_update = UpdateUserForm(instance=request.user)
             account_profile_update = None

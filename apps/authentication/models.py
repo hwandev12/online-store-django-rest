@@ -65,9 +65,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def token(self):
         return ""
 
-    # get buyer and seller profile avatar
+    # get buyer and profile avatar
     def get_buyer_avatar(self):
-        return self.buyeraccountmodel.buyerprofile.avatar.url
+        return self.buyeraccountmodel.buyer_profile.avatar.url
 # ------------------- User Model ------------------- #    
 
 # ------------------- Seller Model ------------------- #
