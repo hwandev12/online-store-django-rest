@@ -142,7 +142,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     product_name = serializers.HyperlinkedRelatedField(
         lookup_field="slug",
-        view_name="product-detail",
+        view_name="api-product-detail",
         queryset=Product.objects.all()
     )
     class Meta:
@@ -157,7 +157,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         
 class RatingProductSerializer(serializers.HyperlinkedModelSerializer):
     post = serializers.HyperlinkedRelatedField(
-        view_name="product-detail",
+        view_name="api-product-detail",
         lookup_field="slug",
         queryset=Product.objects.all()
         )
@@ -168,7 +168,7 @@ class RatingProductSerializer(serializers.HyperlinkedModelSerializer):
         
 class CheckoutItemProductSerializer(serializers.HyperlinkedModelSerializer):
     product = serializers.HyperlinkedRelatedField(
-        view_name="product-detail",
+        view_name="api-product-detail",
         lookup_field="slug",
         queryset=Product.objects.all()
     )
@@ -180,13 +180,13 @@ class CheckoutItemProductSerializer(serializers.HyperlinkedModelSerializer):
         
     def get_cart_user_data(self, obj):
         return {
-            "Email": obj.user.email,
+            "Email": obj.user.user.email,
             "Total Cost": f"${obj.get_total_product_cost()}",
         }
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
     product = serializers.HyperlinkedRelatedField(
-        view_name="product-detail",
+        view_name="api-product-detail",
         lookup_field='slug',
         queryset=Product.objects.all()
     )
@@ -252,7 +252,12 @@ class SellerProfileSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["user", "avatar"]
         
 class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
-    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
+    owner_product = serializers.HyperlinkedRelatedField(
+        many=True,
+        view_name="api-product-detail",
+        lookup_field="slug",
+        queryset=Product.objects.all()
+    )
     user = serializers.SerializerMethodField(read_only=True)
     lookup_field = 'first_name'
     extra_kwargs = {
