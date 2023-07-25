@@ -46,7 +46,12 @@ from apps.authentication.models import (
 from rest_framework import permissions
 import json
 
-from .permissions import DocumentIsOwnerPermission, ProfileIsOwnerPermission
+from .permissions import (
+    DocumentIsOwnerPermission,
+    ProfileIsOwnerPermission
+)
+
+from django_filters import rest_framework as filters
 
 @api_view(["GET"])
 def api_root(request, format=None):
@@ -62,6 +67,8 @@ class ProductListApiView(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = "slug"
+    filter_backends = (filters.DjangoFilterBackend, )
+    filterset_fields = ("category", "product_cost")
     
 # ----------------- Product Api ----------------- #
 
@@ -108,7 +115,7 @@ class CommentApiView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
-    permission_classes = [permissions.IsAuthenticated, custom_perm.CustomModelPermissionToCheckWriteComment,]
+    permission_classes = [custom_perm.CustomModelPermissionToCheckWrite,]
 # ----------------- Comment Api ----------------- #
 # ----------------- Rating Api ----------------- #
 class RatingProductApiView(viewsets.ReadOnlyModelViewSet):
@@ -129,15 +136,15 @@ class OrderApiView(viewsets.ModelViewSet):
     queryset = Checkout.objects.all()
     serializer_class = OrderSerializer
     
-    permission_classes = [DocumentIsOwnerPermission, permissions.IsAuthenticated]        
+    permission_classes = [custom_perm.CustomModelPermissionToCheckWrite,]        
     
-    def get_queryset(self):
-        if self.request.user.is_buyer:
-            user = self.request.user.buyeraccountmodel
-            return Checkout.objects.filter(user=user)
-        else:
-            # show error log here later
-            pass
+    # def get_queryset(self):
+    #     if self.request.user.is_buyer:
+    #         user = self.request.user.buyeraccountmodel
+    #         return Checkout.objects.filter(user=user)
+    #     else:
+    #         # show error log here later
+    #         pass
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

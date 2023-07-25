@@ -20,12 +20,16 @@ class ProfileIsOwnerPermission(permissions.BasePermission):
 
         return obj.user == request.user
     
-class CustomModelPermissionToCheckWriteComment(permissions.BasePermission):
+class CustomModelPermissionToCheckWrite(permissions.BasePermission):
     message = "Actually this message doesn't show itself, but just in case"
+    
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.is_buyer:
+            return True
+        return False
     
     def has_object_permission(self, request, view, obj):
         
-        if request.method in permissions.SAFE_METHODS:
+        if obj.user == request.user.buyeraccountmodel:
             return True
-        
-        return obj.user == request.user.buyeraccountmodel
+        return False
