@@ -107,7 +107,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
-    image = ProductImageSerializer(many=True, read_only=True)
+    image = ProductImageSerializer(many=True)
     class Meta:
         model = Product
         fields = [
@@ -227,44 +227,6 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
             "First Name": obj.user.first_name
         }
         
-class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
-    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
-    user = serializers.SerializerMethodField(read_only=True)
-    lookup_field = 'first_name'
-    extra_kwargs = {
-        "url": {"lookup_field": "first_name"}
-    }
-    
-    class Meta:
-        model = SellerAccountModel
-        fields = ['id', 'user', 'first_name', 'last_name', 'phone_number', 'organization', 'owner_product']
-        
-    # write a method to get user information
-    def get_user(self, obj):
-        return {
-            "id": obj.user.id,
-            "email": obj.user.email,
-            "is_staff": obj.user.is_staff,
-            "is_superuser": obj.user.is_superuser,
-            "is_active": obj.user.is_active
-        }
-        
-class BuyerUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BuyerAccountModel
-        fields = "__all__"
-        
-    lookup_field = 'first_name'
-    extra_kwargs = {
-        "url": {"lookup_field": "first_name"}
-    }
-
-class AllUserSerializer(serializers.ModelSerializer):
-    
-    class Meta:
-        model = User
-        fields = '__all__'
-
 # create a serializer for users that: buyer | seller
 
 class BuyerProfileSerializer(serializers.HyperlinkedModelSerializer):
@@ -288,3 +250,65 @@ class SellerProfileSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = SellerProfile
         fields = ["user", "avatar"]
+        
+class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
+    owner_product = serializers.HyperlinkedRelatedField(many=True, view_name="product-detail", lookup_field="slug", queryset=Product.objects.all())
+    user = serializers.SerializerMethodField(read_only=True)
+    lookup_field = 'first_name'
+    extra_kwargs = {
+        "url": {"lookup_field": "first_name"}
+    }
+    
+    class Meta:
+        model = SellerAccountModel
+        fields = ['id', 'user', 'first_name', 'last_name', 'phone_number', 'organization', 'owner_product']
+        
+    # write a method to get user information
+    def get_user(self, obj):
+        return {
+            "id": obj.user.id,
+            "email": obj.user.email,
+            "is_staff": obj.user.is_staff,
+            "is_superuser": obj.user.is_superuser,
+            "is_active": obj.user.is_active
+        }
+        
+class BuyerUserSerializer(serializers.ModelSerializer):
+    buyer_profile = BuyerProfileSerializer()
+    class Meta:
+        model = BuyerAccountModel
+        fields = "__all__"
+        
+    lookup_field = 'first_name'
+    extra_kwargs = {
+        "url": {"lookup_field": "first_name"}
+    }
+
+    def update(self, instance, validated_data):
+        
+        buyer_profile_data = validated_data.pop('buyer_profile')
+        buyer_profile = instance.buyer_profile
+        
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.phone_number = validated_data.get("phone_number", instance.phone_number)
+        instance.company = validated_data.get("company", instance.company)
+        instance.save()
+        
+        buyer_profile.avatar = buyer_profile_data.get(
+            'avatar',
+            buyer_profile.avatar
+        )
+        
+        buyer_profile.save()
+        return instance
+        
+        
+    
+
+class AllUserSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = User
+        fields = '__all__'
+

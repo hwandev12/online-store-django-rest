@@ -12,7 +12,6 @@ from rest_framework_simplejwt.views import (
 from allauth.account.views import ConfirmEmailView
 
 router = DefaultRouter()
-router.register(r"products", views.ProductListApiView, basename="product")
 router.register(r"users", views.UserApiView, basename='user'),
 router.register(r"sellers", views.SellerUserApiView, basename='seller'),
 router.register(r"seller-profile", views.SellerProfileApiView, basename="seller-profile")
@@ -37,6 +36,12 @@ urlpatterns = [
     re_path(r'^account-confirm-email/(?P<key>[-:\w]+)/$', ConfirmEmailView.as_view(),
     name='account_confirm_email'),
     path('register/seller', views.SellerRegisterApiView.as_view()),
-    path('register/buyer/', views.BuyerRegisterApiView.as_view())
+    path('register/buyer/', views.BuyerRegisterApiView.as_view()),
+    
+    # for product page
+    path('products/', views.ProductListApiView.as_view(), name='api-product'),
+    path('products/<slug:slug>/', views.ProductDetailApiView.as_view(), name='api-product-detail'),
+    path('product/create/', views.ProductCreateApiView.as_view(), name='api-product-create'),
+    path('product/update/<slug:slug>/', views.ProductUpdateApiView.as_view(), name="api-product-update")
 ]
 

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
@@ -57,20 +57,75 @@ from django_filters import rest_framework as filters
 def api_root(request, format=None):
     return Response({
         "users": reverse("user-lists", request=request, format=format),
-        "products": reverse("products-api", request=request, format=format),
+        "product": reverse("product", request=request, format=format),
         "seller users": reverse("seller-users-api", request=request, format=format),
         "buyer users": reverse("buyer-users-api", request=request, format=format),
     })
 
 # ----------------- Product Api ----------------- #
-class ProductListApiView(viewsets.ReadOnlyModelViewSet):
+class ProductListApiView(mixins.ListModelMixin,
+                         generics.GenericAPIView):
+    """_Summary of This API_
+
+    Description:
+        content: Here is public where each user even sellers can see their products online
+
+    Returns:
+        _type_: _Read Only View_
+    """
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    lookup_field = "slug"
-    filter_backends = (filters.DjangoFilterBackend, )
-    filterset_fields = ("category", "product_cost")
     
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
 # ----------------- Product Api ----------------- #
+
+# ----------------- Product Detail Api ----------------- #
+class ProductDetailApiView(mixins.RetrieveModelMixin,
+                           generics.GenericAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+# ----------------- Product Detail Api ----------------- #
+
+# ----------------- Product Create Api ----------------- #
+class ProductCreateApiView(mixins.CreateModelMixin,
+                           generics.GenericAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [custom_perm.SellerProductCreatePermission]
+    
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+# ----------------- Product Create Api ----------------- #
+
+# ----------------- Product Update Api ----------------- #
+class ProductUpdateApiView(mixins.UpdateModelMixin,
+                           mixins.RetrieveModelMixin,
+                           generics.GenericAPIView):
+    
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+    permission_classes = [custom_perm.SellerProductCreatePermission]
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+# ----------------- Product Update Api ----------------- #
 
 # ----------------- Product Image Api ----------------- #    
 class ProductImageApiView(viewsets.ReadOnlyModelViewSet):
