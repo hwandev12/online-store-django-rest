@@ -127,6 +127,24 @@ class ProductUpdateApiView(mixins.UpdateModelMixin,
     
 # ----------------- Product Update Api ----------------- #
 
+# ----------------- Product Delete Api ----------------- #
+class ProductDeleteApiView(mixins.RetrieveModelMixin,
+                           mixins.DestroyModelMixin,
+                           generics.GenericAPIView):
+    
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = 'slug'
+    permission_classes = [custom_perm.SellerProductCreatePermission]
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+# ----------------- Product Delete Api ----------------- #
+
 # ----------------- Product Image Api ----------------- #    
 class ProductImageApiView(viewsets.ReadOnlyModelViewSet):
     queryset = ProductImage.objects.all()

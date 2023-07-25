@@ -42,6 +42,7 @@ urlpatterns = [
     path('products/', views.ProductListApiView.as_view(), name='api-product'),
     path('products/<slug:slug>/', views.ProductDetailApiView.as_view(), name='api-product-detail'),
     path('product/create/', views.ProductCreateApiView.as_view(), name='api-product-create'),
-    path('product/update/<slug:slug>/', views.ProductUpdateApiView.as_view(), name="api-product-update")
+    path('product/update/<slug:slug>/', views.ProductUpdateApiView.as_view(), name="api-product-update"),
+    path('product/delete/<slug:slug>/', views.ProductDeleteApiView.as_view(), name="api-product-delete")
 ]
 
