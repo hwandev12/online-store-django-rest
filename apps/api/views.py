@@ -224,23 +224,6 @@ class OrderApiView(viewsets.ModelViewSet):
     
 # ----------------- Order Api ----------------- #
 
-# ----------------- BuyerProfile Api ----------------- #
-class BuyerProfileApiView(viewsets.ModelViewSet):
-    queryset = BuyerProfile.objects.all()
-    serializer_class = BuyerProfileSerializer
-    
-    permission_classes = [DocumentIsOwnerPermission, permissions.IsAuthenticated]
-# ----------------- BuyerProfile Api ----------------- #
-
-# ----------------- SellerProfile Api ----------------- #
-class SellerProfileApiView(viewsets.ModelViewSet):
-    queryset = SellerProfile.objects.all()
-    serializer_class = SellerProfileSerializer
-    
-    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
-# ----------------- SellerProfile Api ----------------- #
-
-
 # ----------------- For User Registration ----------------- #
 class SellerRegisterApiView(RegisterView):
     serializer_class = SellerUserRegisterSerializer

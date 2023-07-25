@@ -14,8 +14,6 @@ from allauth.account.views import ConfirmEmailView
 router = DefaultRouter()
 router.register(r"users", views.UserApiView, basename='user'),
 router.register(r"sellers", views.SellerUserApiView, basename='seller'),
-router.register(r"seller-profile", views.SellerProfileApiView, basename="seller-profile")
-router.register(r"buyer-profile", views.BuyerProfileApiView, basename="buyer-profile")
 router.register(r"buyers", views.BuyerUserApiView, basename='buyer'),
 # for product section
 router.register(r"product-image", views.ProductImageApiView, basename='product-image'),
