@@ -15,15 +15,19 @@ class DocumentIsOwnerPermission(permissions.BasePermission):
             return True
         return False
     
-class ProfileIsOwnerPermission(permissions.BasePermission):
+class ProfileIsOwnerSellerPermission(permissions.BasePermission):
     message = "Sorry redirect home page"
     
-    def has_object_permission(self, request, view, obj):
-    
-        if request.method in permissions.SAFE_METHODS:
+    def has_permission(self, request, view):
+        if request.user.is_authenticated and request.user.is_seller:
             return True
+        return False
+    
+    def has_object_permission(self, request, view, obj):
 
-        return obj.user == request.user
+        if obj.user == request.user:
+            return True
+        return False
     
 class CustomModelPermissionToCheckWrite(permissions.BasePermission):
     message = "Actually this message doesn't show itself, but just in case"

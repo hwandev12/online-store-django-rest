@@ -48,7 +48,6 @@ import json
 
 from .permissions import (
     DocumentIsOwnerPermission,
-    ProfileIsOwnerPermission
 )
 
 from django_filters import rest_framework as filters
@@ -56,10 +55,7 @@ from django_filters import rest_framework as filters
 @api_view(["GET"])
 def api_root(request, format=None):
     return Response({
-        "users": reverse("user-lists", request=request, format=format),
-        "product": reverse("product", request=request, format=format),
-        "seller users": reverse("seller-users-api", request=request, format=format),
-        "buyer users": reverse("buyer-users-api", request=request, format=format),
+        "products": reverse("api-product", request=request, format=format),
     })
 
 # ----------------- Product Api ----------------- #
@@ -145,20 +141,74 @@ class ProductDeleteApiView(mixins.RetrieveModelMixin,
     
 # ----------------- Product Delete Api ----------------- #
 
-# ----------------- Product Image Api ----------------- #    
-class ProductImageApiView(viewsets.ReadOnlyModelViewSet):
-    queryset = ProductImage.objects.all()
-    serializer_class = ProductImageSerializer
-# ----------------- Product Image Api ----------------- #    
-
 # ----------------- Seller User Api ----------------- #
 class SellerUserApiView(viewsets.ModelViewSet):
+    """_This page is only for admin and other permitted users to get seller users data for dashboard and other purposes_
+
+    Right:
+         _Just for admin rights_
+    """
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = 'first_name'
     
-    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 # ----------------- Seller User Api ----------------- #
+
+# ----------------- Seller Profile Api ----------------- #
+class SellerProfileApiView(mixins.RetrieveModelMixin,
+                           generics.GenericAPIView):
+    
+    queryset = SellerAccountModel.objects.all()
+    serializer_class = SellerUserSerializer
+    lookup_field = "first_name"
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    permission_classes = [permissions.IsAuthenticated]
+    
+# ----------------- Seller Profile Api ----------------- #
+
+# ----------------- Seller Profile Update Api ----------------- #
+class SellerProfileUpdateView(mixins.RetrieveModelMixin,
+                              mixins.UpdateModelMixin,
+                              generics.GenericAPIView):
+    
+    queryset = SellerAccountModel.objects.all()
+    serializer_class = SellerUserSerializer
+    lookup_field = 'first_name'
+    permission_classes = [custom_perm.ProfileIsOwnerSellerPermission]
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+        
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    
+# ----------------- Seller Profile Update Api ----------------- #
+
+# ----------------- Seller Profile Delete Api ----------------- #
+class SellerProfileDeleteApiView(mixins.RetrieveModelMixin,
+                                 mixins.DestroyModelMixin,
+                                 generics.GenericAPIView):
+    
+    """
+    That could be for deletion account. But then we can update to complex one
+    """
+    
+    queryset = SellerAccountModel.objects.all()
+    serializer_class = SellerUserSerializer
+    lookup_field = "first_name"
+    permission_classes = [custom_perm.ProfileIsOwnerSellerPermission]
+    
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+    
+# ----------------- Seller Profile Delete Api ----------------- #
 
 # ----------------- Buyer User Api ----------------- #
 class BuyerUserApiView(viewsets.ModelViewSet):
@@ -166,7 +216,7 @@ class BuyerUserApiView(viewsets.ModelViewSet):
     serializer_class = BuyerUserSerializer
     lookup_field = "first_name"
     
-    permission_classes = [ProfileIsOwnerPermission, permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 # ----------------- Buyer User Api ----------------- #
 
 # ----------------- User Api ----------------- #

@@ -16,7 +16,6 @@ router.register(r"users", views.UserApiView, basename='user'),
 router.register(r"sellers", views.SellerUserApiView, basename='seller'),
 router.register(r"buyers", views.BuyerUserApiView, basename='buyer'),
 # for product section
-router.register(r"product-image", views.ProductImageApiView, basename='product-image'),
 router.register(r"product-category", views.ProductCategoryApiView, basename="product-category")
 router.register(r"product-comment", views.CommentApiView, basename="product-comment")
 router.register(r"rating-product", views.RatingProductApiView, basename="product-rating")
@@ -24,7 +23,8 @@ router.register(r"product-cart", views.CheckoutItemApiView, basename="product-ca
 router.register(r"product-order", views.OrderApiView, basename="product-order")
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path("", views.api_root),
+    path("router/", include(router.urls)),
     # for user authentication and authorization
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -35,6 +35,11 @@ urlpatterns = [
     name='account_confirm_email'),
     path('register/seller', views.SellerRegisterApiView.as_view()),
     path('register/buyer/', views.BuyerRegisterApiView.as_view()),
+    
+    # for profiles
+    path("profile/<str:first_name>/", views.SellerProfileApiView.as_view(), name="api-seller-profile"),
+    path("profile/<str:first_name>/update/", views.SellerProfileUpdateView.as_view(), name="api-seller-profile-update"),
+    path("profile/<str:first_name>/delete/", views.SellerProfileDeleteApiView.as_view(), name="api-seller-profile-delete"),
     
     # for product page
     path('products/', views.ProductListApiView.as_view(), name='api-product'),

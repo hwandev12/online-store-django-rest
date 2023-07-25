@@ -258,6 +258,7 @@ class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
         lookup_field="slug",
         queryset=Product.objects.all()
     )
+    seller_profile = SellerProfileSerializer()
     user = serializers.SerializerMethodField(read_only=True)
     lookup_field = 'first_name'
     extra_kwargs = {
@@ -266,7 +267,7 @@ class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
     
     class Meta:
         model = SellerAccountModel
-        fields = ['id', 'user', 'first_name', 'last_name', 'phone_number', 'organization', 'owner_product']
+        fields = ['id', 'user', 'seller_profile', 'first_name', 'last_name', 'phone_number', 'organization', 'owner_product']
         
     # write a method to get user information
     def get_user(self, obj):
@@ -278,6 +279,22 @@ class SellerUserSerializer(serializers.HyperlinkedModelSerializer):
             "is_active": obj.user.is_active
         }
         
+    def update(self, instance, validated_data):
+        seller_profile_data = validated_data.pop("seller_profile")
+        seller_profile = instance.seller_profile
+        
+        instance.first_name = validated_data.get("first_name", instance.first_name)
+        instance.last_name = validated_data.get("last_name", instance.last_name)
+        instance.phone_number = validated_data.get("phone_number", instance.phone_number)
+        instance.organization = validated_data.get("organization", instance.organization)
+        instance.save()
+        
+        seller_profile.avatar = seller_profile_data.get(
+            'avatar',
+            seller_profile.avatar
+        )
+        seller_profile.save()
+        return instance
 class BuyerUserSerializer(serializers.ModelSerializer):
     buyer_profile = BuyerProfileSerializer()
     class Meta:
