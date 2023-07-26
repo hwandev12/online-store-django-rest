@@ -40,6 +40,7 @@ urlpatterns = [
     path("profile/<str:first_name>/", views.SellerProfileApiView.as_view(), name="api-seller-profile"),
     path("profile/<str:first_name>/update/", views.SellerProfileUpdateView.as_view(), name="api-seller-profile-update"),
     path("profile/<str:first_name>/delete/", views.SellerProfileDeleteApiView.as_view(), name="api-seller-profile-delete"),
+    path("profile-buyer/<str:first_name>/", views.BuyerProfileApiView.as_view(), name='api-buyer-profile'),
     
     # for product page
     path('products/', views.ProductListApiView.as_view(), name='api-product'),
