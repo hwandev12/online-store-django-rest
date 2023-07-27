@@ -121,6 +121,7 @@ def user_profile(request, firstname):
 def profile(request, first_name):
     seller = None
     seller_profile = None
+    not_owned_profile = None
     buyer = None
     user = None
     product = None
@@ -156,7 +157,14 @@ def profile(request, first_name):
             return redirect("/")
     elif request.user.is_buyer:
         try:
-            buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
+            try:
+                buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
+            except:
+                not_owned_profile = get_object_or_404(SellerAccountModel, first_name=first_name)
+            try:
+                not_owned_profile = get_object_or_404(SellerAccountModel, first_name=first_name)
+            except:
+                buyer = get_object_or_404(BuyerAccountModel, user=request.user, first_name=first_name)
             orders = Checkout.objects.filter(user=request.user.buyeraccountmodel)
             comments = Comment.objects.filter(user=request.user)
         except ValueError as e:
@@ -190,6 +198,7 @@ def profile(request, first_name):
         "is_following": is_following,
         "count_of_followers": count_of_followers,
         "product_count": product_count,
+        "not_owned_profile": not_owned_profile
     }
     return render(request, 'account/profile.html', context)
 # ------------------- User Profile ------------------- #

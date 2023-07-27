@@ -15,6 +15,8 @@
     <div class="col-xl-12 col-md-6 col-sm-10 mx-auto">
 
         <!-- Profile widget -->
+        {% if not not_owned_profile %}
+        <h4 class="mt-0 mb-0">{{ not_owned_profile.first_name }}</h4>
         <div class="bg-white shadow rounded overflow-hidden">
             <div class="px-4 pt-0 pb-4 bg-dark">
                 <div class="d-flex align-items-end profile-header">
@@ -106,6 +108,9 @@
                 </div>
             </div>
         </div>
+        {% else %}
+        <h1>Later I would add some context here</h1>
+        {% endif %}
 
     </div>
 </div>

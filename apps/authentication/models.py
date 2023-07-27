@@ -144,6 +144,7 @@ class SellerProfile(models.Model):
         return self.user.first_name
 # ------------------- Seller Profile ------------------- #
 
+
 @receiver(user_signed_up)
 def user_signup_callback(sender, user, request, **kwargs):
     messages.success(request, "", extra_tags="signup")
