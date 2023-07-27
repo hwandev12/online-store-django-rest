@@ -157,29 +157,62 @@ class SellerUserApiView(viewsets.ModelViewSet):
 
 # ----------------- Seller Profile Api ----------------- #
 from itertools import chain
-class SellerProfileApiView(mixins.RetrieveModelMixin,
+class GeneralProfileApiView(mixins.RetrieveModelMixin,
                            generics.GenericAPIView):
     
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = "first_name"
     
+    def get_queryset(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerAccountModel.objects.all()
+            return SellerAccountModel.objects.all()
+        except ValueError as e:
+            return e
+        
+    def get_serializer_class(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerUserSerializer
+            return SellerUserSerializer
+        except ValueError as e:
+            return e
+    
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
+
     
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, custom_perm.ProfileIsOwnerGeneralPermission]
     
 # ----------------- Seller Profile Api ----------------- #
 
 # ----------------- Seller Profile Update Api ----------------- #
-class SellerProfileUpdateView(mixins.RetrieveModelMixin,
+class GeneralProfileUpdateApiView(mixins.RetrieveModelMixin,
                               mixins.UpdateModelMixin,
                               generics.GenericAPIView):
     
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = 'first_name'
-    permission_classes = [custom_perm.ProfileIsOwnerSellerPermission]
+    permission_classes = [custom_perm.ProfileIsOwnerGeneralPermission]
+    
+    def get_queryset(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerAccountModel.objects.all()
+            return SellerAccountModel.objects.all()
+        except ValueError as e:
+            return e
+        
+    def get_serializer_class(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerUserSerializer
+            return SellerUserSerializer
+        except ValueError as e:
+            return e
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -190,7 +223,7 @@ class SellerProfileUpdateView(mixins.RetrieveModelMixin,
 # ----------------- Seller Profile Update Api ----------------- #
 
 # ----------------- Seller Profile Delete Api ----------------- #
-class SellerProfileDeleteApiView(mixins.RetrieveModelMixin,
+class GeneralProfileDeleteApiView(mixins.RetrieveModelMixin,
                                  mixins.DestroyModelMixin,
                                  generics.GenericAPIView):
     
@@ -201,7 +234,23 @@ class SellerProfileDeleteApiView(mixins.RetrieveModelMixin,
     queryset = SellerAccountModel.objects.all()
     serializer_class = SellerUserSerializer
     lookup_field = "first_name"
-    permission_classes = [custom_perm.ProfileIsOwnerSellerPermission]
+    permission_classes = [custom_perm.ProfileIsOwnerGeneralPermission]
+    
+    def get_queryset(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerAccountModel.objects.all()
+            return SellerAccountModel.objects.all()
+        except ValueError as e:
+            return e
+        
+    def get_serializer_class(self):
+        try:
+            if self.request.user.is_buyer:
+                return BuyerUserSerializer
+            return SellerUserSerializer
+        except ValueError as e:
+            return e
     
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
@@ -219,21 +268,6 @@ class BuyerUserApiView(viewsets.ModelViewSet):
     
     permission_classes = [permissions.IsAuthenticated, permissions.IsAdminUser]
 # ----------------- Buyer User Api ----------------- #
-
-# ----------------- Buyer Profile Api ----------------- #
-class BuyerProfileApiView(mixins.RetrieveModelMixin,
-                          generics.GenericAPIView):
-    
-    queryset = BuyerAccountModel.objects.all()
-    serializer_class = BuyerUserSerializer
-    lookup_field = 'first_name'
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        return self.retrieve(request, *args, **kwargs)
-
-    
-# ----------------- Buyer Profile Api ----------------- #
 
 # ----------------- User Api ----------------- #
 class UserApiView(viewsets.ReadOnlyModelViewSet):

@@ -37,10 +37,9 @@ urlpatterns = [
     path('register/buyer/', views.BuyerRegisterApiView.as_view()),
     
     # for profiles
-    path("profile/<str:first_name>/", views.SellerProfileApiView.as_view(), name="api-seller-profile"),
-    path("profile/<str:first_name>/update/", views.SellerProfileUpdateView.as_view(), name="api-seller-profile-update"),
-    path("profile/<str:first_name>/delete/", views.SellerProfileDeleteApiView.as_view(), name="api-seller-profile-delete"),
-    path("profile-buyer/<str:first_name>/", views.BuyerProfileApiView.as_view(), name='api-buyer-profile'),
+    path("profile/<str:first_name>/", views.GeneralProfileApiView.as_view(), name="api-profile"),
+    path("profile/<str:first_name>/update/", views.GeneralProfileUpdateApiView.as_view(), name="api-profile-update"),
+    path("profile/<str:first_name>/delete/", views.GeneralProfileDeleteApiView.as_view(), name="api-profile-delete"),
     
     # for product page
     path('products/', views.ProductListApiView.as_view(), name='api-product'),

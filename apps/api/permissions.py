@@ -15,11 +15,11 @@ class DocumentIsOwnerPermission(permissions.BasePermission):
             return True
         return False
     
-class ProfileIsOwnerSellerPermission(permissions.BasePermission):
+class ProfileIsOwnerGeneralPermission(permissions.BasePermission):
     message = "Sorry redirect home page"
     
     def has_permission(self, request, view):
-        if request.user.is_authenticated and request.user.is_seller:
+        if request.user.is_authenticated:
             return True
         return False
     
