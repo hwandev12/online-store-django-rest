@@ -292,7 +292,13 @@ class CommentApiView(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     
-    permission_classes = [custom_perm.CustomModelPermissionToCheckWrite,]
+    permission_classes = [permissions.IsAuthenticated,]
+    
+    def get_queryset(self):
+        if self.request.user.is_buyer:
+            return Comment.objects.all()
+        raise NotFound
+    
 # ----------------- Comment Api ----------------- #
 # ----------------- Rating Api ----------------- #
 class RatingProductApiView(viewsets.ReadOnlyModelViewSet):
