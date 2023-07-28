@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
+from rest_framework import status
 from .serializers import (
     ProductSerializer,
     SellerUserSerializer,
@@ -35,6 +36,9 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from dj_rest_auth.registration.views import RegisterView
 from . import permissions as custom_perm
+
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.exceptions import NotFound
 
 from apps.authentication.models import (
     SellerAccountModel,
@@ -309,15 +313,15 @@ class OrderApiView(viewsets.ModelViewSet):
     queryset = Checkout.objects.all()
     serializer_class = OrderSerializer
     
-    permission_classes = [custom_perm.CustomModelPermissionToCheckWrite,]        
+    permission_classes = [permissions.IsAuthenticated]             
+     
     
-    # def get_queryset(self):
-    #     if self.request.user.is_buyer:
-    #         user = self.request.user.buyeraccountmodel
-    #         return Checkout.objects.filter(user=user)
-    #     else:
-    #         # show error log here later
-    #         pass
+    def get_queryset(self):
+        try:
+            user = self.request.user.buyeraccountmodel
+            return Checkout.objects.filter(user=user)
+        except BuyerAccountModel.DoesNotExist:
+            raise NotFound
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
