@@ -104,10 +104,26 @@ class ProductImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImage
         fields = ["product_image"]
+        
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    product_name = serializers.HyperlinkedRelatedField(
+        lookup_field="slug",
+        view_name="api-product-detail",
+        queryset=Product.objects.all()
+    )
+    class Meta:
+        model = Comment
+        fields = [
+            "user",
+            "product_name",
+            "comment",
+            "created_at",
+        ]
 
 class ProductSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.SerializerMethodField(read_only=True)
     image = ProductImageSerializer(many=True)
+    comment = CommentSerializer(many=True)
     class Meta:
         model = Product
         fields = [
@@ -123,6 +139,7 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
             "updated_at",
             "product_status",
             "discount_price",
+            "comment"
         ]
         
     def get_owner(self, obj):
@@ -137,22 +154,6 @@ class ProductSerializer(serializers.HyperlinkedModelSerializer):
     extra_kwargs = {
         "url": {"lookup_field": "slug"}
     }
-
-
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    product_name = serializers.HyperlinkedRelatedField(
-        lookup_field="slug",
-        view_name="api-product-detail",
-        queryset=Product.objects.all()
-    )
-    class Meta:
-        model = Comment
-        fields = [
-            "user",
-            "product_name",
-            "comment",
-            "created_at",
-        ]
 
         
 class RatingProductSerializer(serializers.HyperlinkedModelSerializer):

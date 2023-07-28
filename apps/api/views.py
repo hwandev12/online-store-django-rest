@@ -83,6 +83,7 @@ class ProductListApiView(mixins.ListModelMixin,
 
 # ----------------- Product Detail Api ----------------- #
 class ProductDetailApiView(mixins.RetrieveModelMixin,
+                           mixins.CreateModelMixin,
                            generics.GenericAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
@@ -91,6 +92,9 @@ class ProductDetailApiView(mixins.RetrieveModelMixin,
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)
 
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+    
 # ----------------- Product Detail Api ----------------- #
 
 # ----------------- Product Create Api ----------------- #
